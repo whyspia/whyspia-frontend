@@ -9,7 +9,7 @@ export default async function apiGetAllEmotes({
   orderBy,
   orderDirection,
   senderTwitterUsername = null,
-  receiverTwitterUsername = null,
+  receiverSymbol = null,
   symbol = null,
 }) {
 
@@ -22,7 +22,7 @@ export default async function apiGetAllEmotes({
         orderBy,
         orderDirection,
         senderTwitterUsername,
-        receiverTwitterUsername,
+        receiverSymbol,
         symbol,
       },
     })

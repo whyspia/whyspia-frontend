@@ -27,7 +27,7 @@ export default function SendEmoteModal({
 
   const [selectedButton, setSelectedButton] = useState(initialDesire)
 
-  const [receiverTwitterUsername, setReceiverTwitterUsername] = useState(null)
+  const [receiverSymbol, setreceiverSymbol] = useState(null)
   const [selectedSymbol, setSelectedSymbol] = useState('')
   
   const [isValidXUser, setIsValidXUser] = useState(false)
@@ -99,7 +99,7 @@ export default function SendEmoteModal({
   const onSetReceiverChanged = debounce(async (username: string) => {
     const { isExisting, userToken } = await checkExistingTwitterProfile(username)
 
-    setReceiverTwitterUsername(userToken?.twitterUsername)
+    setreceiverSymbol(userToken?.twitterUsername)
 
     setIsValidXUser(isExisting)
     setIsValid(isExisting && selectedSymbol !== '')
@@ -110,7 +110,7 @@ export default function SendEmoteModal({
 
     const emote = await apiNewEmote({
       jwt: jwtToken,
-      receiverTwitterUsername: receiverTwitterUsername,
+      receiverSymbol: receiverSymbol,
       symbol: selectedSymbol,
     })
   
@@ -122,7 +122,7 @@ export default function SendEmoteModal({
 
     setIsEmoteSending(false)
 
-    toast.success(`"${selectedSymbol}" has been sent to ${receiverTwitterUsername}!`)
+    toast.success(`"${selectedSymbol}" has been sent to ${receiverSymbol}!`)
   }
 
   const onDesireClicked = (desire: string) => {

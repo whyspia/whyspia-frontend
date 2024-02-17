@@ -5,12 +5,12 @@ import client from 'lib/axios'
  */
 export const apiNewEmote = async ({
   jwt,
-  receiverTwitterUsername,
+  receiverSymbol,
   symbol,
 }) => {
   // TODO: somewhere else need to handle how to get receiverUserTokenID when that twitter handle isnt in our system yet
   const body = {
-    receiverTwitterUsername,
+    receiverSymbol,
     symbol,
   }
 

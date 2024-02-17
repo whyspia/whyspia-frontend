@@ -75,7 +75,7 @@ const ProfileReusable = () => {
   )
 
   const fetchReceivedEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ receiverTwitterUsername: username, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ receiverSymbol: username, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -190,7 +190,7 @@ const ProfileReusable = () => {
         <>
           {sentEmotesData?.map((emote) => (
             <div className="text-lg" key={emote.id}>
-              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverTwitterUsername}</A> - {formatTimeAgo(emote.timestamp)}
+              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
             </div>
           ))}
 
@@ -204,7 +204,7 @@ const ProfileReusable = () => {
         <>
           {receivedEmotesData?.map((emote) => (
             <div className="text-lg" key={emote.id}>
-              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverTwitterUsername}</A> - {formatTimeAgo(emote.timestamp)}
+              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
             </div>
           ))}
 
