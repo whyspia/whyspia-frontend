@@ -65,7 +65,7 @@ const Hug: NextPage = () => {
 
     const emote = await apiNewEmote({
       jwt: jwtToken,
-      receiverSymbol: receiverSymbol,
+      receiverSymbols: [receiverSymbol],
       symbol: 'hug',
     })
   

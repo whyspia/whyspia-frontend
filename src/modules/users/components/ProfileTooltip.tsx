@@ -35,12 +35,12 @@ export const ProfileTooltip = () => {
         <div className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300">
           <div className="relative w-6 h-6">
             <Image
-              src={'/twitter-solid-blue.svg'}
-              alt="twitter-solid-blue-icon"
+              src={'/x-logo-black.svg'}
+              alt="x-logo-black-icon"
               layout="fill"
             />
           </div>
-          <span className="ml-2 font-medium">My Profile</span>
+          <span className="ml-2 font-medium">{user?.twitterUsername}</span>
         </div>
       </A>
 

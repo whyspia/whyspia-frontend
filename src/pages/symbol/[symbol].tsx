@@ -89,7 +89,7 @@ const SymbolPage = () => {
 
     const emote = await apiNewEmote({
       jwt: jwtToken,
-      receiverSymbol: receiverSymbol,
+      receiverSymbols: [receiverSymbol],
       symbol: (symbol as string).toLowerCase(), // TODO: sending URL param here - will need to fix this one day
     })
   

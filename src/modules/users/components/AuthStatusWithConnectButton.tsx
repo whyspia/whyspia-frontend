@@ -4,9 +4,10 @@ import Image from "next/image"
 import { useContext, useState } from "react"
 import { twitterLogin } from "../services/UserService"
 import { ProfileTooltip } from "./ProfileTooltip"
+import { BellIcon } from "@heroicons/react/outline"
 
 export default function AuthStatusWithConnectButton() {
-  const { user } = useContext(GlobalContext)
+  const { user, userNotifData } = useContext(GlobalContext)
 
   const [timerId, setTimerId] = useState(null)
   const [profileTooltipVisibility, setProfileTooltipVisibility] =
@@ -39,47 +40,42 @@ export default function AuthStatusWithConnectButton() {
       )}
 
       {user && user?.twitterUsername && (
-        <div
-          onMouseEnter={onMouseEnterProfileTooltip}
-          onMouseLeave={onMouseLeaveProfileTooltip}
-          className="flex items-center"
-        >
-          {profileTooltipVisibility && (
-            <div className="absolute top-0 mt-10 right-0 mb-1 text-sm text-black rounded-xl shadow bg-white overflow-hidden">
-              <ProfileTooltip />
+        <div className="flex  ">
+
+          {/* block dealing with BellIcon/notifications */}
+          <A className="relative group cursor-pointer mr-4" href={`/notifications`}>
+            <div className="w-10 h-10 rounded-full p-1 group-hover:bg-gray-200 group-hover:bg-opacity-50 flex justify-center items-center">
+              <BellIcon className="text-white w-7 h-7" />
             </div>
-          )}
+
+            {userNotifData && userNotifData?.hasReadCasuallyFalseCount > 0 && (
+              <span className="absolute top-2 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                {userNotifData.hasReadCasuallyFalseCount}
+              </span>
+            )}
+          </A>
+          
           <div
-            // onClick={openWalletModal}
-            className="flex items-center border rounded-3xl px-3 py-2"
+            onMouseEnter={onMouseEnterProfileTooltip}
+            onMouseLeave={onMouseLeaveProfileTooltip}
+            className="flex items-center"
           >
-            <div className="relative w-6 h-6">
-              <Image
-                src={'/twitter-solid-blue.svg'}
-                alt="twitter-solid-blue-icon"
-                layout="fill"
-              />
-            </div>
+            {profileTooltipVisibility && (
+              <div className="absolute top-0 mt-10 right-0 mb-1 text-sm text-black rounded-xl shadow bg-white overflow-hidden">
+                <ProfileTooltip />
+              </div>
+            )}
 
-            <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
-              {user?.twitterUsername}
-            </div>
-          </div>
-
-          <A
-            href={
-              user && user.twitterUsername
-                ? `/u/${
-                    user && user.twitterUsername
-                      ? user.twitterUsername
-                      : ''
-                  }`
-                : '#'
-            }
-          >
-            <button
-              // onClick={active ? null : openWalletModal}
-              className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold py-1 ml-2 rounded-lg"
+            <A
+              href={
+                user && user.twitterUsername
+                  ? `/u/${
+                      user && user.twitterUsername
+                        ? user.twitterUsername
+                        : ''
+                    }`
+                  : '#'
+              }
             >
               <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
                 <Image
@@ -90,8 +86,9 @@ export default function AuthStatusWithConnectButton() {
                   className="rounded-full"
                 />
               </div>
-            </button>
-          </A>
+            </A>
+          
+          </div>
         </div>
       )}
     </>
