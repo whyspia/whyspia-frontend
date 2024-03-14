@@ -110,8 +110,8 @@ export default function SendEmoteModal({
 
     const emote = await apiNewEmote({
       jwt: jwtToken,
-      receiverSymbols: [receiverSymbol],
-      symbol: selectedSymbol,
+      receiverSymbols: [receiverSymbol],  // TODO: make so multiple symbols are used here
+      sentSymbols: [selectedSymbol],      // TODO: make so multiple symbols are used here
     })
   
     if (emote) {

@@ -17,6 +17,7 @@ import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import { EmoteTypesWithEmojis } from 'modules/symbol/utils/EmoteTypeUtil'
 import DefineUI2 from 'modules/symbol/components/DefineUI2'
 import { twitterLogin } from 'modules/users/services/UserService'
+import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 
 const SymbolPage = () => {
   const router = useRouter()
@@ -45,7 +46,7 @@ const SymbolPage = () => {
   )
 
   const fetchEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ symbol: symbol ? (symbol as string).toLowerCase() : null, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ sentSymbols: symbol ? [(symbol as string).toLowerCase()] : null, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -90,7 +91,7 @@ const SymbolPage = () => {
     const emote = await apiNewEmote({
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],
-      symbol: (symbol as string).toLowerCase(), // TODO: sending URL param here - will need to fix this one day
+      sentSymbols: [(symbol as string).toLowerCase()], // TODO: sending URL param here - will need to fix this one day
     })
   
     if (emote) {
@@ -183,13 +184,13 @@ const SymbolPage = () => {
                   {isEmoteSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
                 </>
               )}
-              
 
-              {emotesData?.map((emote) => (
-                <div className="text-lg" key={emote.id}>
-                  <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
-                </div>
-              ))}
+              {emotesData?.map((emote) => {
+                
+                return (
+                  <SentEmoteBlock emote={emote} jwt={jwtToken} />
+                )
+              })}
 
               {hasEmotesNextPage && <button onClick={() => fetchEmotesNextPage()} disabled={!hasEmotesNextPage || isEmotesFetchingNextPage}>
                 {isEmotesFetchingNextPage ? 'Loading...' : 'Load More'}

@@ -1,10 +1,10 @@
 import client from 'lib/axios'
 
-type EmoteResponse = {
+export type EmoteResponse = {
   id: string
   senderTwitterUsername: string
   receiverSymbols: string[]
-  symbol: string
+  sentSymbols: string[]
   timestamp: Date
 }
 

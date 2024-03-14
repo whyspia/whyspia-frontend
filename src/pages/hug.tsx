@@ -13,6 +13,7 @@ import { formatTimeAgo } from 'utils/randomUtils'
 import { GlobalContext } from './_app'
 import { checkExistingTwitterProfile } from 'actions/users/apiUserActions'
 import classNames from 'classnames'
+import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 
 const Hug: NextPage = () => {
   const { jwtToken } = useContext(GlobalContext)
@@ -21,7 +22,7 @@ const Hug: NextPage = () => {
   const [isHugSending, setIsHugSending] = useState(false)
 
   const fetchEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ symbol: 'hug', skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ sentSymbols: ['hug'], skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -66,7 +67,7 @@ const Hug: NextPage = () => {
     const emote = await apiNewEmote({
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],
-      symbol: 'hug',
+      sentSymbols: ['hug'],
     })
   
     if (emote) {
@@ -108,11 +109,12 @@ const Hug: NextPage = () => {
 
       {isHugSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
 
-      {emotesData?.map((emote) => (
-        <div className="text-lg" key={emote.id}>
-          <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
-        </div>
-      ))}
+      {emotesData?.map((emote) => {
+        
+        return (
+          <SentEmoteBlock emote={emote} jwt={jwtToken} />
+        )
+      })}
 
       {hasNextPage && <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
         {isFetchingNextPage ? 'Loading...' : 'Load More'}

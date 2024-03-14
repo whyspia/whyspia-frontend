@@ -9,9 +9,19 @@ export default async function apiGetAllEmotes({
   orderBy,
   orderDirection,
   senderTwitterUsername = null,
-  receiverSymbol = null,
-  symbol = null,
+  receiverSymbols = null,
+  sentSymbols = null,
+}: {
+  skip: number
+  limit: number
+  orderBy: string
+  orderDirection: string
+  senderTwitterUsername?: string
+  receiverSymbols?: string[]
+  sentSymbols?: string[]
 }) {
+  const commaSeperatedReceiverSymbols = receiverSymbols?.join(",") || null
+  const commaSeperatedSentSymbols = sentSymbols?.join(",") || null
 
   try {
     // TODO: implement these params and one to filter by a certain sender or receiver
@@ -22,8 +32,8 @@ export default async function apiGetAllEmotes({
         orderBy,
         orderDirection,
         senderTwitterUsername,
-        receiverSymbol,
-        symbol,
+        receiverSymbols: commaSeperatedReceiverSymbols,
+        sentSymbols: commaSeperatedSentSymbols,
       },
     })
 

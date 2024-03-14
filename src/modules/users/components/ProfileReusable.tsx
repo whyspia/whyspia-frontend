@@ -8,6 +8,7 @@ import { formatTimeAgo } from 'utils/randomUtils'
 import A from 'components/A'
 import apiGetAllDefinitions from 'actions/symbol-definitions/apiGetAllDefinitions'
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline"
+import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 
 const availableTabs = ['sent', 'received', 'symbols']
 
@@ -75,7 +76,7 @@ const ProfileReusable = () => {
   )
 
   const fetchReceivedEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ receiverSymbol: username, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ receiverSymbols: [username], skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -188,11 +189,12 @@ const ProfileReusable = () => {
 
       {activeTab === 'sent' && (
         <>
-          {sentEmotesData?.map((emote) => (
-            <div className="text-lg" key={emote.id}>
-              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
-            </div>
-          ))}
+          {sentEmotesData?.map((emote) => {
+            
+            return (
+              <SentEmoteBlock emote={emote} key={emote.id} />
+            )
+          })}
 
           {hasSentNextPage && <button onClick={() => fetchSentNextPage()} disabled={!hasSentNextPage || isSentFetchingNextPage}>
             {isSentFetchingNextPage ? 'Loading...' : 'Load More'}
@@ -202,11 +204,12 @@ const ProfileReusable = () => {
 
       {activeTab === 'received' && (
         <>
-          {receivedEmotesData?.map((emote) => (
-            <div className="text-lg" key={emote.id}>
-              <A href={`/u/${emote.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.senderTwitterUsername}</A> sent "<A href={`/symbol/${emote.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{emote.symbol}</A>" to <A href={`/u/${emote.receiverSymbol}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{emote.receiverSymbol}</A> - {formatTimeAgo(emote.timestamp)}
-            </div>
-          ))}
+          {receivedEmotesData?.map((emote) => {
+            
+            return (
+              <SentEmoteBlock emote={emote} key={emote.id} />
+            )
+          })}
 
           {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
             {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
