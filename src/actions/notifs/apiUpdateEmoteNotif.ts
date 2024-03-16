@@ -1,4 +1,5 @@
 import client from 'lib/axios'
+import { EmoteNotifResponse } from './apiGetAllEmoteNotifs'
 
 /**
  * Update emote notif in DB
@@ -13,7 +14,7 @@ export const apiUpdateEmoteNotif = async ({
   notifIDs: string[]
   isCasualOrDirect: string
   isMarkingUnread: boolean
-}) => {
+}): Promise<Partial<EmoteNotifResponse>> => {
   const commaSeperatedNotifIDs = notifIDs.join(",")
   
   const body = {
@@ -29,7 +30,7 @@ export const apiUpdateEmoteNotif = async ({
       },
     })
 
-    return response?.data?.data?.emote
+    return response?.data?.data // for now returns { hasReadCasuallyFalseCount, hasReadDirectlyFalseCount }
   } catch (error) {
     console.error(`Could not update notifs`, error)
     return null

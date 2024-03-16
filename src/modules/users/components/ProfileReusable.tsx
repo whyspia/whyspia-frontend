@@ -155,6 +155,16 @@ const ProfileReusable = () => {
 
   // console.log('userData==', userData)
 
+  if (!userData) {
+    return (
+      <div className="h-screen flex flex-col items-center mt-10">
+
+        <h1 className="text-4xl font-bold mb-4">dang bruh - no user found in the DB</h1>
+
+      </div>
+    )
+  }
+
   return (
     <div className="h-screen flex flex-col items-center mt-10">
 

@@ -1,10 +1,13 @@
 import { EmoteNotifSingleResponse } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
 import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
+import { GlobalContext } from "lib/GlobalContext"
+import ModalService from "components/modals/ModalService"
+import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
 
 
 export const NotifBlock = ({
@@ -14,6 +17,7 @@ export const NotifBlock = ({
   notif: EmoteNotifSingleResponse
   jwt: string
 }) => {
+  const { setUserNotifData } = useContext(GlobalContext)
   const receiverSymbolsCount = notif?.emoteData?.receiverSymbols?.length || 0
   const sentSymbolsCount = notif?.emoteData?.sentSymbols?.length || 0
   const isMultipleReceivers = receiverSymbolsCount > 1
@@ -97,12 +101,15 @@ export const NotifBlock = ({
     }
   }, [])
 
-  const onMarkSeenChanged = (isMarkSeen: boolean) => {
+  const onMarkSeenChanged = async (isMarkSeen: boolean) => {
+    let response = null
     if (isMarkSeen) {
-      apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: false })
+      response = await apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: false })
     } else {
-      apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: true })
+      response = await apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: true })
     }
+
+    setUserNotifData(response)
 
     setClientHasReadDirectly(isMarkSeen)
   }
@@ -147,7 +154,10 @@ export const NotifBlock = ({
             </div>
 
             <div>
-              <A href={`/u/${notif?.emoteData?.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              <A
+                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.senderTwitterUsername })}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
                 {notif?.emoteData?.senderTwitterUsername}
               </A> sent{' '}
 
@@ -175,7 +185,10 @@ export const NotifBlock = ({
 
                 </span>
               ): (
-                <A href={`/symbol/${notif?.emoteData?.sentSymbols[0]}`} className="text-red-500 hover:text-red-700 cursor-pointer">
+                <A
+                  onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.sentSymbols[0] })}
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
+                >
                   {notif?.emoteData?.sentSymbols[0]}
                 </A>
               )} to{' '}
@@ -203,10 +216,13 @@ export const NotifBlock = ({
 
                 </span>
               ): (
-                <A href={`/u/${notif?.emoteData?.receiverSymbols[0]}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                  {notif?.emoteData?.receiverSymbols[0]}
-                </A>
-              )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
+              <A
+                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
+                {notif?.emoteData?.receiverSymbols[0]}
+              </A>
+            )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
 
             </div>
 
@@ -249,9 +265,14 @@ export const NotifBlock = ({
                 {notif?.emoteData?.receiverSymbols && notif?.emoteData?.receiverSymbols.map((receiverSymbol) => {
 
                   return (
-                    <li key={receiverSymbol}><A href={`/symbol/${receiverSymbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">
-                      {receiverSymbol}
-                    </A></li>
+                    <li key={receiverSymbol}>
+                      <A
+                        onClick={() => ModalService.open(SymbolSelectModal, { symbol: receiverSymbol })}
+                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                      >
+                        {receiverSymbol}
+                      </A>
+                    </li>
                   )
                 })}
               </ul>
@@ -275,9 +296,14 @@ export const NotifBlock = ({
                 {notif?.emoteData?.sentSymbols && notif?.emoteData?.sentSymbols.map((sentSymbol) => {
 
                   return (
-                    <li key={sentSymbol}><A href={`/symbol/${sentSymbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">
-                      {sentSymbol}
-                    </A></li>
+                    <li key={sentSymbol}>
+                      <A
+                        onClick={() => ModalService.open(SymbolSelectModal, { symbol: sentSymbol })}
+                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                      >
+                        {sentSymbol}
+                      </A>
+                    </li>
                   )
                 })}
               </ul>
@@ -317,7 +343,10 @@ export const NotifBlock = ({
           </div>
 
           <div>
-            <A href={`/u/${notif?.emoteData?.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+            <A
+              onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.senderTwitterUsername })}
+              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+            >
               {notif?.emoteData?.senderTwitterUsername}
             </A> sent{' '}
 
@@ -345,7 +374,10 @@ export const NotifBlock = ({
 
               </span>
             ): (
-              <A href={`/symbol/${notif?.emoteData?.sentSymbols[0]}`} className="text-red-500 hover:text-red-700 cursor-pointer">
+              <A
+                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.sentSymbols[0] })}
+                className="text-red-500 hover:text-red-700 cursor-pointer"
+              >
                 {notif?.emoteData?.sentSymbols[0]}
               </A>
             )} to{' '}
@@ -373,7 +405,10 @@ export const NotifBlock = ({
 
               </span>
             ): (
-              <A href={`/u/${notif?.emoteData?.receiverSymbols[0]}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              <A
+                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
                 {notif?.emoteData?.receiverSymbols[0]}
               </A>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}

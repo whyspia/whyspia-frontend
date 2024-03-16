@@ -7,13 +7,20 @@ import apiGetAllEmoteNotifs from 'actions/notifs/apiGetAllEmoteNotifs'
 import { useContext } from 'react'
 import { GlobalContext } from './_app'
 import { NotifBlock } from 'modules/notifs/components/NotifBlock'
+import apiGetAndUpdateAllEmoteNotifs from 'actions/notifs/apiGetAndUpdateAllEmoteNotifs'
 
 
 const Notifications = () => {
-  const { jwtToken } = useContext(GlobalContext)
+  const { jwtToken, setUserNotifData, userNotifData } = useContext(GlobalContext)
 
   const fetchNotifs = async ({ pageParam = 0 }) => {
-    const notifs = await apiGetAllEmoteNotifs({ jwt: jwtToken, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    let notifs = null
+    if (userNotifData && userNotifData?.hasReadCasuallyFalseCount <= 0) {
+      notifs = await apiGetAllEmoteNotifs({ jwt: jwtToken, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    } else {
+      notifs = await apiGetAndUpdateAllEmoteNotifs({ jwt: jwtToken, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    }
+    setUserNotifData(notifs)
     return notifs ? notifs.emoteNotifs : []
   }
 
