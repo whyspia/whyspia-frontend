@@ -1,20 +1,23 @@
-import { EmoteNotifSingleResponse, EmoteResponse } from "actions/notifs/apiGetAllEmoteNotifs"
+import { EmoteResponse } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
 import { useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
-import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
 import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import ModalService from "components/modals/ModalService"
 import SymbolSelectModal from "./SymbolSelectModal"
+import toast from 'react-hot-toast'
+import copy from 'copy-to-clipboard'
+import { getURL } from "utils/seo-constants"
 
 
 export const SentEmoteBlock = ({
   emote,
-  jwt
+  jwt,
+  isPersonal = false, // is visuals of this Emote being displayed FOR logged in user. If so, can use language like "you"
 }: {
   emote: EmoteResponse
   jwt?: string
+  isPersonal?: boolean
 }) => {
   const receiverSymbolsCount = emote?.receiverSymbols?.length || 0
   const sentSymbolsCount = emote?.sentSymbols?.length || 0
@@ -82,13 +85,13 @@ export const SentEmoteBlock = ({
   }, [])
 
   const onShowDetailsChanged = (isDetailsShown: boolean) => {
-    // if (isMarkSeen) {
-    //   apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: false })
-    // } else {
-    //   apiUpdateEmoteNotif({ jwt, notifIDs: [notif.id], isCasualOrDirect: 'direct', isMarkingUnread: true })
-    // }
-
     setShowDetails(isDetailsShown)
+  }
+
+  const copyEmotePageURL = () => {
+    const url = `${getURL()}/emote/${emote?.id}`
+    copy(url)
+    toast.success('Copied emote page URL')
   }
 
   return (
@@ -141,7 +144,11 @@ export const SentEmoteBlock = ({
                 ref={receiversRef}
                 className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
               >
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                {isPersonal ? (
+                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+                ): (
+                  <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                )}
 
                 {receiversTooltipVisibility && (
                   <div
@@ -159,12 +166,18 @@ export const SentEmoteBlock = ({
 
               </span>
             ): (
-              <A
-                onClick={() => ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })}
-                className="text-blue-500 hover:text-blue-700 cursor-pointer"
-              >
-                {emote?.receiverSymbols[0]}
-              </A>
+              <>
+                {isPersonal ? (
+                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+                ): (
+                  <A
+                    onClick={() => ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })}
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                  >
+                    {emote?.receiverSymbols[0]}
+                  </A>
+                )}
+              </>
             )} - {formatTimeAgo(emote?.timestamp)}
 
           </div>
@@ -298,7 +311,11 @@ export const SentEmoteBlock = ({
               ref={receiversRef}
               className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
             >
-              <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+              {isPersonal ? (
+                <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+              ): (
+                <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+              )}
 
               {receiversTooltipVisibility && (
                 <div
@@ -316,12 +333,18 @@ export const SentEmoteBlock = ({
 
             </span>
           ): (
-            <A
-              onClick={() => ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })}
-              className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >
-              {emote?.receiverSymbols[0]}
-            </A>
+            <>
+              {isPersonal ? (
+                <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+              ): (
+                <A
+                  onClick={() => ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })}
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                >
+                  {emote?.receiverSymbols[0]}
+                </A>
+              )}
+            </>
           )} - {formatTimeAgo(emote?.timestamp)}
 
         </div>
@@ -349,6 +372,10 @@ export const SentEmoteBlock = ({
             <div className="flex flex-col w-full text-black font-semibold">
               <div onClick={() => onShowDetailsChanged(!showDetails)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                 <span>toggle details</span>
+              </div>
+
+              <div onClick={copyEmotePageURL} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                <span>copy link</span>
               </div>
 
               {/* <div onClick={() => onMarkSeenChanged(false)} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">

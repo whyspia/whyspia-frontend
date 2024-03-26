@@ -24,3 +24,7 @@ export function formatTimeAgo(timestamp) {
     return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`
   }
 }
+
+export const isServerSide = () => {
+  return typeof window === 'undefined'
+}

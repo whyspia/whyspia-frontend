@@ -7,7 +7,7 @@ export const setCookie = (name, value, expirationDateUTC) => {
 }
 
 export const deleteCookie = (name) => {
-  document.cookie = `${name}=; max-age=0`
+  document.cookie = `${name}=; max-age=0; path=/;`
 }
 
 export const getCookie = (name) => {

@@ -188,7 +188,7 @@ const SymbolPage = () => {
               {emotesData?.map((emote) => {
                 
                 return (
-                  <SentEmoteBlock emote={emote} jwt={jwtToken} />
+                  <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote.id} />
                 )
               })}
 

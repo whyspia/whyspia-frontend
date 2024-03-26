@@ -8,6 +8,9 @@ import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
 import { GlobalContext } from "lib/GlobalContext"
 import ModalService from "components/modals/ModalService"
 import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
+import toast from 'react-hot-toast'
+import copy from 'copy-to-clipboard'
+import { getURL } from "utils/seo-constants"
 
 
 export const NotifBlock = ({
@@ -118,6 +121,12 @@ export const NotifBlock = ({
     setShowDetails(isDetailsShown)
   }
 
+  const copyEmotePageURL = () => {
+    const url = `${getURL()}/emote/${notif?.emoteData?.id}`
+    copy(url)
+    toast.success('Copied emote page URL')
+  }
+
   return (
     <div className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white flex  items-center">
 
@@ -198,7 +207,7 @@ export const NotifBlock = ({
                   ref={receiversRef}
                   className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
                 >
-                  <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
 
                   {receiversTooltipVisibility && (
                     <div
@@ -216,12 +225,7 @@ export const NotifBlock = ({
 
                 </span>
               ): (
-              <A
-                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })}
-                className="text-blue-500 hover:text-blue-700 cursor-pointer"
-              >
-                {notif?.emoteData?.receiverSymbols[0]}
-              </A>
+                <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
 
             </div>
@@ -387,7 +391,7 @@ export const NotifBlock = ({
                 ref={receiversRef}
                 className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
               >
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
 
                 {receiversTooltipVisibility && (
                   <div
@@ -405,12 +409,7 @@ export const NotifBlock = ({
 
               </span>
             ): (
-              <A
-                onClick={() => ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })}
-                className="text-blue-500 hover:text-blue-700 cursor-pointer"
-              >
-                {notif?.emoteData?.receiverSymbols[0]}
-              </A>
+              <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
 
           </div>
@@ -431,8 +430,16 @@ export const NotifBlock = ({
             className="absolute h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
           >
             <div className="flex flex-col w-full text-black font-semibold">
+              <div className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                <A href="/context/nou">go to No U context</A>
+              </div>
+
               <div onClick={() => onShowDetailsChanged(!showDetails)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                 <span>toggle details</span>
+              </div>
+
+              <div onClick={copyEmotePageURL} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                <span>copy link</span>
               </div>
 
               {/* <div onClick={() => onMarkSeenChanged(false)} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
