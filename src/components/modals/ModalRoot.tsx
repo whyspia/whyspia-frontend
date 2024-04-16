@@ -57,7 +57,7 @@ export default function ModalRoot() {
             <div
               className={
                 modalList?.length > 0
-                  ? 'fixed flex justify-center inset-0 overflow-y-auto z-50 bg-gray-500 bg-opacity-75'
+                  ? 'fixed flex justify-center inset-0 overflow-y-auto z-[700] bg-gray-500 bg-opacity-75'
                   : ''
               }
               key={index}

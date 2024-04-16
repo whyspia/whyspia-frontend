@@ -204,20 +204,20 @@ export default function SendEmoteModal({
             ) : (
               <div>
                 
-                <div className="font-bold text-lg mb-1">Send to:</div>
+                <div className="font-bold text-lg mb-1">send to:</div>
 
                 <textarea
                   onChange={(event) => onSetReceiverChanged(event.target.value)}
-                  placeholder="Enter X username..."
+                  placeholder="enter X username..."
                   className="w-full rounded-lg px-2 py-1"
                 />
 
-                <div className="font-bold text-lg mb-1">Symbol to send:</div>
+                <div className="font-bold text-lg mb-1">symbol to send:</div>
 
                 <textarea
                   value={selectedSymbol}
                   onChange={(event) => onSymbolTyped(event.target.value)}
-                  placeholder="Enter symbol..."
+                  placeholder="enter symbol..."
                   className="w-full rounded-lg px-2 py-1"
                 />
 
@@ -233,7 +233,7 @@ export default function SendEmoteModal({
                   )}
                   disabled={!isValid}
                 >
-                  Send
+                  send
                 </button>
 
               </div>

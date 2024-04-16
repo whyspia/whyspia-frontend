@@ -5,26 +5,63 @@ import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
 import apiGetAllEmotes from 'actions/emotes/apiGetAllEmotes'
 import { flatten } from 'lodash'
 import toast from 'react-hot-toast'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import { twitterLogin } from 'modules/users/services/UserService'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
+import { getAllUserTokens } from 'actions/users/apiUserActions'
+import A from 'components/A'
+import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
+import ModalService from 'components/modals/ModalService'
+import NouEmoteModal from 'modules/symbol/components/NouEmoteModal'
+import apiGetUnrespondedReceivedEmotes from 'actions/emotes/apiGetUnrespondedReceivedEmotes'
 
 // i noticed this nou page is just YOUR received symbols. Which is different from notifications which can be so much more - especially once you can follow all kinds of things
 const NouPage = () => {
 
   const { jwtToken, user } = useContext(GlobalContext)
 
-  const fetchReceivedEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ receiverSymbols: [user?.twitterUsername], skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+  const [searchBarQuery, setSearchBarQuery] = useState('')
+  const searchBarRef = useRef(null)
+
+  const fetchUserTokens = async ({ pageParam = 0 }) => {
+    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc' })
+    return userTokens
+  }
+
+  const { data: infiniteUserTokens, fetchNextPage: fetchSearchNextPage, hasNextPage: hasSearchNextPage, isFetchingNextPage: isSearchFetchingNextPage } = useInfiniteQuery(
+    ['search', 10, searchBarQuery],
+    ({ pageParam = 0 }) =>
+      fetchUserTokens({
+        pageParam
+      }),
+    {
+      enabled: Boolean(searchBarQuery && searchBarQuery?.length > 0), // disables query if this is not true
+      getNextPageParam: (lastGroup, allGroups) => {
+        const morePagesExist = lastGroup?.length === 10
+
+        if (!morePagesExist) {
+          return false
+        }
+
+        return allGroups.length * 10
+      },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+    }
+  )
+
+  const fetchUnrespondedReceivedEmotes = async ({ pageParam = 0 }) => {
+    const emotes = await apiGetUnrespondedReceivedEmotes({ jwt: jwtToken, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
   const { data: infiniteReceivedEmotes, fetchNextPage: fetchReceivedNextPage, hasNextPage: hasReceivedNextPage, isFetchingNextPage: isReceivedFetchingNextPage } = useInfiniteQuery(
-    ['received', 10, user?.twitterUsername, user],
+    ['unrespondedReceivedEmotes',],
     ({ pageParam = 0 }) =>
-    fetchReceivedEmotes({
+    fetchUnrespondedReceivedEmotes({
         pageParam
       }),
     {
@@ -39,14 +76,18 @@ const NouPage = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: Boolean(jwtToken),
       keepPreviousData: true,
     }
   )
 
+  const onSearchBarTyped = (symbol: string) => {
+    setSearchBarQuery(symbol)
+  }
+
   const receivedEmotesData = flatten(infiniteReceivedEmotes?.pages || [])
 
-  console.log('receivedEmotesData==', receivedEmotesData)
+  const userTokens = flatten(infiniteUserTokens?.pages || [])
 
   return (
     <div className="h-screen flex flex-col items-center mt-10">
@@ -69,16 +110,82 @@ const NouPage = () => {
             </>
           ): (
             <>
-              {receivedEmotesData?.map((emote) => {
-            
-                return (
-                  <SentEmoteBlock isPersonal={true} emote={emote} jwt={jwtToken} key={emote.id} />
-                )
-              })}
+              <div className="relative mb-8" ref={searchBarRef}>
+                
+                <input
+                  type="text"
+                  value={searchBarQuery}
+                  onChange={(e) => onSearchBarTyped(e.target.value)}
+                  placeholder="Search for someone to send symbols to"
+                  className="hidden md:block w-[30rem] border border-gray-300 rounded px-3 py-2"
+                />
+                {/* {searchbarTooltipVisibility && (
+                  <div
+                    onClick={() => setSearchbarTooltipVisibility(false)}
+                    className="absolute h-[10rem] w-full inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
+                  >
+                    <SearchbarTooltipContent userTokens={userTokens} searchText={searchBarQuery} />
+                  </div>
+                )} */}
+              </div>
 
-              {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
-                {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
-              </button>}
+              {Boolean(searchBarQuery && searchBarQuery?.length > 0) ? (
+                <>
+                  {userTokens?.map((searchedUser) => {
+
+                    return (
+                      <div
+                        // onClick={(event) => router.push(`/emote/${emote?.id}`)}
+                        className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+                        key={searchedUser.id}
+                      >
+                        <div>
+                          <A
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              ModalService.open(SymbolSelectModal, { symbol: searchedUser?.twitterUsername })
+                            }}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          >
+                            {searchedUser?.twitterUsername}
+                          </A>
+                
+                        </div>
+
+                        {/* Emote button */}
+                        <div
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            ModalService.open(NouEmoteModal, { initialSymbol: 'hug', receiverSymbol: searchedUser?.twitterUsername })
+                          }}
+                          className="bg-blue-500 rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-blue-500 hover:border-white cursor-pointer"
+                        >
+                          emote
+                        </div>
+                  
+                      </div>
+                    )
+                  })}
+                </>
+
+
+                
+              ): (
+                <>
+                  {receivedEmotesData?.map((emote) => {
+                    
+                    return (
+                      <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} key={emote.id} />
+                    )
+                  })}
+
+                  {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
+                    {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
+                  </button>}
+                </>
+              )}
+
+              
             </>
           )}
 
