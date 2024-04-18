@@ -115,7 +115,8 @@ export const SentEmoteBlock = ({
       }}
       className={classNames(
         isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
-        "relative text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+        showDetails ? 'items-start' : 'items-center', // this is basically for keeping emote button at top when showing details. and items-center is needed when not showing details bc it centers all the text of emote and emote button
+        "relative text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex cursor-pointer"
       )}
     >
 
@@ -452,7 +453,7 @@ export const SentEmoteBlock = ({
       )}
 
       {/* Emote button */}
-      {!isPreview && (
+      {(!isPreview && context !== "nou_sent") && (
         <div
           onClick={(event) => {
             event.stopPropagation()
@@ -473,7 +474,7 @@ export const SentEmoteBlock = ({
         </div>
       )}
 
-      {!isPreview && (
+      {(!isPreview) && (
         <div
           ref={optionsRef}
           onClick={(event) => event.stopPropagation()}

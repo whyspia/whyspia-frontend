@@ -15,7 +15,7 @@ import A from 'components/A'
 import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import ModalService from 'components/modals/ModalService'
 import NouEmoteModal from 'modules/symbol/components/NouEmoteModal'
-import apiGetUnrespondedReceivedEmotes from 'actions/emotes/apiGetUnrespondedReceivedEmotes'
+import apiGetUnrespondedEmotes from 'actions/emotes/apiGetUnrespondedEmotes'
 
 // i noticed this nou page is just YOUR received symbols. Which is different from notifications which can be so much more - especially once you can follow all kinds of things
 const NouPage = () => {
@@ -24,6 +24,8 @@ const NouPage = () => {
 
   const [searchBarQuery, setSearchBarQuery] = useState('')
   const searchBarRef = useRef(null)
+
+  const [activeTab, setActiveTab] = useState('received')
 
   const fetchUserTokens = async ({ pageParam = 0 }) => {
     const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc' })
@@ -54,7 +56,7 @@ const NouPage = () => {
   )
 
   const fetchUnrespondedReceivedEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetUnrespondedReceivedEmotes({ jwt: jwtToken, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetUnrespondedEmotes({ jwt: jwtToken, fetchSentOrReceived: 'received', skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -81,11 +83,44 @@ const NouPage = () => {
     }
   )
 
+  const fetchUnrespondedSentEmotes = async ({ pageParam = 0 }) => {
+    const emotes = await apiGetUnrespondedEmotes({ jwt: jwtToken, fetchSentOrReceived: 'sent', skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    return emotes
+  }
+
+  const { data: infiniteSentEmotes, fetchNextPage: fetchSentNextPage, hasNextPage: hasSentNextPage, isFetchingNextPage: isSentFetchingNextPage } = useInfiniteQuery(
+    ['unrespondedSentEmotes',],
+    ({ pageParam = 0 }) =>
+    fetchUnrespondedSentEmotes({
+        pageParam
+      }),
+    {
+      getNextPageParam: (lastGroup, allGroups) => {
+        const morePagesExist = lastGroup?.length === 10
+
+        if (!morePagesExist) {
+          return false
+        }
+
+        return allGroups.length * 10
+      },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      enabled: Boolean(jwtToken),
+      keepPreviousData: true,
+    }
+  )
+
+  const onTabChanged = (tabName: string) => {
+    setActiveTab(tabName)
+  }
+
   const onSearchBarTyped = (symbol: string) => {
     setSearchBarQuery(symbol)
   }
 
   const receivedEmotesData = flatten(infiniteReceivedEmotes?.pages || [])
+  const sentEmotesData = flatten(infiniteSentEmotes?.pages || [])
 
   const userTokens = flatten(infiniteUserTokens?.pages || [])
 
@@ -167,21 +202,61 @@ const NouPage = () => {
                     )
                   })}
                 </>
-
-
-                
+ 
               ): (
                 <>
-                  {receivedEmotesData?.map((emote) => {
-                    
-                    return (
-                      <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} key={emote.id} />
-                    )
-                  })}
 
-                  {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
-                    {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
-                  </button>}
+                  <div className="flex mb-4">
+
+                    <button
+                      className={`px-4 py-2 ${
+                        activeTab === 'received' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      }`}
+                      onClick={() => onTabChanged('received')}
+                    >
+                      received
+                    </button>
+
+                    <button
+                      className={`px-4 py-2 ${
+                        activeTab === 'sent' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      }`}
+                      onClick={() => onTabChanged('sent')}
+                    >
+                      sent
+                    </button>
+                    
+                  </div>
+
+                  {activeTab === 'received' ? (
+                    <>
+                      {receivedEmotesData?.map((emote) => {
+                      
+                        return (
+                          <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} key={emote.id} />
+                        )
+                      })}
+
+                      {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
+                        {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
+                      </button>}
+                    </>
+                  ): (
+                    <>
+                      {sentEmotesData?.map((emote) => {
+                      
+                        return (
+                          <SentEmoteBlock context='nou_sent' emote={emote} jwt={jwtToken} key={emote.id} />
+                        )
+                      })}
+
+                      {hasSentNextPage && <button onClick={() => fetchSentNextPage()} disabled={!hasSentNextPage || isSentFetchingNextPage}>
+                        {isSentFetchingNextPage ? 'Loading...' : 'Load More'}
+                      </button>}
+                    </>
+                  )}
+
+                  
                 </>
               )}
 

@@ -3,7 +3,7 @@ import client from 'lib/axios'
 /**
  * get unresponded received emotes in the no u context (these conditions based on emotes sent at same timestamp as main emote)
  */
-export default async function apiGetUnrespondedReceivedEmotes({
+export default async function apiGetUnrespondedEmotes({
   jwt,
   skip,
   limit,
@@ -12,6 +12,7 @@ export default async function apiGetUnrespondedReceivedEmotes({
   senderTwitterUsername = null,
   receiverSymbols = null,
   sentSymbols = null,
+  fetchSentOrReceived = 'received',
 }: {
   jwt: string
   skip: number
@@ -21,10 +22,11 @@ export default async function apiGetUnrespondedReceivedEmotes({
   senderTwitterUsername?: string
   receiverSymbols?: string[]
   sentSymbols?: string[]
+  fetchSentOrReceived: string
 }) {
 
   try {
-    const response = await client.get(`/emote/fetchUnrespondedReceivedEmotes`, {
+    const response = await client.get(`/emote/fetchUnrespondedEmotes`, {
       params: {
         skip,
         limit,
@@ -33,6 +35,7 @@ export default async function apiGetUnrespondedReceivedEmotes({
         senderTwitterUsername,
         receiverSymbols,
         sentSymbols,
+        fetchSentOrReceived,
       },
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : null,
@@ -41,7 +44,7 @@ export default async function apiGetUnrespondedReceivedEmotes({
 
     return response?.data?.data?.emotes
   } catch (error) {
-    console.error('Could not get UnrespondedReceivedEmotes', error)
+    console.error('Could not get UnrespondedEmotes', error)
     return []
   }
 }

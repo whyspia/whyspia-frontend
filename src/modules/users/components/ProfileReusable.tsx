@@ -173,19 +173,19 @@ const ProfileReusable = () => {
       <div className="flex">
         <button
           className={`px-4 py-2 ${
-            activeTab === 'sent' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+            activeTab === 'sent' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
           }`}
           onClick={() => onTabChanged('sent')}
         >
-          SENT
+          sent
         </button>
         <button
           className={`px-4 py-2 ${
-            activeTab === 'received' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+            activeTab === 'received' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
           }`}
           onClick={() => onTabChanged('received')}
         >
-          RECEIVED
+          received
         </button>
         <button
           className={`px-4 py-2 ${
@@ -193,7 +193,7 @@ const ProfileReusable = () => {
           }`}
           onClick={() => onTabChanged('symbols')}
         >
-          SYMBOLS
+          symbols
         </button>
       </div>
 

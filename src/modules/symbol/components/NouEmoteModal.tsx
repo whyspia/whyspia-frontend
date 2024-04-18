@@ -79,6 +79,7 @@ export default function NouEmoteModal({
     setIsEmoteSending(false)
 
     queryClient.invalidateQueries(['unrespondedReceivedEmotes'])
+    queryClient.invalidateQueries(['unrespondedSentEmotes'])
 
     toast.success(`"${selectedSymbol}" has been sent to ${receiverSymbol}!`)
 
