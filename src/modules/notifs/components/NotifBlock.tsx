@@ -236,7 +236,7 @@ export const NotifBlock = ({
                   onClick={(event) => event.stopPropagation()}
                   className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
                 >
-                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+                  <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
 
                   {receiversTooltipVisibility && (
                     <div
@@ -260,7 +260,7 @@ export const NotifBlock = ({
 
                 </span>
               ): (
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
 
             </div>
@@ -463,7 +463,7 @@ export const NotifBlock = ({
                 onClick={(event) => event.stopPropagation()}
                 className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
               >
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
 
                 {receiversTooltipVisibility && (
                   <div
@@ -487,7 +487,7 @@ export const NotifBlock = ({
 
               </span>
             ): (
-              <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+              <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
 
           </div>

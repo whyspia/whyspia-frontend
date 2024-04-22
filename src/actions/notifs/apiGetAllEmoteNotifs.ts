@@ -6,6 +6,8 @@ export type EmoteResponse = {
   receiverSymbols: string[]
   sentSymbols: string[]
   timestamp: Date
+  chainPreview?: EmoteResponse[]
+  totalChainLength?: number
 }
 
 export type EmoteNotifSingleResponse = {

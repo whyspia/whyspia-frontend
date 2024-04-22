@@ -12,17 +12,21 @@ import { useRouter } from "next/router"
 import NouEmoteModal from "./NouEmoteModal"
 import SendEmoteModal from "./SendEmoteModal"
 import classNames from "classnames"
+import NouChainModal from "./NouChainModal"
+import { UserProfile } from "types/customTypes"
 
 
 export const SentEmoteBlock = ({
   emote,
   jwt,
-  isPersonal = false, // is visuals of this Emote being displayed FOR logged in user. If so, can use language like "you"
+  user,
+  isPersonal = false, // is visuals of this Emote being displayed FOR logged in user. If so, can use language like "you". But need to know if "you" shows up for sender or receiver (...i guess could be both if talking to self lol)
   isPreview = false,  // is this a preview - so an emote that has not been sent yet
   context = '',     // sometimes the context changes code in this file
 }: {
   emote: EmoteResponse
   jwt?: string
+  user?: UserProfile
   isPersonal?: boolean
   isPreview?: boolean
   context?: string
@@ -33,11 +37,15 @@ export const SentEmoteBlock = ({
   const isMultipleReceivers = receiverSymbolsCount > 1
   const isMultipleSentSymbols = sentSymbolsCount > 1
 
+  const isAuthedUserSender = emote?.senderTwitterUsername === user?.twitterUsername
+  const isAuthedUserReceiver = emote?.receiverSymbols?.includes(user?.twitterUsername)
+
   const [showDetails, setShowDetails] = useState(false)
 
   const [isFromDropdownOpen, setIsFromDropdownOpen] = useState(false)
   const [isToDropdownOpen, setIsToDropdownOpen] = useState(false)
   const [isSentSymbolsDropdownOpen, setIsSentSymbolsDropdownOpen] = useState(false)
+  const [isHistoryDropdownOpen, setIsHistoryDropdownOpen] = useState(false)
 
   const [optionsTooltipVisibility, setOptionsTooltipVisibility] = useState(false)
   const optionsRef = useRef(null)
@@ -104,7 +112,7 @@ export const SentEmoteBlock = ({
     toast.success('Copied emote page URL')
   }
 
-  const isFullWidth = isPreview
+  const isFullWidth = isPreview || context === 'nou_chain_preview'
 
   return (
     <div
@@ -116,22 +124,30 @@ export const SentEmoteBlock = ({
       className={classNames(
         isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
         showDetails ? 'items-start' : 'items-center', // this is basically for keeping emote button at top when showing details. and items-center is needed when not showing details bc it centers all the text of emote and emote button
-        "relative text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex cursor-pointer"
+        "relative text-lg mb-2 p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex cursor-pointer"
       )}
     >
 
       {showDetails ? (
         <div className="">
 
+          {/* block: main emote text before showing details */}
           <div>
             <A
               onClick={(event) => {
                 event.stopPropagation()
                 ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
               }}
-              className="text-blue-500 hover:text-blue-700 cursor-pointer"
             >
-              {emote?.senderTwitterUsername}
+              {isPersonal && isAuthedUserSender ? (
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
+              ): (
+                <span
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                >
+                  {emote?.senderTwitterUsername}
+                </span>
+              )}
             </A> sent{' '}
 
             {isMultipleSentSymbols ? (
@@ -184,10 +200,10 @@ export const SentEmoteBlock = ({
                 onClick={(event) => event.stopPropagation()}
                 className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
               >
-                {isPersonal ? (
-                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+                {isPersonal && isAuthedUserReceiver ? (
+                  <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
                 ): (
-                  <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                  <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
                 )}
 
                 {receiversTooltipVisibility && (
@@ -215,26 +231,28 @@ export const SentEmoteBlock = ({
 
               </span>
             ): (
-              <>
-                {isPersonal ? (
-                  <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+              <A
+                onClick={(event) => {
+                  event.stopPropagation()
+                  ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
+                }}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
+                {isPersonal && isAuthedUserReceiver ? (
+                  <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
                 ): (
-                  <A
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
-                    }}
+                  <span
                     className="text-blue-500 hover:text-blue-700 cursor-pointer"
                   >
                     {emote?.receiverSymbols[0]}
-                  </A>
+                  </span>
                 )}
-              </>
+              </A>
             )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
 
           </div>
 
-          <div className="mt-3">
+          {(!context.includes('nou')) && <div className="mt-3">
 
             <button
               onClick={(event) => {
@@ -259,9 +277,9 @@ export const SentEmoteBlock = ({
               </ul>
             )}
 
-          </div>
+          </div>}
 
-          <div className="mt-3">
+          {(!context.includes('nou')) && <div className="mt-3">
 
             <button
               onClick={(event) => {
@@ -299,9 +317,9 @@ export const SentEmoteBlock = ({
               </ul>
             )}
 
-          </div>
+          </div>}
 
-          <div className="mt-3">
+          {(!context.includes('nou')) && <div className="mt-3">
 
             <button onClick={(event) => {
               event.stopPropagation()
@@ -336,7 +354,57 @@ export const SentEmoteBlock = ({
               </ul>
             )}
 
-          </div>
+          </div>}
+
+          {context !== 'nou_chain_preview' && (
+            <div className="mt-3">
+
+              <button onClick={(event) => {
+                event.stopPropagation()
+                setIsHistoryDropdownOpen(!isHistoryDropdownOpen)
+              }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
+                <div>HISTORY:</div>
+                {isHistoryDropdownOpen ? (
+                  <ChevronUpIcon className="w-5 h-5 ml-2" />
+                ) : (
+                  <ChevronDownIcon className="w-5 h-5 ml-2" />
+                )}
+              </button>
+
+              {isHistoryDropdownOpen && (
+                <div className="w-full bg-[#252736] p-3">
+
+                  {(emote?.totalChainLength && emote?.totalChainLength > 1) && (
+                    <div className="text-xs mb-2">emote streak: {emote?.totalChainLength}</div>
+                  )}
+
+                  {emote?.chainPreview && emote?.chainPreview.map((chainEmote) => {
+
+                    return (
+                      <SentEmoteBlock context='nou_chain_preview' emote={chainEmote} jwt={jwt} key={chainEmote.id} />
+                    )
+                  })}
+
+                  {(emote?.totalChainLength && emote?.totalChainLength === 1) && (
+                    <div className="text-xs">this emote is the first in the chain...will it continue?</div>
+                  )}
+
+                  {(emote?.totalChainLength && emote?.totalChainLength > 2) && (
+                    <div
+                      className="text-xs hover:underline"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        ModalService.open(NouChainModal, { emoteID: emote?.id })
+                      }}
+                    >
+                      see full history...
+                    </div>
+                  )}
+                </div>
+              )}
+
+            </div>
+          )}
 
         </div>
       ): (
@@ -346,9 +414,16 @@ export const SentEmoteBlock = ({
               event.stopPropagation()
               ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
             }}
-            className="text-blue-500 hover:text-blue-700 cursor-pointer"
           >
-            {emote?.senderTwitterUsername}
+            {isPersonal && isAuthedUserSender ? (
+              <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
+            ): (
+              <span
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
+                {emote?.senderTwitterUsername}
+              </span>
+            )}
           </A> sent{' '}
 
           {isMultipleSentSymbols ? (
@@ -401,10 +476,10 @@ export const SentEmoteBlock = ({
               onClick={(event) => event.stopPropagation()}
               className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
             >
-              {isPersonal ? (
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+              {isPersonal && isAuthedUserReceiver ? (
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
               ): (
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{receiverSymbolsCount} receivers</span>
               )}
 
               {receiversTooltipVisibility && (
@@ -432,28 +507,29 @@ export const SentEmoteBlock = ({
 
             </span>
           ): (
-            <>
-              {isPersonal ? (
-                <span className="text-red-500 hover:text-red-700 cursor-pointer">you</span>
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
+              }}
+            >
+              {isPersonal && isAuthedUserReceiver ? (
+                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
               ): (
-                <A
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
-                  }}
+                <span
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
                   {emote?.receiverSymbols[0]}
-                </A>
+                </span>
               )}
-            </>
+            </A>
           )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
 
         </div>
       )}
 
       {/* Emote button */}
-      {(!isPreview && context !== "nou_sent") && (
+      {(!isPreview && context !== "nou_sent" && context !== "nou_chain_preview") && (
         <div
           onClick={(event) => {
             event.stopPropagation()

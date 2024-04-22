@@ -1,13 +1,8 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
-import { useInfiniteQuery, useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
-import apiGetAllEmotes from 'actions/emotes/apiGetAllEmotes'
+import { useInfiniteQuery } from 'react-query'
 import { flatten } from 'lodash'
-import toast from 'react-hot-toast'
 import { useContext, useRef, useState } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
-import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import { twitterLogin } from 'modules/users/services/UserService'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 import { getAllUserTokens } from 'actions/users/apiUserActions'
@@ -233,7 +228,7 @@ const NouPage = () => {
                       {receivedEmotesData?.map((emote) => {
                       
                         return (
-                          <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} key={emote.id} />
+                          <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
                         )
                       })}
 
@@ -246,7 +241,7 @@ const NouPage = () => {
                       {sentEmotesData?.map((emote) => {
                       
                         return (
-                          <SentEmoteBlock context='nou_sent' emote={emote} jwt={jwtToken} key={emote.id} />
+                          <SentEmoteBlock context='nou_sent' isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
                         )
                       })}
 
