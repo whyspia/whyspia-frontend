@@ -54,7 +54,7 @@ const Notifications = () => {
   return (
     <div className="h-screen flex flex-col items-center mt-10">
 
-      <h1 className="text-4xl font-bold mb-4">Notifications</h1>
+      <h1 className="text-4xl font-bold mb-4">notifications</h1>
 
       <>
         {notifsData?.map((notif) => {

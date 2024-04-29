@@ -11,9 +11,11 @@ import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
 import { useInfiniteQuery } from 'react-query'
 import DefineUI from './DefineUI'
 import { twitterLogin } from 'modules/users/services/UserService'
+import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import A from 'components/A'
 
 const dontCloseOnURLStateChange = [
-  '/desire', '/desire/send', '/desire/define', '/desire/search', '/desire/about'
+  '/desire', '/desire/send', '/desire/define', '/desire/search', '/desire/about', '/desire/context'
 ]
 
 export default function SendEmoteModal({
@@ -50,6 +52,8 @@ export default function SendEmoteModal({
         setSelectedButton('send')
       } else if (window.location.pathname === '/desire/define') {
         setSelectedButton('define')
+      } else if (window.location.pathname === '/desire/context') {
+        setSelectedButton('context')
       }
     } 
 
@@ -150,6 +154,16 @@ export default function SendEmoteModal({
 
         <div className="flex flex-wrap justify-center mt-6">
           <button
+            onClick={() => onDesireClicked('context')}
+            className={classNames(
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
+              selectedButton === 'context' ? 'bg-purple-500' : '',
+            )}
+          >
+            go to context
+          </button>
+
+          <button
             onClick={() => onDesireClicked('send')}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
@@ -198,7 +212,7 @@ export default function SendEmoteModal({
                   onClick={() => twitterLogin(null)}
                   className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
                 >
-                  Connect X
+                  connect X
                 </div>
               </>
             ) : (
@@ -250,12 +264,33 @@ export default function SendEmoteModal({
                   onClick={() => twitterLogin(null)}
                   className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
                 >
-                  Connect X
+                  connect X
                 </div>
               </>
             ) : (
               <DefineUI jwtToken={jwtToken} />
             )}
+          </>
+        )}
+
+        {selectedButton === 'context' && (
+          <>
+            <div className="text-2xl font-bold mb-6">choose context to go to</div>
+
+            <div className="mb-4">
+              {Object.values(EMOTE_CONTEXTS).map((c) => (
+                <A
+                  key={c}
+                  onClick={() => close()}
+                  href={getContextPagePath(c)}
+                  className={classNames(
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+                  )}
+                >
+                  {c}
+                </A>
+              ))}
+            </div>
           </>
         )}
 

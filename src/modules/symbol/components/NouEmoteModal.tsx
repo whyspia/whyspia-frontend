@@ -46,7 +46,7 @@ export default function NouEmoteModal({
   const nouContextEmoteData = {
     id: "previewID",
     senderTwitterUsername: user.twitterUsername,
-    receiverSymbols: ['nou context'],
+    receiverSymbols: ['No U'],
     sentSymbols: ['symbol'],
     timestamp: new Date()
   }
@@ -139,7 +139,7 @@ export default function NouEmoteModal({
 
             {isShowAdditionaEmotesChecked && (
               <div className="mt-2">
-                <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by the nou context. if you're not cool with this, dont use the no u context</div>
+                <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by No U. if you're not cool with this, dont use the No U context</div>
                 <SentEmoteBlock isPreview={true} emote={nouContextEmoteData} jwt={jwtToken} />
                 <SentEmoteBlock isPreview={true} emote={replyEmoteData} jwt={jwtToken} />
               </div>

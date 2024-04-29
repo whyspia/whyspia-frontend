@@ -124,7 +124,7 @@ const NouPage = () => {
 
       <>
         <h1 className="text-4xl font-bold mb-8">
-          no u
+          No U
         </h1>
 
         <>
@@ -146,7 +146,7 @@ const NouPage = () => {
                   type="text"
                   value={searchBarQuery}
                   onChange={(e) => onSearchBarTyped(e.target.value)}
-                  placeholder="Search for someone to send symbols to"
+                  placeholder="search for someone to send symbols to"
                   className="hidden md:block w-[30rem] border border-gray-300 rounded px-3 py-2"
                 />
                 {/* {searchbarTooltipVisibility && (

@@ -56,19 +56,19 @@ const DefineUI = ({ jwtToken }) => {
   return (
     <div>
             
-      <div className="font-bold text-lg mb-1">Symbol to define:</div>
+      <div className="font-bold text-lg mb-1">symbol to define:</div>
 
       <textarea
         value={selectedSymbol}
         onChange={(event) => onSymbolTyped(event.target.value)}
-        placeholder="Enter symbol..."
+        placeholder="enter symbol..."
         className="w-full rounded-lg px-2 py-1"
       />
 
       {previousDefinition && (
         <div className="my-2">
           <div className="mb-1 flex items-center">
-            <div className="mr-1 font-bold text-lg cursor-pointer">Current definition</div>
+            <div className="mr-1 font-bold text-lg cursor-pointer">current definition</div>
             
             <div onClick={() => setIsPreviousDefinitionVisible(!isPreviousDefinitionVisible)} className="cursor-pointer">
               {isPreviousDefinitionVisible ? (
@@ -86,12 +86,12 @@ const DefineUI = ({ jwtToken }) => {
         </div>
       )}
 
-      <div className="font-bold text-lg mb-1">Definition of symbol:</div>
+      <div className="font-bold text-lg mb-1">definition of symbol:</div>
 
       <textarea
         value={definition}
         onChange={(event) => onDefinitionTyped(event.target.value)}
-        placeholder="Enter definition..."
+        placeholder="enter definition..."
         className="w-full rounded-lg px-2 py-1"
       />
 
@@ -107,7 +107,7 @@ const DefineUI = ({ jwtToken }) => {
         )}
         disabled={!isValid}
       >
-        Submit
+        submit
       </button>
 
     </div>

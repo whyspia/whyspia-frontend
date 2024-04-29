@@ -14,6 +14,9 @@ import SendEmoteModal from "./SendEmoteModal"
 import classNames from "classnames"
 import NouChainModal from "./NouChainModal"
 import { UserProfile } from "types/customTypes"
+import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
+import ContextSelectModal from "modules/context/components/ContextSelectModal"
+import EmoteSelectModal from "modules/emote/components/EmoteSelectModal"
 
 
 export const SentEmoteBlock = ({
@@ -112,13 +115,13 @@ export const SentEmoteBlock = ({
     toast.success('Copied emote page URL')
   }
 
-  const isFullWidth = isPreview || context === 'nou_chain_preview'
+  const isFullWidth = isPreview || context === 'nou_chain_preview' || context === EMOTE_CONTEXTS.NO_CONTEXT
 
   return (
     <div
       onClick={(event) => {
         if (!isPreview) {
-          router.push(`/emote/${emote?.id}`)
+          ModalService.open(EmoteSelectModal, { emote })
         }
       }}
       className={classNames(
@@ -249,6 +252,17 @@ export const SentEmoteBlock = ({
                 )}
               </A>
             )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
+
+            {' '}with{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: emote?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {emote?.context ?? 'no context'}
+            </A>
 
           </div>
 
@@ -525,11 +539,22 @@ export const SentEmoteBlock = ({
             </A>
           )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
 
+          {' '}with{' '}
+          <A
+            onClick={(event) => {
+              event.stopPropagation()
+              ModalService.open(ContextSelectModal, { context: emote?.context ?? 'no context' })
+            }}
+            className="text-purple-500 hover:text-purple-700 cursor-pointer"
+          >
+            {emote?.context ?? 'no context'}
+          </A>
+
         </div>
       )}
 
       {/* Emote button */}
-      {(!isPreview && context !== "nou_sent" && context !== "nou_chain_preview") && (
+      {(!isPreview && context !== "nou_sent" && context !== "nou_chain_preview"&& context !== EMOTE_CONTEXTS.NO_CONTEXT) && (
         <div
           onClick={(event) => {
             event.stopPropagation()

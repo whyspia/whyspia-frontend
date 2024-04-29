@@ -83,7 +83,7 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
             onClick={() => twitterLogin(null)}
             className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
           >
-            Connect X
+            connect X
           </div>
         </>
       ) : (
@@ -129,7 +129,7 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
             )}
             disabled={!isValid}
           >
-            Send
+            send
           </button>
 
           {isDefinitionSubmitting && <CircleSpinner color="white" bgcolor="#0857e0" />}

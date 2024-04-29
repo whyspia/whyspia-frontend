@@ -1,7 +1,7 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
 import type { NextPage } from 'next'
 
-const About: NextPage = () => {
+const AboutHome: NextPage = () => {
 
   return (
     <div className="text-center px-4 relative z-40">
@@ -23,8 +23,8 @@ const About: NextPage = () => {
   )
 }
 
-(About as any).layoutProps = {
+(AboutHome as any).layoutProps = {
   Layout: DefaultLayout,
 }
 
-export default About
+export default AboutHome

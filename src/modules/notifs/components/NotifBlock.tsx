@@ -11,7 +11,8 @@ import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
-import { useRouter } from "next/router"
+import ContextSelectModal from "modules/context/components/ContextSelectModal"
+import EmoteSelectModal from "modules/emote/components/EmoteSelectModal"
 
 
 export const NotifBlock = ({
@@ -21,7 +22,6 @@ export const NotifBlock = ({
   notif: EmoteNotifSingleResponse
   jwt: string
 }) => {
-  const router = useRouter()
   const { setUserNotifData } = useContext(GlobalContext)
   const receiverSymbolsCount = notif?.emoteData?.receiverSymbols?.length || 0
   const sentSymbolsCount = notif?.emoteData?.sentSymbols?.length || 0
@@ -132,7 +132,7 @@ export const NotifBlock = ({
 
   return (
     <div
-      onClick={(event) => router.push(`/emote/${notif?.emoteData?.id}`)}
+      onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.emoteData })}
       className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
     >
 
@@ -260,8 +260,27 @@ export const NotifBlock = ({
 
                 </span>
               ): (
-                <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
-            )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
+                <A
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })
+                  }}
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                >
+                  you
+                </A>
+              )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
+
+              {' '}with{' '}
+              <A
+                onClick={(event) => {
+                  event.stopPropagation()
+                  ModalService.open(ContextSelectModal, { context: notif?.emoteData?.context ?? 'no context' })
+                }}
+                className="text-purple-500 hover:text-purple-700 cursor-pointer"
+              >
+                {notif?.emoteData?.context ?? 'no context'}
+              </A>
 
             </div>
 
@@ -487,8 +506,27 @@ export const NotifBlock = ({
 
               </span>
             ): (
-              <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you</span>
+              <A
+                onClick={(event) => {
+                  event.stopPropagation()
+                  ModalService.open(SymbolSelectModal, { symbol: notif?.emoteData?.receiverSymbols[0] })
+                }}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
+                you
+              </A>
             )} - {formatTimeAgo(notif?.emoteData?.timestamp)}
+
+            {' '}with{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: notif?.emoteData?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {notif?.emoteData?.context ?? 'no context'}
+            </A>
 
           </div>
 

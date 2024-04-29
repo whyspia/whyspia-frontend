@@ -130,7 +130,7 @@ const SymbolPage = () => {
           )}
 
           <h1 className="text-4xl font-bold mb-8">
-            {selectedButton === 'send' ? "Send" : "Define"} "{symbol ? (symbol as string).toLowerCase() : ""}"
+            {selectedButton === 'send' ? "send" : "define"} "{symbol ? (symbol as string).toLowerCase() : ""}"
           </h1>
 
           <div className="flex items-center space-x-2">
@@ -163,12 +163,12 @@ const SymbolPage = () => {
                     onClick={() => twitterLogin(null)}
                     className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
                   >
-                    Connect X
+                    connect X
                   </div>
                 </>
               ) : (
                 <>
-                  <input type="text" placeholder="Enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
+                  <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
 
                   <button
                     onClick={handleSendEmote}
@@ -178,7 +178,7 @@ const SymbolPage = () => {
                     )}
                     disabled={!isValid}
                   >
-                    Send
+                    send
                   </button>
 
                   {isEmoteSending && <CircleSpinner color="white" bgcolor="#0857e0" />}

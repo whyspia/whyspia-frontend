@@ -21,7 +21,13 @@ const HomeReusable: NextPage = () => {
       <div className="flex flex-wrap justify-center mt-6">
 
         <A
-          // href="/all"
+          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          onClick={() => onDesireClicked('context')}
+        >
+          go to context
+        </A>
+
+        <A
           className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
           onClick={() => onDesireClicked('send')}
         >

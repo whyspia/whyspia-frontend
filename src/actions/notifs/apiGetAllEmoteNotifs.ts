@@ -8,6 +8,7 @@ export type EmoteResponse = {
   timestamp: Date
   chainPreview?: EmoteResponse[]
   totalChainLength?: number
+  context?: string
 }
 
 export type EmoteNotifSingleResponse = {
