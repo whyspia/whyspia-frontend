@@ -11,6 +11,7 @@ export default async function apiGetAllEmotes({
   senderTwitterUsername = null,
   receiverSymbols = null,
   sentSymbols = null,
+  context = null,
 }: {
   skip: number
   limit: number
@@ -19,6 +20,7 @@ export default async function apiGetAllEmotes({
   senderTwitterUsername?: string
   receiverSymbols?: string[]
   sentSymbols?: string[]
+  context?: string
 }) {
   const commaSeperatedReceiverSymbols = receiverSymbols?.join(",") || null
   const commaSeperatedSentSymbols = sentSymbols?.join(",") || null
@@ -34,6 +36,7 @@ export default async function apiGetAllEmotes({
         senderTwitterUsername,
         receiverSymbols: commaSeperatedReceiverSymbols,
         sentSymbols: commaSeperatedSentSymbols,
+        context
       },
     })
 

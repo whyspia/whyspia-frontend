@@ -1,9 +1,9 @@
-// this should match the enum in backend codebase
+// this should match the enum in backend codebase. This is text displayed for a context visually too - on Emote cards
 export enum EMOTE_CONTEXTS {
   NO_CONTEXT = 'no context',
   NOU = 'No U',
   WHYSPIA = 'whyspia',
-  NANA = 'nana',
+  NANA = 'nana-context',
 }
 
 export const getContextPagePath = (context: string) => {

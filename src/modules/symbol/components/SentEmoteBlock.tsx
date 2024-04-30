@@ -116,6 +116,7 @@ export const SentEmoteBlock = ({
   }
 
   const isFullWidth = isPreview || context === 'nou_chain_preview' || context === EMOTE_CONTEXTS.NO_CONTEXT
+  const showEmoteButtonIfTrue = (!isPreview && context !== "nou_sent" && context !== "nou_chain_preview" && context !== EMOTE_CONTEXTS.NO_CONTEXT && context !== EMOTE_CONTEXTS.NANA)
 
   return (
     <div
@@ -266,7 +267,7 @@ export const SentEmoteBlock = ({
 
           </div>
 
-          {(!context.includes('nou')) && <div className="mt-3">
+          {(!context.includes('nou') && context !== EMOTE_CONTEXTS.NOU) && <div className="mt-3">
 
             <button
               onClick={(event) => {
@@ -293,7 +294,7 @@ export const SentEmoteBlock = ({
 
           </div>}
 
-          {(!context.includes('nou')) && <div className="mt-3">
+          {(!context.includes('nou') && context !== EMOTE_CONTEXTS.NOU) && <div className="mt-3">
 
             <button
               onClick={(event) => {
@@ -333,7 +334,7 @@ export const SentEmoteBlock = ({
 
           </div>}
 
-          {(!context.includes('nou')) && <div className="mt-3">
+          {(!context.includes('nou') && context !== EMOTE_CONTEXTS.NOU) && <div className="mt-3">
 
             <button onClick={(event) => {
               event.stopPropagation()
@@ -370,7 +371,7 @@ export const SentEmoteBlock = ({
 
           </div>}
 
-          {context !== 'nou_chain_preview' && (
+          {(context === EMOTE_CONTEXTS.NOU || context === 'nou_sent') && (
             <div className="mt-3">
 
               <button onClick={(event) => {
@@ -554,7 +555,7 @@ export const SentEmoteBlock = ({
       )}
 
       {/* Emote button */}
-      {(!isPreview && context !== "nou_sent" && context !== "nou_chain_preview"&& context !== EMOTE_CONTEXTS.NO_CONTEXT) && (
+      {showEmoteButtonIfTrue && (
         <div
           onClick={(event) => {
             event.stopPropagation()

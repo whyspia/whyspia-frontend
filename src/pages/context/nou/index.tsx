@@ -11,6 +11,7 @@ import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import ModalService from 'components/modals/ModalService'
 import NouEmoteModal from 'modules/symbol/components/NouEmoteModal'
 import apiGetUnrespondedEmotes from 'actions/emotes/apiGetUnrespondedEmotes'
+import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 
 // i noticed this nou page is just YOUR received symbols. Which is different from notifications which can be so much more - especially once you can follow all kinds of things
 const NouPage = () => {
@@ -135,7 +136,7 @@ const NouPage = () => {
                 onClick={() => twitterLogin(null)}
                 className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
               >
-                Connect X
+                connect X
               </div>
             </>
           ): (
@@ -228,7 +229,7 @@ const NouPage = () => {
                       {receivedEmotesData?.map((emote) => {
                       
                         return (
-                          <SentEmoteBlock context='nou' isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
+                          <SentEmoteBlock context={EMOTE_CONTEXTS.NOU} isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
                         )
                       })}
 

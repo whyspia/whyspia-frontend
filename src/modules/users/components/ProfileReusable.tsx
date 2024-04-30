@@ -170,7 +170,7 @@ const ProfileReusable = () => {
 
       <h1 className="text-4xl font-bold mb-4">{userData?.twitterUsername}</h1>
 
-      <div className="flex">
+      <div className="flex mb-4">
         <button
           className={`px-4 py-2 ${
             activeTab === 'sent' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
