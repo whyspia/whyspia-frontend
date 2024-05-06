@@ -277,7 +277,7 @@ export default function SendEmoteModal({
           <>
             <div className="text-2xl font-bold mb-6">choose context to go to</div>
 
-            <div className="mb-4">
+            <div className="mb-4 flex flex-wrap">
               {Object.values(EMOTE_CONTEXTS).map((c) => (
                 <A
                   key={c}

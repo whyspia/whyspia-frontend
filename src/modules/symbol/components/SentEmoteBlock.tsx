@@ -560,7 +560,7 @@ export const SentEmoteBlock = ({
           onClick={(event) => {
             event.stopPropagation()
 
-            if (context === 'nou') {
+            if (context === EMOTE_CONTEXTS.NOU) {
               ModalService.open(NouEmoteModal, { initialEmote: emote, initialSymbol: emote?.sentSymbols[0], receiverSymbol: emote?.senderTwitterUsername })
 
             } else {
