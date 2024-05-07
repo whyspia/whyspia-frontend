@@ -12,12 +12,21 @@ const ParallelContexts = [
   EMOTE_CONTEXTS.AKIYA_COLLECTIVE,
 ]
 
+const PARALLEL_USER_PATHS = [
+  'help board',
+  'helpers',
+  'joinable people',
+  'all people in this context',
+  'YOU',
+]
+
 const ParallelPage = () => {
   const queryClient = useQueryClient()
 
   const { jwtToken, user } = useContext(GlobalContext)
 
   const [selectedContext, setSelectedContext] = useState(EMOTE_CONTEXTS.NO_CONTEXT as string)
+  const [selectedPath, setSelectedPath] = useState('help board')
 
 
   return (
@@ -30,13 +39,29 @@ const ParallelPage = () => {
 
         <>
 
-          <div className="font-bold text-lg mb-1">choose context:</div>
+          <div className="md:w-1/2 w-full flex justify-between">
 
-          <DropdownSelectMenu
-            options={ParallelContexts}
-            selectedOption={selectedContext}
-            setSelectedOption={setSelectedContext}
-          />
+            <div>
+              <div className="font-bold text-lg mb-1">choose context:</div>
+
+              <DropdownSelectMenu
+                options={ParallelContexts}
+                selectedOption={selectedContext}
+                setSelectedOption={setSelectedContext}
+              />
+            </div>
+
+            <div>
+              <div className="font-bold text-lg mb-1">choose user path:</div>
+
+              <DropdownSelectMenu
+                options={PARALLEL_USER_PATHS}
+                selectedOption={selectedPath}
+                setSelectedOption={setSelectedPath}
+              />
+            </div>
+
+          </div>
         
           {/* {!user?.twitterUsername ? (
             <>
