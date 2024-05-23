@@ -74,6 +74,8 @@ export default function NouEmoteModal({
       console.log('emotes created successfully:', responseEmotes)
     } else {
       console.error('Failed to create emotes')
+      setIsEmoteSending(false)
+      return false
     }
 
     setIsEmoteSending(false)

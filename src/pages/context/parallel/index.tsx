@@ -1,5 +1,6 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
 import { useContext, useEffect, useState } from 'react'
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
 import DropdownSelectMenu from 'modules/forms/components/DropdownSelectMenu'
@@ -10,6 +11,7 @@ import ParallelGoOnlineModal from 'modules/contexts/parallel/components/Parallel
 import useSocketio from 'modules/no-category/hooks/useSocketio'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
+import ParallelHelpRequestModal from 'modules/contexts/parallel/components/ParallelHelpRequestModal'
 
 
 const ParallelContexts = [
@@ -42,6 +44,8 @@ const ParallelPage = () => {
   const [isOnline, setIsOnline] = useState(false) // isOnline true basically means user sent emote to say they are online
 
   const { isSocketioConnected } = useSocketio(isOnline)
+
+  const [isPreviewDropdownOpen, setIsPreviewDropdownOpen] = useState(false)
 
   useEffect(() => {
     if (!jwtToken) {
@@ -183,15 +187,43 @@ const ParallelPage = () => {
                   </div>
 
                   {selectedContext === EMOTE_CONTEXTS.NO_CONTEXT ? (
-                    <div>
+                    <div className="border-t border-white w-full mt-4 pt-4 flex justify-center">
                       no context chosen yet...CHOOSE ONE
                     </div>
                   ): (
-                    <div>
+                    <div className="border-t border-white w-full mt-4 pt-4 flex justify-center">
                       {/* based on user path selected, show a different UX */}
                       {selectedPath === PARALLEL_USER_PATHS.HELP_BOARD && (
-                        <div>
-                          help board
+                        <div className="flex items-center flex-col">
+                          <div className="text-2xl font-bold">help board</div>
+                          
+                          <div
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              setIsPreviewDropdownOpen(!isPreviewDropdownOpen)
+                            }}
+                            className="flex items-center mt-4 mb-2 py-2 px-4 rounded-md bg-purple-500 border border-purple-500 hover:border-white w-full cursor-pointer"
+                          >
+                            <div className="font-bold text-lg mb-1">two main options here</div>
+                            {isPreviewDropdownOpen ? (
+                              <ChevronUpIcon className="w-5 h-5" />
+                            ) : (
+                              <ChevronDownIcon className="w-5 h-5" />
+                            )}
+                          </div>
+
+                          {isPreviewDropdownOpen && (
+                            <ul className="ml-10 list-disc">
+                              <li
+                                onClick={() => ModalService.open(ParallelHelpRequestModal, { chosenContext: selectedContext })}
+                                className="text-blue-500 hover:underline cursor-pointer"
+                              >
+                                post things you need help with OR desires
+                              </li>
+                              <li>read posts and help people</li>
+                            </ul>
+                          )}
+
                         </div>
                       )}
                       {selectedPath === PARALLEL_USER_PATHS.HELPERS && (
