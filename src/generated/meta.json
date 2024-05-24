@@ -1,0 +1,18 @@
+{
+  "gzip": false,
+  "generator": "Unity 2022.3.19f1, Needle Engine Integration @3.37.12-exp",
+  "developmentBuild": false,
+  "allowHotReload": true,
+  "facebookInstantGames": null,
+  "license": "basic",
+  "useRapier": true,
+  "needleEditor": null,
+  "sceneName": "Whyspia Home",
+  "meta": {
+    "title": "HTML AR Overlay",
+    "description": "Custom DOM Overlays in AR",
+    "image": "include/AROverlay.jpg"
+  },
+  "absolutePath": "https://localhost:3000",
+  "deployOnly": false
+}

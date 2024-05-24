@@ -1,7 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-}
+const webpack = require("webpack");
 
-module.exports = nextConfig
+module.exports = async () => {
+  const { needleNext } = await import("@needle-tools/engine/plugins/next/index.js");
+  return needleNext({webpack: (config) => {
+    config.resolve.extensionAlias = {
+      ".js": [".js", ".ts"],
+  };
+  return config;
+  }}, { modules: { webpack } });
+}
