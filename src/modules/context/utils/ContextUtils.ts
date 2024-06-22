@@ -10,6 +10,13 @@ export enum EMOTE_CONTEXTS {
   AKIYA_COLLECTIVE = 'Akiya Collective',
 }
 
+// contexts that are ready and usable
+export const EMOTE_CONTEXTS_ACTIVE = [
+  EMOTE_CONTEXTS.NOU,
+  EMOTE_CONTEXTS.NANA,
+  EMOTE_CONTEXTS.NO_CONTEXT,
+]
+
 export const getContextPagePath = (context: string) => {
   if (context === EMOTE_CONTEXTS.NO_CONTEXT) return '/'
   if (context === EMOTE_CONTEXTS.NOU) return '/context/nou'

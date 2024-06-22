@@ -11,7 +11,7 @@ import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
 import { useInfiniteQuery } from 'react-query'
 import DefineUI from './DefineUI'
 import { twitterLogin } from 'modules/users/services/UserService'
-import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath } from 'modules/context/utils/ContextUtils'
 import A from 'components/A'
 
 const dontCloseOnURLStateChange = [
@@ -278,7 +278,7 @@ export default function SendEmoteModal({
             <div className="text-2xl font-bold mb-6">choose context to go to</div>
 
             <div className="mb-4 flex flex-wrap">
-              {Object.values(EMOTE_CONTEXTS).map((c) => (
+              {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
                 <A
                   key={c}
                   onClick={() => close()}
