@@ -154,7 +154,7 @@ const NanaPage = () => {
               <ul className="ml-10 list-disc">
                 <li>this is shmoji. i love my nana and wanted to make a context for her</li>
                 <li>she is the most loving person i have ever known and that love is the foundation of this project. the motivation. the inspiration</li>
-                <li>you can just send her the default "hey" or send any message</li>
+                <li>you can just send her the default &quot;hey&quot; or send any message</li>
               </ul>
             )}
 

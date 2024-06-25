@@ -106,7 +106,7 @@ export default function Header() {
             >
               {/* <img src="/ShmojiChibiTransparent.png" className="w-12" alt="shmoji-icon" /> */}
               <span className="w-auto h-full ml-2 text-2xl leading-none text-white md:text-3xl">
-                emote
+                whyspia
               </span>
             </div>
 
