@@ -35,6 +35,7 @@ export default function ParallelHelpRequestModal({
       sentSymbols: [selectedPostType],
       timestamp: new Date(),
       context: EMOTE_CONTEXTS.PARALLEL,
+      bAgentDecidedSendNotifToReceiver: false,
     }
     
     const parallelHelpRequestContentEmoteData = {
@@ -44,6 +45,7 @@ export default function ParallelHelpRequestModal({
       sentSymbols: [helpOrDesireText],
       timestamp: new Date(),
       context: EMOTE_CONTEXTS.PARALLEL,
+      bAgentDecidedSendNotifToReceiver: false,
     }
 
     const emotes = [parallelHelpRequestIdentifierEmoteData, parallelHelpRequestContentEmoteData]

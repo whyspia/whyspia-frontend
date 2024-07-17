@@ -13,7 +13,7 @@ export default async function apiGetAllDefinedEvents({
 }) {
 
   try {
-    const response = await client.get(`/pingppl`, {
+    const response = await client.get(`/pingppl/definedEvent`, {
       params: {
         skip,
         limit,

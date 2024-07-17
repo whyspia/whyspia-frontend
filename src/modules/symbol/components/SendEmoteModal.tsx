@@ -116,6 +116,7 @@ export default function SendEmoteModal({
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],  // TODO: make so multiple symbols are used here
       sentSymbols: [selectedSymbol],      // TODO: make so multiple symbols are used here
+      bAgentDecidedSendNotifToReceiver: false,
     })
   
     if (emote) {

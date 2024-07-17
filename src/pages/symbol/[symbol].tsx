@@ -92,6 +92,7 @@ const SymbolPage = () => {
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],
       sentSymbols: [(symbol as string).toLowerCase()], // TODO: sending URL param here - will need to fix this one day
+      bAgentDecidedSendNotifToReceiver: false,
     })
   
     if (emote) {

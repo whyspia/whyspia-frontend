@@ -1,4 +1,12 @@
+import { PingpplFollowResponse } from 'actions/pingppl/apiGetAllPingpplFollows'
+import { PingpplSentEventResponse } from 'actions/pingppl/apiGetAllSentEvents'
 import client from 'lib/axios'
+
+export enum NOTIF_TYPE {
+  EMOTE = 'EMOTE',
+  PINGPPL_FOLLOW = 'PINGPPL_FOLLOW',
+  PINGPPL_SENTEVENT = 'PINGPPL_SENTEVENT',
+}
 
 export type EmoteResponse = {
   id: string
@@ -13,7 +21,8 @@ export type EmoteResponse = {
 
 export type EmoteNotifSingleResponse = {
   id: string
-  emoteData: EmoteResponse
+  notifData: EmoteResponse | PingpplFollowResponse | PingpplSentEventResponse | null
+  notifType: NOTIF_TYPE
   receiverSymbol: string
   hasReadCasually: boolean
   hasReadDirectly: boolean
@@ -35,6 +44,7 @@ export default async function apiGetAllEmoteNotifs({
   orderBy,
   orderDirection,
   jwt,
+  notifType = null
 }): Promise<EmoteNotifResponse> {
 
   try {
@@ -44,6 +54,7 @@ export default async function apiGetAllEmoteNotifs({
         limit,
         orderBy,
         orderDirection,
+        notifType
       },
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : null,

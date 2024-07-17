@@ -5,18 +5,16 @@ import client from 'lib/axios'
  */
 export const apiCreateDefinedEvent = async ({
   jwt,
-  eventCreator,
   eventName,
   eventDescription,
 }) => {
   const body = {
-    eventCreator,
     eventName,
     eventDescription,
   }
 
   try {
-    let response = await client.post(`/pingppl`, body, {
+    let response = await client.post(`/pingppl/definedEvent`, body, {
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : null,
       },

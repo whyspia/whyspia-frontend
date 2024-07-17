@@ -59,6 +59,7 @@ const useSocketio = (isOnline: boolean) => {
         jwt: jwtToken,
         receiverSymbols: [EMOTE_CONTEXTS.PARALLEL],  // TODO: make so multiple symbols are used here
         sentSymbols: ['im online'],      // TODO: make so multiple symbols are used here
+        bAgentDecidedSendNotifToReceiver: false,
       })
     
       if (emote) {

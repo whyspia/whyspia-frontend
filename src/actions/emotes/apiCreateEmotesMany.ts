@@ -3,6 +3,7 @@ import client from 'lib/axios'
 type EmoteRequestBody = {
   receiverSymbols: string[]
   sentSymbols: string[]
+  bAgentDecidedSendNotifToReceiver: boolean
 }
 
 /**

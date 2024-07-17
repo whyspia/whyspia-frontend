@@ -67,6 +67,7 @@ const ParallelPage = () => {
         jwt: jwtToken,
         receiverSymbols: [newContext],
         sentSymbols: ['entered'],
+        bAgentDecidedSendNotifToReceiver: false,
       })
     
       if (emote) {
@@ -84,6 +85,7 @@ const ParallelPage = () => {
           jwt: jwtToken,
           receiverSymbols: [selectedContext],
           sentSymbols: ['exited'],
+          bAgentDecidedSendNotifToReceiver: false,
         })
       
         if (emote) {
@@ -98,11 +100,13 @@ const ParallelPage = () => {
           jwt: jwtToken,
           receiverSymbols: [newContext],
           sentSymbols: ['entered'],
+          bAgentDecidedSendNotifToReceiver: false,
         }
         const exitEmote = {
           jwt: jwtToken,
           receiverSymbols: [selectedContext],
           sentSymbols: ['exited'],
+          bAgentDecidedSendNotifToReceiver: false
         }
         const emotes = [exitEmote, enterEmote]
 

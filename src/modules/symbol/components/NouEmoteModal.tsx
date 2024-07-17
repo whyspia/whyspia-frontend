@@ -39,7 +39,8 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: [receiverSymbol],
     sentSymbols: [selectedSymbol],
-    timestamp: new Date()
+    timestamp: new Date(),
+    bAgentDecidedSendNotifToReceiver: true,
   }
 
   // this is preview emote data to identify no u context being used
@@ -48,7 +49,8 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: ['No U'],
     sentSymbols: ['symbol'],
-    timestamp: new Date()
+    timestamp: new Date(),
+    bAgentDecidedSendNotifToReceiver: false,
   }
 
   // this is preview emote data to identify which emote is being replied to
@@ -57,7 +59,8 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: [`${getFrontendURL()}/emote/${initialEmote?.id}`],
     sentSymbols: ['reply'],
-    timestamp: new Date()
+    timestamp: new Date(),
+    bAgentDecidedSendNotifToReceiver: false,
   }
 
   const onSendEmote = async () => {

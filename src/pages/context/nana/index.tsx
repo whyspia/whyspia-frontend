@@ -57,7 +57,8 @@ const NanaPage = () => {
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: ['nana'],
     sentSymbols: [selectedSymbol],
-    timestamp: new Date()
+    timestamp: new Date(),
+    bAgentDecidedSendNotifToReceiver: false,
   }
 
   // this is preview emote data to identify nana context being used
@@ -66,7 +67,8 @@ const NanaPage = () => {
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: [EMOTE_CONTEXTS.NANA],
     sentSymbols: ['symbol'],
-    timestamp: new Date()
+    timestamp: new Date(),
+    bAgentDecidedSendNotifToReceiver: false,
   }
 
   async function handleSendMessage() {

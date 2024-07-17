@@ -7,10 +7,12 @@ export const apiNewEmote = async ({
   jwt,
   receiverSymbols,
   sentSymbols,
+  bAgentDecidedSendNotifToReceiver,
 }: {
   jwt: string
   receiverSymbols: string[]
   sentSymbols: string[]
+  bAgentDecidedSendNotifToReceiver: boolean
 }) => {
   const commaSeperatedReceiverSymbols = receiverSymbols.join(",")
   const commaSeperatedSentSymbols = sentSymbols.join(",")
@@ -18,6 +20,7 @@ export const apiNewEmote = async ({
   const body = {
     receiverSymbols: commaSeperatedReceiverSymbols,
     sentSymbols: commaSeperatedSentSymbols,
+    bAgentDecidedSendNotifToReceiver,
   }
 
   try {

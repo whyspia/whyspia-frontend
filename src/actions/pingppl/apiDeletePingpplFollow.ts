@@ -1,22 +1,22 @@
 import client from 'lib/axios'
 
 /**
- * Delete defined-event in DB
+ * Delete pingpplFollow in DB
  */
-export const apiDeleteDefinedEvent = async ({
+export const apiDeletePingpplFollow = async ({
   jwt,
-  definedEventId,
+  pingpplFollowId,
 }: {
   jwt: string
-  definedEventId: string
+  pingpplFollowId: string
 }) => {
   
   const body = {
-    definedEventId,
+    pingpplFollowId,
   }
 
   try {
-    let response = await client.delete(`/pingppl/definedEvent`, {
+    let response = await client.delete(`/pingppl/pingpplFollow`, {
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : null,
       },
@@ -25,7 +25,7 @@ export const apiDeleteDefinedEvent = async ({
 
     return response?.data?.data
   } catch (error) {
-    console.error(`Could not delete defined-event`, error)
+    console.error(`Could not delete pingpplFollow`, error)
     return null
   }
 }

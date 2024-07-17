@@ -68,6 +68,7 @@ const Hug: NextPage = () => {
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],
       sentSymbols: ['hug'],
+      bAgentDecidedSendNotifToReceiver: true,
     })
   
     if (emote) {

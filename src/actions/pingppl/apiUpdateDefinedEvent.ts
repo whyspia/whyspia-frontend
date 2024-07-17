@@ -22,7 +22,7 @@ export const apiUpdateDefinedEvent = async ({
   }
 
   try {
-    let response = await client.put(`/pingppl`, body, {
+    let response = await client.put(`/pingppl/definedEvent`, body, {
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : null,
       },

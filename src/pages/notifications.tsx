@@ -40,9 +40,9 @@ const Notifications = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
+      refetchOnMount: true,
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: Boolean(jwtToken),
       keepPreviousData: true,
     }
   )
@@ -61,7 +61,7 @@ const Notifications = () => {
           
 
           return (
-            <NotifBlock notif={notif} jwt={jwtToken} key={notif?.emoteData.id} />
+            <NotifBlock notif={notif} jwt={jwtToken} key={notif?.id} />
           )
         })}
 
