@@ -15,6 +15,7 @@ import apiGetAllSentEvents, { PingpplSentEventResponse } from 'actions/pingppl/a
 import { formatTimeAgo } from 'utils/randomUtils'
 import A from 'components/A'
 import apiGetAllEmoteNotifs, { NOTIF_TYPE } from 'actions/notifs/apiGetAllEmoteNotifs'
+import { PersonalPlannedEventBlock } from 'modules/contexts/pingppl/components/PersonalPlannedEventBlock'
 
 const PingPplPage = () => {
   const queryClient = useQueryClient()
@@ -28,15 +29,17 @@ const PingPplPage = () => {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isPingOrPlanSending, setIsPingOrPlanSending] = useState(false)
 
+  const [plannedPingSearchBarQuery, setPlannedPingSearchBarQuery] = useState('')
+
   // const isValid = selectedSymbol?.length > 0
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
-    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: user?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: user?.twitterUsername, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return definedEvents
   }
 
   const { data: infiniteDefinedEvents, fetchNextPage: fetchDENextPage, hasNextPage: hasDENextPage, isFetchingNextPage: isFetchingDENextPage } = useInfiniteQuery(
-    [`infiniteDefinedEvents-${user?.twitterUsername}`],
+    [`infiniteDefinedEvents-${user?.twitterUsername}`, plannedPingSearchBarQuery],
     ({ pageParam = 0 }) =>
       fetchDefinedEvents({
         pageParam
@@ -351,15 +354,17 @@ const PingPplPage = () => {
 
               {selectedTab === 'planned-pings' && (
                 <div className="text-white">
-                  {definedEventsData.map((event) => (
-                    <div
-                      key={event.id}
-                      // onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
-                      className="relative w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
-                    >
-                      <div className="font-bold">{event.eventName}</div>
-                      <div className="text-xs">{event.eventDescription}</div>
-                    </div>
+
+                  <input
+                    type="text"
+                    value={plannedPingSearchBarQuery}
+                    onChange={(e) => setPlannedPingSearchBarQuery(e.target.value)}
+                    placeholder="search planned pings..."
+                    className="hidden md:block w-full mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
+                  />
+
+                  {definedEventsData.map((plannedEvent) => (
+                    <PersonalPlannedEventBlock plannedEvent={plannedEvent} key={plannedEvent.id} />
                   ))}
 
                   {hasDENextPage && <button onClick={() => fetchDENextPage()} disabled={!hasDENextPage || isFetchingDENextPage}>

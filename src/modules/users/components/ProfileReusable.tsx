@@ -26,6 +26,7 @@ const ProfileReusable = () => {
   const { username, tabName, symbol } = router.query as any
   const [selectedDefinitionId, setSelectedDefinitionId] = useState(null)
 
+  const [plannedPingSearchBarQuery, setPlannedPingSearchBarQuery] = useState('')
 
   const { data: userData } = useQuery<any>(
     [{ username }],
@@ -67,12 +68,12 @@ const ProfileReusable = () => {
   }, [symbol])
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
-    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.twitterUsername, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return definedEvents
   }
 
   const { data: infiniteDefinedEvents, fetchNextPage: fetchDENextPage, hasNextPage: hasDENextPage, isFetchingNextPage: isFetchingDENextPage } = useInfiniteQuery(
-    [`infiniteDefinedEvents-${userData?.twitterUsername}`],
+    [`infiniteDefinedEvents-${userData?.twitterUsername}`, plannedPingSearchBarQuery],
     ({ pageParam = 0 }) =>
       fetchDefinedEvents({
         pageParam
@@ -332,6 +333,15 @@ const ProfileReusable = () => {
 
       {activeTab === 'planned-pings' && (
         <div className="md:w-1/2 w-full text-white">
+
+          <input
+            type="text"
+            value={plannedPingSearchBarQuery}
+            onChange={(e) => setPlannedPingSearchBarQuery(e.target.value)}
+            placeholder="search planned pings..."
+            className="hidden md:block w-[30rem] mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
+          />
+
           {definedEventsData.map((event) => {
             const pingpplFollow = pingpplFollowsData.find(follow => ((follow.eventNameFollowed === event.eventName) && (follow.eventSender === event.eventCreator)))
             const isFollowed = Boolean(pingpplFollow)

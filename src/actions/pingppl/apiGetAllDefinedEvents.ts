@@ -10,6 +10,7 @@ export default async function apiGetAllDefinedEvents({
   orderDirection,
   eventCreator = null,
   eventName = null,
+  search = null,
 }) {
 
   try {
@@ -21,6 +22,7 @@ export default async function apiGetAllDefinedEvents({
         orderDirection,
         eventCreator,
         eventName,
+        search,
       },
     })
 

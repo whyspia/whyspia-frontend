@@ -13,7 +13,7 @@ export type EmoteResponse = {
   senderTwitterUsername: string
   receiverSymbols: string[]
   sentSymbols: string[]
-  timestamp: Date
+  createdAt: Date
   chainPreview?: EmoteResponse[]
   totalChainLength?: number
   context?: string
@@ -26,7 +26,7 @@ export type EmoteNotifSingleResponse = {
   receiverSymbol: string
   hasReadCasually: boolean
   hasReadDirectly: boolean
-  timestamp: Date
+  createdAt: Date
 }
 
 export type EmoteNotifResponse = {

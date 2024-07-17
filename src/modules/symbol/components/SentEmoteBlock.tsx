@@ -252,7 +252,7 @@ export const SentEmoteBlock = ({
                   </span>
                 )}
               </A>
-            )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
+            )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.createdAt)}
 
             {' '}with{' '}
             <A
@@ -538,7 +538,7 @@ export const SentEmoteBlock = ({
                 </span>
               )}
             </A>
-          )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.timestamp)}
+          )} - {isPreview ? '1 minute ago' : formatTimeAgo(emote?.createdAt)}
 
           {' '}with{' '}
           <A
