@@ -2,15 +2,25 @@
 
 import { useEffect, useRef, useState } from "react"
 import { getFrontendURL } from "utils/seo-constants"
+import toast from 'react-hot-toast'
 import { DotsHorizontalIcon } from "@heroicons/react/solid"
+import { apiDeleteDefinedEvent } from "actions/pingppl/apiDeleteDefinedEvent"
+import { useQueryClient } from "react-query"
+import { UserProfile } from "types/customTypes"
 
 
 export const PersonalPlannedEventBlock = ({
   plannedEvent,
+  jwt,
+  user,
 }: {
   plannedEvent: any
+  jwt?: string
+  user?: UserProfile
 }) => {
+  const queryClient = useQueryClient()
 
+  const [isPlannedPingDeleting, setIsPlannedPingDeleting] = useState(false)
   const [optionsTooltipVisibility, setOptionsTooltipVisibility] = useState(false)
   const optionsRef = useRef(null)
 
@@ -35,6 +45,26 @@ export const PersonalPlannedEventBlock = ({
   //   copy(url)
   //   toast.success('Copied emote page URL')
   // }
+
+  const onDeletePlannedPing = async () => {
+    setIsPlannedPingDeleting(true)
+
+    const result = await apiDeleteDefinedEvent({ jwt, definedEventId: plannedEvent?.id })
+  
+    if (result) {
+      console.log('planned ping deleted successfully:', result)
+    } else {
+      console.error('Failed to delete planned ping')
+      setIsPlannedPingDeleting(false)
+      return
+    }
+
+    setIsPlannedPingDeleting(false)
+
+    queryClient.invalidateQueries([`infiniteDefinedEvents-${user?.twitterUsername}`])
+
+    toast.success(`successfully deleted planned ping!`)
+  }
 
   return (
     <div
@@ -61,17 +91,17 @@ export const PersonalPlannedEventBlock = ({
             className="absolute h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
           >
             <div className="flex flex-col w-full text-black font-semibold">
-              {/* <div
+              <div
                 onClick={(event) => {
                   event.stopPropagation()
-                  onShowDetailsChanged(!showDetails)
+                  onDeletePlannedPing()
                 }}
                 className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50"
               >
                 <span>delete planned ping</span>
               </div>
 
-              <div onClick={(event) => copyEmotePageURL(event)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+              {/* <div onClick={(event) => copyEmotePageURL(event)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                 <span>copy link</span>
               </div> */}
 

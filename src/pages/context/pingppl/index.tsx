@@ -364,7 +364,7 @@ const PingPplPage = () => {
                   />
 
                   {definedEventsData.map((plannedEvent) => (
-                    <PersonalPlannedEventBlock plannedEvent={plannedEvent} key={plannedEvent.id} />
+                    <PersonalPlannedEventBlock plannedEvent={plannedEvent} key={plannedEvent.id} jwt={jwtToken} user={user} />
                   ))}
 
                   {hasDENextPage && <button onClick={() => fetchDENextPage()} disabled={!hasDENextPage || isFetchingDENextPage}>
