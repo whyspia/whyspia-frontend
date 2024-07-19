@@ -26,6 +26,7 @@ export type EmoteNotifSingleResponse = {
   receiverSymbol: string
   hasReadCasually: boolean
   hasReadDirectly: boolean
+  context?: string
   createdAt: Date
 }
 

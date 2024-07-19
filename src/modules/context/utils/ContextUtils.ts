@@ -13,10 +13,11 @@ export enum EMOTE_CONTEXTS {
 
 // contexts that are ready and usable
 export const EMOTE_CONTEXTS_ACTIVE = [
+  EMOTE_CONTEXTS.PINGPPL,
   EMOTE_CONTEXTS.NOU,
   EMOTE_CONTEXTS.NANA,
   EMOTE_CONTEXTS.NO_CONTEXT,
-  EMOTE_CONTEXTS.PINGPPL,
+  
 ]
 
 export const getContextPagePath = (context: string) => {

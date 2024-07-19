@@ -39,7 +39,7 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: [receiverSymbol],
     sentSymbols: [selectedSymbol],
-    timestamp: new Date(),
+    createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: true,
   }
 
@@ -49,7 +49,7 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: ['No U'],
     sentSymbols: ['symbol'],
-    timestamp: new Date(),
+    createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: false,
   }
 
@@ -59,7 +59,7 @@ export default function NouEmoteModal({
     senderTwitterUsername: user.twitterUsername,
     receiverSymbols: [`${getFrontendURL()}/emote/${initialEmote?.id}`],
     sentSymbols: ['reply'],
-    timestamp: new Date(),
+    createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: false,
   }
 

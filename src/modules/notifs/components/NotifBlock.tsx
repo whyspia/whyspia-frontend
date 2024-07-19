@@ -15,14 +15,19 @@ import ContextSelectModal from "modules/context/components/ContextSelectModal"
 import EmoteSelectModal from "modules/emote/components/EmoteSelectModal"
 import { PingpplFollowResponse } from "actions/pingppl/apiGetAllPingpplFollows"
 import { PingpplSentEventResponse } from "actions/pingppl/apiGetAllSentEvents"
+import PingpplFollowReactModal from "modules/contexts/pingppl/components/PingpplFollowReactModal"
+import classNames from "classnames"
+import PingpplSentEventReactModal from "modules/contexts/pingppl/components/PingpplSentEventReactModal"
 
 
 export const NotifBlock = ({
   notif,
-  jwt
+  jwt,
+  isFullWidth = false,
 }: {
   notif: EmoteNotifSingleResponse
   jwt: string
+  isFullWidth?: boolean
 }) => {
   const { setUserNotifData } = useContext(GlobalContext)
   const receiverSymbolsCount = (notif?.notifData as EmoteResponse)?.receiverSymbols?.length || 0
@@ -136,7 +141,10 @@ export const NotifBlock = ({
     return (
       <div
         onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
-        className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+        className={classNames(
+          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
+        )}
       >
   
         {showDetails ? (
@@ -278,11 +286,11 @@ export const NotifBlock = ({
                 <A
                   onClick={(event) => {
                     event.stopPropagation()
-                    ModalService.open(ContextSelectModal, { context: (notif?.notifData as any)?.context ?? 'no context' })
+                    ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
                   }}
                   className="text-purple-500 hover:text-purple-700 cursor-pointer"
                 >
-                  {(notif?.notifData as any)?.context ?? 'no context'}
+                  {(notif)?.context ?? 'no context'}
                 </A>
   
               </div>
@@ -524,11 +532,11 @@ export const NotifBlock = ({
               <A
                 onClick={(event) => {
                   event.stopPropagation()
-                  ModalService.open(ContextSelectModal, { context: (notif?.notifData as any)?.context ?? 'no context' })
+                  ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
                 }}
                 className="text-purple-500 hover:text-purple-700 cursor-pointer"
               >
-                {(notif?.notifData as any)?.context ?? 'no context'}
+                {(notif)?.context ?? 'no context'}
               </A>
   
             </div>
@@ -553,9 +561,6 @@ export const NotifBlock = ({
               className="absolute h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
             >
               <div className="flex flex-col w-full text-black font-semibold">
-                <div className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                  <A href="/context/nou">go to No U context</A>
-                </div>
   
                 <div onClick={(event) => {
                   event.stopPropagation()
@@ -586,8 +591,11 @@ export const NotifBlock = ({
   if (notif?.notifType === NOTIF_TYPE.PINGPPL_FOLLOW) {
     return (
       <div
-        // onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
-        className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+        onClick={(event) => ModalService.open(PingpplFollowReactModal, { notif })}
+        className={classNames(
+          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
+        )}
       >
         <div className="flex items-center">
   
@@ -641,12 +649,22 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplFollowResponse)?.eventNameFollowed })
+                ModalService.open(PingpplFollowReactModal, { notif })
               }}
               className="text-red-500 hover:text-red-700 cursor-pointer"
             >
               {(notif?.notifData as PingpplFollowResponse)?.eventNameFollowed}
             </A> - {formatTimeAgo((notif as any)?.createdAt)}
+            {' '}with{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {(notif)?.context ?? 'no context'}
+            </A>
           </div>
         
         </div>
@@ -657,8 +675,11 @@ export const NotifBlock = ({
   if (notif?.notifType === NOTIF_TYPE.PINGPPL_SENTEVENT) {
     return (
       <div
-        // onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
-        className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+        onClick={(event) => ModalService.open(PingpplSentEventReactModal, { notif })}
+        className={classNames(
+          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
+        )}
       >
         <div className="flex items-center">
   
@@ -712,12 +733,22 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplSentEventResponse)?.eventName })
+                ModalService.open(PingpplSentEventReactModal, { notif })
               }}
               className="text-red-500 hover:text-red-700 cursor-pointer"
             >
               {(notif?.notifData as PingpplSentEventResponse)?.eventName}
             </A> - {formatTimeAgo((notif as any)?.createdAt)}
+            {' '}with{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {(notif)?.context ?? 'no context'}
+            </A>
           </div>
         
         </div>

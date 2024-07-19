@@ -17,6 +17,8 @@ import PingpplFollowConfirmModal from 'modules/contexts/pingppl/components/Pingp
 import apiGetAllPingpplFollows from 'actions/pingppl/apiGetAllPingpplFollows'
 import { GlobalContext } from 'lib/GlobalContext'
 import PingpplUnfollowConfirmModal from 'modules/contexts/pingppl/components/PingpplUnfollowConfirmModal'
+import ContextSelectModal from 'modules/context/components/ContextSelectModal'
+import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
@@ -349,7 +351,7 @@ const ProfileReusable = () => {
             return (
               <div
                 key={event.id}
-                // onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
+                onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
                 className="relative flex w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
               >
                 <div>
@@ -395,14 +397,14 @@ const ProfileReusable = () => {
           {sentEventsData.map((event) => (
             <div
               key={event.id}
-              // onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
+              onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
               className="relative w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
             >
-              <div className="">you sent{' '}
+              <div className="">{event?.eventSender} sent{' '}
               <A
                 onClick={(e) => {
                   e.stopPropagation()
-                  // ModalService.open(SymbolSelectModal, { symbol: event.eventName })
+                  ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })
                 }}
                 className="text-red-500 hover:text-red-700 cursor-pointer"
               >
