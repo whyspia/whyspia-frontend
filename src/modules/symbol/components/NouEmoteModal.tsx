@@ -9,6 +9,7 @@ import { getFrontendURL } from 'utils/seo-constants'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
 import { useQueryClient } from 'react-query'
+import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 
 
 export default function NouEmoteModal({
@@ -41,6 +42,7 @@ export default function NouEmoteModal({
     sentSymbols: [selectedSymbol],
     createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: true,
+    context: EMOTE_CONTEXTS.NOU
   }
 
   // this is preview emote data to identify no u context being used
@@ -51,6 +53,7 @@ export default function NouEmoteModal({
     sentSymbols: ['symbol'],
     createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: false,
+    context: EMOTE_CONTEXTS.NOU
   }
 
   // this is preview emote data to identify which emote is being replied to
@@ -61,6 +64,7 @@ export default function NouEmoteModal({
     sentSymbols: ['reply'],
     createdAt: new Date(),
     bAgentDecidedSendNotifToReceiver: false,
+    context: EMOTE_CONTEXTS.NOU
   }
 
   const onSendEmote = async () => {
@@ -146,7 +150,7 @@ export default function NouEmoteModal({
               <div className="mt-2">
                 <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by No U. if you're not cool with this, dont use the No U context</div>
                 <SentEmoteBlock isPreview={true} emote={nouContextEmoteData} jwt={jwtToken} />
-                <SentEmoteBlock isPreview={true} emote={replyEmoteData} jwt={jwtToken} />
+                {initialEmote && <SentEmoteBlock isPreview={true} emote={replyEmoteData} jwt={jwtToken} />}
               </div>
             )}
           </>
