@@ -15,7 +15,7 @@ export default function YouGottaLoginModal({
 
         <div
           onClick={() => twitterLogin(null)}
-          className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+          className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
         >
           Connect X
         </div>

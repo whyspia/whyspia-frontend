@@ -1,7 +1,6 @@
 // it's personal bc has options for editing and deleting the planned event
 
 import { useEffect, useRef, useState } from "react"
-import { getFrontendURL } from "utils/seo-constants"
 import toast from 'react-hot-toast'
 import { DotsHorizontalIcon } from "@heroicons/react/solid"
 import { apiDeleteDefinedEvent } from "actions/pingppl/apiDeleteDefinedEvent"

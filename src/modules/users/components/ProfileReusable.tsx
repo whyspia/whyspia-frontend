@@ -19,12 +19,14 @@ import { GlobalContext } from 'lib/GlobalContext'
 import PingpplUnfollowConfirmModal from 'modules/contexts/pingppl/components/PingpplUnfollowConfirmModal'
 import ContextSelectModal from 'modules/context/components/ContextSelectModal'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import YouGottaLoginModal from './YouGottaLoginModal'
+import { PublicPlannedPingBlock } from 'modules/contexts/pingppl/components/PublicPlannedPingBlock'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
 const ProfileReusable = () => {
   const router = useRouter()
-  const { user: loggedInUser } = useContext(GlobalContext)
+  const { user: loggedInUser, jwtToken } = useContext(GlobalContext)
   const { username, tabName, symbol } = router.query as any
   const [selectedDefinitionId, setSelectedDefinitionId] = useState(null)
 
@@ -42,16 +44,6 @@ const ProfileReusable = () => {
   )
 
   const [activeTab, setActiveTab] = useState(null)
-
-  const [followingOrUnfollowHoveredId, setFollowingOrUnfollowHoveredId] = useState<string | null>(null)
-
-  const handleMouseEnter = (id: string) => {
-    setFollowingOrUnfollowHoveredId(id)
-  }
-
-  const handleMouseLeave = () => {
-    setFollowingOrUnfollowHoveredId(null)
-  }
 
   const [searchDefsQuery, setSearchDefsQuery] = useState('')
 
@@ -344,45 +336,12 @@ const ProfileReusable = () => {
             className="hidden md:block w-[30rem] mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
           />
 
-          {definedEventsData.map((event) => {
-            const pingpplFollow = pingpplFollowsData.find(follow => ((follow.eventNameFollowed === event.eventName) && (follow.eventSender === event.eventCreator)))
+          {definedEventsData.map((plannedEvent) => {
+            const pingpplFollow = pingpplFollowsData.find(follow => ((follow.eventNameFollowed === plannedEvent?.eventName) && (follow.eventSender === plannedEvent?.eventCreator)))
             const isFollowed = Boolean(pingpplFollow)
             const pingpplFollowId = pingpplFollow?.id
             return (
-              <div
-                key={event.id}
-                onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
-                className="relative flex w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
-              >
-                <div>
-                  <div className="font-bold">{event.eventName}</div>
-                  <div className="text-xs">{event.eventDescription}</div>
-                </div>
-
-                {isFollowed ? (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      ModalService.open(PingpplUnfollowConfirmModal, { pingpplFollowId, eventNameFollowed: event.eventName, eventSender: userData?.twitterUsername, eventDescription: event.eventDescription })
-                    }}
-                    className="transition-colors duration-300 flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-purple-500 hover:border-white hover:bg-red-500 cursor-pointer"
-                    onMouseEnter={() => handleMouseEnter(event.id)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {followingOrUnfollowHoveredId === event.id ? 'unfollow' : 'following'}
-                  </div>
-                ): (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      ModalService.open(PingpplFollowConfirmModal, { eventNameFollowed: event.eventName, eventSender: userData?.twitterUsername, eventDescription: event.eventDescription })
-                    }}
-                    className="flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-purple-500 hover:border-white cursor-pointer"
-                  >
-                    follow
-                  </div>
-                )}
-              </div>
+              <PublicPlannedPingBlock plannedEvent={plannedEvent} key={plannedEvent.id} jwt={jwtToken} isLoggedInUserFollowing={isFollowed} pingpplFollowId={pingpplFollowId} />
             )
           })}
 
