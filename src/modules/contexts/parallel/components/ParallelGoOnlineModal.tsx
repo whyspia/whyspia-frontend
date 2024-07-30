@@ -12,7 +12,7 @@ const goOnlineEmoteData = {
   senderTwitterUsername: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.PARALLEL],
   sentSymbols: ['im online'],
-  timestamp: new Date(),
+  createdAt: new Date(),
   context: EMOTE_CONTEXTS.PARALLEL,
 }
 
@@ -21,7 +21,7 @@ const enterContextEmoteData = {
   senderTwitterUsername: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.VIBE_CAFE],
   sentSymbols: ['entered'],
-  timestamp: new Date(),
+  createdAt: new Date(),
   context: EMOTE_CONTEXTS.PARALLEL,
 }
 
@@ -30,7 +30,7 @@ const exitContextEmoteData = {
   senderTwitterUsername: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.VIBE_CAFE],
   sentSymbols: ['exited'],
-  timestamp: new Date(),
+  createdAt: new Date(),
   context: EMOTE_CONTEXTS.PARALLEL,
 }
 
