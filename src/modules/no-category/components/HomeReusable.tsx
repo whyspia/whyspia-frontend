@@ -27,7 +27,7 @@ const HomeReusable: NextPage = () => {
           go to context
         </A>
 
-        <A
+        {/* <A
           className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
           onClick={() => onDesireClicked('send')}
         >
@@ -40,14 +40,14 @@ const HomeReusable: NextPage = () => {
           onClick={() => onDesireClicked('define')}
         >
           define symbol
-        </A>
+        </A> */}
 
-        <A
+        {/* <A
           href={`/desire/search`}
           className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
         >
           search symbols or users
-        </A>
+        </A> */}
 
         <A
           href={`/desire/about`}

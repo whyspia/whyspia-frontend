@@ -2,6 +2,7 @@ import { checkExistingTwitterProfile } from 'actions/users/apiUserActions'
 import Modal from 'components/modals/Modal'
 import { useContext, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import useOnClickOutside from 'utils/hooks/useOnClickOutside'
 import debounce from 'lodash/debounce'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
@@ -9,9 +10,7 @@ import { GlobalContext } from 'lib/GlobalContext'
 import classNames from 'classnames'
 import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
 import { useInfiniteQuery } from 'react-query'
-import DefineUI from './DefineUI'
-import { twitterLogin } from 'modules/users/services/UserService'
-import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath, getContextSummary } from 'modules/context/utils/ContextUtils'
 import A from 'components/A'
 
 const dontCloseOnURLStateChange = [
@@ -36,6 +35,8 @@ export default function SendEmoteModal({
   const [isValid, setIsValid] = useState(false)
 
   const [isEmoteSending, setIsEmoteSending] = useState(false)
+
+  const [isContextSummsDropdownOpen, setIsContextSummsDropdownOpen] = useState(false)
 
   const [isSortingDropdownOpen, setIsSortingDropdownOpen] = useState(false)
   const ref = useRef()
@@ -164,7 +165,7 @@ export default function SendEmoteModal({
             go to context
           </button>
 
-          <button
+          {/* <button
             onClick={() => onDesireClicked('send')}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
@@ -182,9 +183,9 @@ export default function SendEmoteModal({
             )}
           >
             define symbol
-          </button>
+          </button> */}
 
-          <button
+          {/* <button
             onClick={() => onDesireClicked('search')}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
@@ -192,7 +193,7 @@ export default function SendEmoteModal({
             )}
           >
             search symbols or users
-          </button>
+          </button> */}
           
           <button
             onClick={() => onDesireClicked('about')}
@@ -205,7 +206,7 @@ export default function SendEmoteModal({
           </button>
         </div>
 
-        {selectedButton === 'send' && (
+        {/* {selectedButton === 'send' && (
           <>
             {!user?.twitterUsername ? (
               <>
@@ -236,7 +237,6 @@ export default function SendEmoteModal({
                   className="w-full rounded-lg px-2 py-1"
                 />
 
-                {/* Send button */}
                 <button
                   onClick={onSendEmote}
                   className={classNames(
@@ -255,9 +255,9 @@ export default function SendEmoteModal({
             )}
             
           </>
-        )}
+        )} */}
 
-        {selectedButton === 'define' && (
+        {/* {selectedButton === 'define' && (
           <>
             {!user?.twitterUsername ? (
               <>
@@ -272,7 +272,7 @@ export default function SendEmoteModal({
               <DefineUI jwtToken={jwtToken} />
             )}
           </>
-        )}
+        )} */}
 
         {selectedButton === 'context' && (
           <>
@@ -294,6 +294,35 @@ export default function SendEmoteModal({
             </div>
           </>
         )}
+
+        <div className="mt-3">
+
+          <button
+            onClick={(event) => {
+              event.stopPropagation()
+              setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
+            }}
+            className="flex items-center py-2 px-4 rounded-md border border-purple-500 w-full"
+          >
+            <div>context summaries:</div>
+            {isContextSummsDropdownOpen ? (
+              <ChevronUpIcon className="w-5 h-5 ml-2" />
+            ) : (
+              <ChevronDownIcon className="w-5 h-5 ml-2" />
+            )}
+          </button>
+
+          {isContextSummsDropdownOpen && (
+            <ul className="ml-10 list-disc mt-4">
+              {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
+                <li key={c} className="mb-2">
+                  <span className="font-bold">{c}</span>: {getContextSummary(c)}
+                </li>
+              ))}
+            </ul>
+          )}
+
+        </div>
 
       </div>
     </Modal>
