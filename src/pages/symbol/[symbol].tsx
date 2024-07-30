@@ -131,7 +131,7 @@ const SymbolPage = () => {
           )}
 
           <h1 className="text-4xl font-bold mb-8">
-            {selectedButton === 'send' ? "send" : "define"} "{symbol ? (symbol as string).toLowerCase() : ""}"
+            {selectedButton === 'send' ? "send" : "define"} &quot;{symbol ? (symbol as string).toLowerCase() : ""}&quot;
           </h1>
 
           <div className="flex items-center space-x-2">

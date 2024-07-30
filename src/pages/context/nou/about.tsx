@@ -30,7 +30,7 @@ const NoUAbout: NextPage = () => {
           4) create chains of emotes and see how long you can keep a streak
         </div>
 
-        <div>a symbol is anything you can input (like the text "hug" which allows you to send a virtual hug)</div>
+        <div>a symbol is anything you can input (like the text &quot;hug&quot; which allows you to send a virtual hug)</div>
 
       </div>
 

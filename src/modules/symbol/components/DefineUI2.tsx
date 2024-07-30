@@ -140,7 +140,7 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
 
       {definitionsData?.map((definition) => (
         <div className="text-lg" key={definition.id}>
-          <A href={`/u/${definition.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderTwitterUsername}</A> defined "<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>" - {formatTimeAgo(definition.timestamp)}
+          <A href={`/u/${definition.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderTwitterUsername}</A> defined &quot;<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>&quot; - {formatTimeAgo(definition.timestamp)}
         </div>
       ))}
 

@@ -148,7 +148,7 @@ export default function NouEmoteModal({
 
             {isShowAdditionaEmotesChecked && (
               <div className="mt-2">
-                <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by No U. if you're not cool with this, dont use the No U context</div>
+                <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by No U. if you&apos;re not cool with this, dont use the No U context</div>
                 <SentEmoteBlock isPreview={true} emote={nouContextEmoteData} jwt={jwtToken} />
                 {initialEmote && <SentEmoteBlock isPreview={true} emote={replyEmoteData} jwt={jwtToken} />}
               </div>

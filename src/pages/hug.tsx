@@ -92,7 +92,7 @@ const Hug: NextPage = () => {
       <Emoji text="🤗" className="text-6xl mb-8" />
 
       <h1 className="text-4xl font-bold mb-8">
-        Send "hug"
+        Send &quot;hug&quot;
       </h1>
 
       <input type="text" placeholder="Enter twitter username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
@@ -113,7 +113,7 @@ const Hug: NextPage = () => {
       {emotesData?.map((emote) => {
         
         return (
-          <SentEmoteBlock emote={emote} jwt={jwtToken} />
+          <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote?.id} />
         )
       })}
 
