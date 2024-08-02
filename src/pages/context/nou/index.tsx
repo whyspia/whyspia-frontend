@@ -123,7 +123,7 @@ const NouPage = () => {
   return (
     <div className="h-screen flex flex-col items-center mt-10">
 
-      <>
+      <div className="md:w-[30rem] w-full flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold mb-8">
           No U
         </h1>
@@ -141,14 +141,14 @@ const NouPage = () => {
             </>
           ): (
             <>
-              <div className="relative mb-8" ref={searchBarRef}>
+              <div className="relative w-full mb-8" ref={searchBarRef}>
                 
                 <input
                   type="text"
                   value={searchBarQuery}
                   onChange={(e) => onSearchBarTyped(e.target.value)}
                   placeholder="search for someone to send symbols to"
-                  className="hidden md:block w-[30rem] border border-gray-300 rounded px-3 py-2"
+                  className="block md:w-[30rem] w-full border border-gray-300 rounded px-3 py-2"
                 />
                 {/* {searchbarTooltipVisibility && (
                   <div
@@ -167,7 +167,7 @@ const NouPage = () => {
                     return (
                       <div
                         // onClick={(event) => router.push(`/emote/${emote?.id}`)}
-                        className="relative md:w-1/2 w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+                        className="relative w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
                         key={searchedUser.id}
                       >
                         <div>
@@ -263,7 +263,7 @@ const NouPage = () => {
           
         </>
 
-      </>
+      </div>
     </div>
   )
 }

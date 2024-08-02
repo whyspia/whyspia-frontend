@@ -360,7 +360,7 @@ const PingPplPage = () => {
                     value={plannedPingSearchBarQuery}
                     onChange={(e) => setPlannedPingSearchBarQuery(e.target.value)}
                     placeholder="search planned pings..."
-                    className="hidden md:block w-full mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
+                    className="block w-full mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
                   />
 
                   {definedEventsData.map((plannedEvent) => (

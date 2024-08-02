@@ -12,6 +12,8 @@ import apiGetAllSymbols from 'actions/symbol/apiGetAllSymbols'
 import { useInfiniteQuery } from 'react-query'
 import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath, getContextSummary } from 'modules/context/utils/ContextUtils'
 import A from 'components/A'
+import { twitterLogin } from 'modules/users/services/UserService'
+import DefineUI from './DefineUI'
 
 const dontCloseOnURLStateChange = [
   '/desire', '/desire/send', '/desire/define', '/desire/search', '/desire/about', '/desire/context'
@@ -117,7 +119,7 @@ export default function SendEmoteModal({
       jwt: jwtToken,
       receiverSymbols: [receiverSymbol],  // TODO: make so multiple symbols are used here
       sentSymbols: [selectedSymbol],      // TODO: make so multiple symbols are used here
-      bAgentDecidedSendNotifToReceiver: false,
+      bAgentDecidedSendNotifToReceiver: true,
     })
   
     if (emote) {
@@ -165,7 +167,7 @@ export default function SendEmoteModal({
             go to context
           </button>
 
-          {/* <button
+          <button
             onClick={() => onDesireClicked('send')}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
@@ -183,9 +185,9 @@ export default function SendEmoteModal({
             )}
           >
             define symbol
-          </button> */}
+          </button>
 
-          {/* <button
+          <button
             onClick={() => onDesireClicked('search')}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
@@ -193,7 +195,7 @@ export default function SendEmoteModal({
             )}
           >
             search symbols or users
-          </button> */}
+          </button>
           
           <button
             onClick={() => onDesireClicked('about')}
@@ -206,7 +208,7 @@ export default function SendEmoteModal({
           </button>
         </div>
 
-        {/* {selectedButton === 'send' && (
+        {selectedButton === 'send' && (
           <>
             {!user?.twitterUsername ? (
               <>
@@ -255,9 +257,9 @@ export default function SendEmoteModal({
             )}
             
           </>
-        )} */}
+        )}
 
-        {/* {selectedButton === 'define' && (
+        {selectedButton === 'define' && (
           <>
             {!user?.twitterUsername ? (
               <>
@@ -272,7 +274,7 @@ export default function SendEmoteModal({
               <DefineUI jwtToken={jwtToken} />
             )}
           </>
-        )} */}
+        )}
 
         {selectedButton === 'context' && (
           <>

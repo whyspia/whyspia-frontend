@@ -58,14 +58,14 @@ const SearchPage: NextPage = () => {
 
       <div className="text-2xl font-bold">search symbols or users</div>
 
-      <div className="w-[70rem] flex flex-col flex-wrap justify-center items-center mt-6 mx-auto">
+      <div className="md:w-[70rem] w-full flex flex-col flex-wrap justify-center items-center mt-6 mx-auto">
 
         <input
           type="text"
           value={searchBarQuery}
           onChange={(e) => onSearchBarTyped(e.target.value)}
           placeholder="Search"
-          className="hidden md:block w-[30rem] border border-gray-300 rounded px-3 py-2 mb-8"
+          className="block md:w-[30rem] w-full border border-gray-300 rounded px-3 py-2 mb-8"
         />
 
         {searchBarQuery && searchBarQuery?.length > 0 && (

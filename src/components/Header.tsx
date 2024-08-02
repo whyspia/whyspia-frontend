@@ -27,8 +27,10 @@ export default function Header() {
   const menuItems: MenuItemType[] = []
 
   const [searchBarQuery, setSearchBarQuery] = useState('')
-  const [searchbarTooltipVisibility, setSearchbarTooltipVisibility] = useState(false)
-  const searchBarRef = useRef(null)
+  const [desktopTooltipVisibility, setDesktopTooltipVisibility] = useState(false)
+  const [mobileTooltipVisibility, setMobileTooltipVisibility] = useState(false)
+  const desktopSearchBarRef = useRef(null)
+  const mobileSearchBarRef = useRef(null)
 
   const fetchUserTokens = async ({ pageParam = 0 }) => {
     const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc' })
@@ -76,10 +78,15 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
-        setSearchbarTooltipVisibility(false)
+      if (desktopSearchBarRef.current && !desktopSearchBarRef.current.contains(event.target)) {
+        setDesktopTooltipVisibility(false)
       } else {
-        setSearchbarTooltipVisibility(true)
+        setDesktopTooltipVisibility(true)
+      }
+      if (mobileSearchBarRef.current && !mobileSearchBarRef.current.contains(event.target)) {
+        setMobileTooltipVisibility(false)
+      } else {
+        setMobileTooltipVisibility(true)
       }
     }
   
@@ -142,7 +149,7 @@ export default function Header() {
               do stuff
             </div>
 
-            <div className="relative z-[600]" ref={searchBarRef}>
+            <div className="relative z-[600]" ref={desktopSearchBarRef}>
               
               <input
                 type="text"
@@ -151,9 +158,9 @@ export default function Header() {
                 placeholder="Search"
                 className="hidden md:block w-[30rem] border border-gray-300 rounded px-3 py-2"
               />
-              {searchbarTooltipVisibility && (
+              {desktopTooltipVisibility && (
                 <div
-                  onClick={() => setSearchbarTooltipVisibility(false)}
+                  onClick={() => setDesktopTooltipVisibility(false)}
                   className="absolute h-[10rem] w-full inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
                 >
                   <SearchbarTooltipContent userTokens={userTokens} searchText={searchBarQuery} />
@@ -194,7 +201,7 @@ export default function Header() {
           )}
         >
           <div className="pt-2 pb-3 text-center">
-            {menuItems.map((menuItem) => (
+            {/* {menuItems.map((menuItem) => (
               <A
                 onClick={() => {
                   menuItem.onClick()
@@ -210,8 +217,26 @@ export default function Header() {
               >
                 {menuItem.name}
               </A>
-            ))}
+            ))} */}
 
+            <div className="relative z-[600]" ref={mobileSearchBarRef}>
+              
+              <input
+                type="text"
+                value={searchBarQuery}
+                onChange={(e) => onSearchBarTyped(e.target.value)}
+                placeholder="Search"
+                className="md:hidden block w-full border border-gray-300 rounded px-3 py-2"
+              />
+              {mobileTooltipVisibility && (
+                <div
+                  onClick={() => setMobileTooltipVisibility(false)}
+                  className="absolute h-[10rem] w-full inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
+                >
+                  <SearchbarTooltipContent userTokens={userTokens} searchText={searchBarQuery} />
+                </div>
+              )}
+            </div>
             
           </div>
         </div>

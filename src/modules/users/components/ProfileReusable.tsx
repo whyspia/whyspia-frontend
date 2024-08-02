@@ -333,7 +333,7 @@ const ProfileReusable = () => {
             value={plannedPingSearchBarQuery}
             onChange={(e) => setPlannedPingSearchBarQuery(e.target.value)}
             placeholder="search planned pings..."
-            className="hidden md:block w-[30rem] mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
+            className="block md:w-[30rem] w-full mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
           />
 
           {definedEventsData.map((plannedEvent) => {
@@ -410,7 +410,7 @@ const ProfileReusable = () => {
       )}
 
       {activeTab === 'symbols' && (
-        <div className="w-[30rem]">
+        <div className="md:w-[30rem] w-full">
           {/* {definitionsData?.map((definition) => (
             <div className="text-lg" key={definition.id}>
               <A href={`/u/${definition.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderTwitterUsername}</A> defined "<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>" - {formatTimeAgo(definition.timestamp)}
@@ -426,7 +426,7 @@ const ProfileReusable = () => {
             value={searchDefsQuery}
             onChange={(e) => onSymbolTyped(e.target.value)}
             placeholder="Enter exact symbol..."
-            className="w-[30rem] border border-gray-300 rounded px-3 py-2 my-8"
+            className="md:w-[30rem] w-full border border-gray-300 rounded px-3 py-2 my-8"
           />
 
           {definitionsData?.map((definitionItem) => (
