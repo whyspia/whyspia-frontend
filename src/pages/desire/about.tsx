@@ -3,6 +3,7 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import { EMOTE_CONTEXTS_ACTIVE, getContextSummary } from 'modules/context/utils/ContextUtils'
 import type { NextPage } from 'next'
 import { useState } from 'react'
+import NonFixedFooter from 'components/NonFixedFooter'
 
 const About: NextPage = () => {
   const [isContextSummsDropdownOpen, setIsContextSummsDropdownOpen] = useState(false)
@@ -91,6 +92,8 @@ const About: NextPage = () => {
         )}
 
       </div>
+
+      <NonFixedFooter />
 
     </div>
   )

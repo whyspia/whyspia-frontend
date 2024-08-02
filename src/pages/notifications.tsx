@@ -1,8 +1,6 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
 import { useInfiniteQuery } from 'react-query'
 import { flatten } from 'lodash'
-import { formatTimeAgo } from 'utils/randomUtils'
-import A from 'components/A'
 import apiGetAllEmoteNotifs from 'actions/notifs/apiGetAllEmoteNotifs'
 import { useContext } from 'react'
 import { GlobalContext } from './_app'

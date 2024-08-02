@@ -7,6 +7,7 @@ export default function DefaultLayout({ children }: { children: ReactNode }) {
     <>
       <div className="min-h-screen py-20 bg-white dark:bg-dark3 dark:text-white">
         <Header />
+
         <div>
           {children}
         </div>
