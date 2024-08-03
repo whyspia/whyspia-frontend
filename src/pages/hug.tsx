@@ -87,39 +87,43 @@ const Hug: NextPage = () => {
   // console.log('emotesData==', emotesData)
 
   return (
-    <div className="bg-yellow-300 h-screen flex flex-col justify-center items-center font-sans">
+    <div className="bg-yellow-300 h-screen font-sans flex flex-col justify-center items-center">
 
-      <Emoji text="🤗" className="text-6xl mb-8" />
+      <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
 
-      <h1 className="text-4xl font-bold mb-8">
-        Send &quot;hug&quot;
-      </h1>
+        <Emoji text="🤗" className="text-6xl mb-8" />
 
-      <input type="text" placeholder="Enter twitter username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
-      
-      <button
-        onClick={handleSendHug}
-        className={classNames(
-          `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
-          isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
-        )}
-        disabled={!isValid}
-      >
-        Send
-      </button>
+        <h1 className="text-4xl font-bold mb-8">
+          Send &quot;hug&quot;
+        </h1>
 
-      {isHugSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
-
-      {emotesData?.map((emote) => {
+        <input type="text" placeholder="Enter twitter username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
         
-        return (
-          <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote?.id} />
-        )
-      })}
+        <button
+          onClick={handleSendHug}
+          className={classNames(
+            `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
+            isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
+          )}
+          disabled={!isValid}
+        >
+          Send
+        </button>
 
-      {hasNextPage && <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
-        {isFetchingNextPage ? 'Loading...' : 'Load More'}
-      </button>}
+        {isHugSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
+
+        {emotesData?.map((emote) => {
+          
+          return (
+            <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote?.id} />
+          )
+        })}
+
+        {hasNextPage && <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+          {isFetchingNextPage ? 'Loading...' : 'Load More'}
+        </button>}
+
+      </div>
     </div>
   )
 }

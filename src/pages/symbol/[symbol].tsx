@@ -122,87 +122,89 @@ const SymbolPage = () => {
   return (
     <div className="h-screen flex flex-col items-center mt-10">
 
-      {isSymbolDataLoading ? (
-        <CircleSpinner color="white" bgcolor="#0857e0" />
-      ) : (
-        <>
-          {EmoteTypesWithEmojis.includes(symbol ? (symbol as string).toLowerCase() : null) && (
-            <Emoji text="🤗" className="text-6xl mb-8" />
-          )}
+      <div className="md:w-[36rem] w-full flex flex-col items-center ">
+        {isSymbolDataLoading ? (
+          <CircleSpinner color="white" bgcolor="#0857e0" />
+        ) : (
+          <div className="flex flex-col justify-center items-center">
+            {EmoteTypesWithEmojis.includes(symbol ? (symbol as string).toLowerCase() : null) && (
+              <Emoji text="🤗" className="text-6xl mb-8" />
+            )}
 
-          <h1 className="text-4xl font-bold mb-8">
-            {selectedButton === 'send' ? "send" : "define"} &quot;{symbol ? (symbol as string).toLowerCase() : ""}&quot;
-          </h1>
+            <h1 className="text-4xl font-bold mb-8">
+              {selectedButton === 'send' ? "send" : "define"} &quot;{symbol ? (symbol as string).toLowerCase() : ""}&quot;
+            </h1>
 
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => onDesireClicked('send')}
-              className={classNames(
-                'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                selectedButton === 'send' ? 'bg-purple-500' : '',
-              )}
-            >
-              send
-            </button>
-            <button
-              onClick={() => onDesireClicked('define')}
-              className={classNames(
-                'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                selectedButton === 'define' ? 'bg-purple-500' : '',
-              )}
-            >
-              define
-            </button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => onDesireClicked('send')}
+                className={classNames(
+                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
+                  selectedButton === 'send' ? 'bg-purple-500' : '',
+                )}
+              >
+                send
+              </button>
+              <button
+                onClick={() => onDesireClicked('define')}
+                className={classNames(
+                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
+                  selectedButton === 'define' ? 'bg-purple-500' : '',
+                )}
+              >
+                define
+              </button>
+            </div>
+
+            {selectedButton === 'send' ? (
+              <>
+              
+                {!user?.twitterUsername ? (
+                  <>
+                    <div
+                      onClick={() => twitterLogin(null)}
+                      className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+                    >
+                      connect X
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
+
+                    <button
+                      onClick={handleSendEmote}
+                      className={classNames(
+                        `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
+                        isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
+                      )}
+                      disabled={!isValid}
+                    >
+                      send
+                    </button>
+
+                    {isEmoteSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
+                  </>
+                )}
+
+                {emotesData?.map((emote) => {
+                  
+                  return (
+                    <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote.id} />
+                  )
+                })}
+
+                {hasEmotesNextPage && <button onClick={() => fetchEmotesNextPage()} disabled={!hasEmotesNextPage || isEmotesFetchingNextPage}>
+                  {isEmotesFetchingNextPage ? 'Loading...' : 'Load More'}
+                </button>}
+              </>
+            ) : (
+              <DefineUI2 jwtToken={jwtToken} user={user} symbolData={symbolData ? symbolData[0] : null} symbolText={symbol ? (symbol as string).toLowerCase() : null} />
+            )}
+
           </div>
-
-          {selectedButton === 'send' ? (
-            <>
-            
-              {!user?.twitterUsername ? (
-                <>
-                  <div
-                    onClick={() => twitterLogin(null)}
-                    className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
-                  >
-                    connect X
-                  </div>
-                </>
-              ) : (
-                <>
-                  <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
-
-                  <button
-                    onClick={handleSendEmote}
-                    className={classNames(
-                      `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
-                      isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
-                    )}
-                    disabled={!isValid}
-                  >
-                    send
-                  </button>
-
-                  {isEmoteSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
-                </>
-              )}
-
-              {emotesData?.map((emote) => {
-                
-                return (
-                  <SentEmoteBlock emote={emote} jwt={jwtToken} key={emote.id} />
-                )
-              })}
-
-              {hasEmotesNextPage && <button onClick={() => fetchEmotesNextPage()} disabled={!hasEmotesNextPage || isEmotesFetchingNextPage}>
-                {isEmotesFetchingNextPage ? 'Loading...' : 'Load More'}
-              </button>}
-            </>
-          ) : (
-            <DefineUI2 jwtToken={jwtToken} user={user} symbolData={symbolData ? symbolData[0] : null} symbolText={symbol ? (symbol as string).toLowerCase() : null} />
-          )}
-
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
 }
