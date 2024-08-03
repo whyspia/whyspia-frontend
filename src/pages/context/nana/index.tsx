@@ -162,7 +162,7 @@ const NanaPage = () => {
 
           </div>
 
-          <div className="mt-4 w-full flex flex-col items-center">
+          <div className="mt-4 md:w-[36rem] w-full flex flex-col items-center">
             {nanaEmotesData?.map((emote) => {
             
               return (

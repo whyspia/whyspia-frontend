@@ -123,7 +123,7 @@ const NouPage = () => {
   return (
     <div className="h-screen flex flex-col items-center mt-10">
 
-      <div className="md:w-[30rem] w-full flex flex-col justify-center items-center">
+      <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold mb-8">
           No U
         </h1>
@@ -141,7 +141,7 @@ const NouPage = () => {
             </>
           ): (
             <>
-              <div className="relative w-full mb-8" ref={searchBarRef}>
+              <div className="relative w-full mb-8 flex justify-center" ref={searchBarRef}>
                 
                 <input
                   type="text"

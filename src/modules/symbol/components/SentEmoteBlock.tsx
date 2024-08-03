@@ -126,9 +126,8 @@ export const SentEmoteBlock = ({
         }
       }}
       className={classNames(
-        isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
         showDetails ? 'items-start' : 'items-center', // this is basically for keeping emote button at top when showing details. and items-center is needed when not showing details bc it centers all the text of emote and emote button
-        "relative text-lg mb-2 p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex cursor-pointer"
+        "relative w-full text-lg mb-2 p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex cursor-pointer"
       )}
     >
 

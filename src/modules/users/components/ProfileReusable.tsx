@@ -380,7 +380,7 @@ const ProfileReusable = () => {
       )}
 
       {activeTab === 'sent-emotes' && (
-        <>
+        <div className="md:w-[36rem] w-full">
           {sentEmotesData?.map((emote) => {
             
             return (
@@ -391,11 +391,11 @@ const ProfileReusable = () => {
           {hasSentNextPage && <button onClick={() => fetchSentNextPage()} disabled={!hasSentNextPage || isSentFetchingNextPage}>
             {isSentFetchingNextPage ? 'Loading...' : 'Load More'}
           </button>}
-        </>
+        </div>
       )}
 
       {activeTab === 'received-emotes' && (
-        <>
+        <div className="md:w-[36rem] w-full">
           {receivedEmotesData?.map((emote) => {
             
             return (
@@ -406,7 +406,7 @@ const ProfileReusable = () => {
           {hasReceivedNextPage && <button onClick={() => fetchReceivedNextPage()} disabled={!hasReceivedNextPage || isReceivedFetchingNextPage}>
             {isReceivedFetchingNextPage ? 'Loading...' : 'Load More'}
           </button>}
-        </>
+        </div>
       )}
 
       {activeTab === 'symbols' && (
