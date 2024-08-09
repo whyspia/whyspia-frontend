@@ -148,8 +148,8 @@ const ThinkingAboutUPage = () => {
                 <button
                   onClick={() => onDesireClicked('send')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedButton === 'send' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'send' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   send
@@ -158,8 +158,8 @@ const ThinkingAboutUPage = () => {
                 <button
                   onClick={() => onDesireClicked('sent')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedButton === 'sent' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'sent' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   sent
@@ -168,8 +168,8 @@ const ThinkingAboutUPage = () => {
                 <button
                   onClick={() => onDesireClicked('received')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedButton === 'received' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'received' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   received
@@ -180,7 +180,7 @@ const ThinkingAboutUPage = () => {
                 <>
                 
                   <div className="flex flex-col">
-                    <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-4" />
+                    <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-[#1d8f89] border-4 shadow-lg rounded-lg mb-4" />
 
                     <div className="flex items-center space-x-2 mb-2">
                       <input
@@ -244,7 +244,7 @@ const ThinkingAboutUPage = () => {
                       onClick={handleSendTAU}
                       className={classNames(
                         `text-white p-4 text-xl shadow-lg rounded-lg mt-4 mb-8`,
-                        isValid ? `bg-yellow-500 cursor-pointer` : `bg-gray-400`,
+                        isValid ? `bg-[#1d8f89] border border-[#1d8f89] hover:border-white cursor-pointer` : `bg-gray-400 border border-gray-400`,
                       )}
                       disabled={!isValid}
                     >

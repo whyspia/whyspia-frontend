@@ -102,7 +102,7 @@ const DefineUI = ({ jwtToken }) => {
           'block rounded-lg text-white px-4 py-2 mt-4 font-bold',
           {
             'bg-gray-400': !isValid,
-            'bg-blue-500 cursor-pointer': isValid,
+            'bg-[#1d8f89] border border-[#1d8f89] hover:border-white cursor-pointer': isValid,
           }
         )}
         disabled={!isValid}

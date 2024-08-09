@@ -11,18 +11,19 @@ import YouGottaLoginModal from "modules/users/components/YouGottaLoginModal"
 import PingpplUnfollowConfirmModal from "./PingpplUnfollowConfirmModal"
 import PingpplFollowConfirmModal from "./PingpplFollowConfirmModal"
 import { getFrontendURL } from "utils/seo-constants"
+import PlannedPingReactModal from "./PlannedPingReactModal"
 
 
 export const PublicPlannedPingBlock = ({
   plannedEvent,
   jwt,
-  isLoggedInUserFollowing,
+  isLoggedInUserFollowing = false,
   pingpplFollowId,  // if loggedinuser is following, this is id of their follow
 }: {
   plannedEvent: any
   jwt?: string
-  isLoggedInUserFollowing: boolean
-  pingpplFollowId: string
+  isLoggedInUserFollowing?: boolean
+  pingpplFollowId?: string
 }) => {
   const [optionsTooltipVisibility, setOptionsTooltipVisibility] = useState(false)
   const optionsRef = useRef(null)
@@ -61,7 +62,7 @@ export const PublicPlannedPingBlock = ({
 
   return (
     <div
-      onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
+      onClick={(event) => ModalService.open(PlannedPingReactModal, { plannedEvent })}
       className="relative flex w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
     >
       <div>
@@ -80,7 +81,7 @@ export const PublicPlannedPingBlock = ({
             }
             
           }}
-          className="transition-colors duration-300 flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-10 px-2 font-bold border border-purple-500 hover:border-white hover:bg-red-500 cursor-pointer"
+          className="transition-colors duration-300 flex items-center bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 font-bold border border-[#1d8f89] hover:border-white hover:bg-red-500 cursor-pointer"
           onMouseEnter={() => handleMouseEnter(plannedEvent?.id)}
           onMouseLeave={handleMouseLeave}
         >
@@ -97,7 +98,7 @@ export const PublicPlannedPingBlock = ({
             }
             
           }}
-          className="flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-10 px-2 font-bold border border-purple-500 hover:border-white cursor-pointer"
+          className="flex items-center bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
         >
           follow
         </div>

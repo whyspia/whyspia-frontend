@@ -32,7 +32,7 @@ export default function PingpplFollowReactModal({
             onClick={() => onOptionSelected('home')}
             href={getContextPagePath(notif?.context)}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
             view ur planned pings

@@ -27,7 +27,7 @@ const DropdownSelectMenu: React.FC<DropdownSelectMenuProps> = ({ options, select
     // </select>
 
     <div className="relative">
-      <button className="p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer flex items-center justify-between" onClick={toggleDropdown}>
+      <button className="p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer flex items-center justify-between" onClick={toggleDropdown}>
         {selectedOption}
         {isOpen ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />}
       </button>

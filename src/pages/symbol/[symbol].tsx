@@ -139,8 +139,8 @@ const SymbolPage = () => {
               <button
                 onClick={() => onDesireClicked('send')}
                 className={classNames(
-                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                  selectedButton === 'send' ? 'bg-purple-500' : '',
+                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                  selectedButton === 'send' ? 'bg-[#1d8f89]' : '',
                 )}
               >
                 send
@@ -148,8 +148,8 @@ const SymbolPage = () => {
               <button
                 onClick={() => onDesireClicked('define')}
                 className={classNames(
-                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                  selectedButton === 'define' ? 'bg-purple-500' : '',
+                  'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                  selectedButton === 'define' ? 'bg-[#1d8f89]' : '',
                 )}
               >
                 define
@@ -175,8 +175,8 @@ const SymbolPage = () => {
                     <button
                       onClick={handleSendEmote}
                       className={classNames(
-                        `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
-                        isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
+                        `text-white p-4 text-xl shadow-lg rounded-lg mb-8 border border-[#1d8f89] hover:border-white`,
+                        isValid ? `bg-[#1d8f89] cursor-pointer` : `bg-[#1d8f89]/50`,
                       )}
                       disabled={!isValid}
                     >

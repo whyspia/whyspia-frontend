@@ -9,15 +9,16 @@ export enum EMOTE_CONTEXTS {
   VIBE_CAMP = 'Vibe Camp',
   AKIYA_COLLECTIVE = 'Akiya Collective',
   PINGPPL = 'pingppl',
+  TAU = 'thinking about u',
 }
 
 // contexts that are ready and usable
 export const EMOTE_CONTEXTS_ACTIVE = [
+  EMOTE_CONTEXTS.TAU,
   EMOTE_CONTEXTS.PINGPPL,
   EMOTE_CONTEXTS.NOU,
   EMOTE_CONTEXTS.NANA,
   EMOTE_CONTEXTS.NO_CONTEXT,
-  
 ]
 
 export const getContextPagePath = (context: string) => {
@@ -27,6 +28,7 @@ export const getContextPagePath = (context: string) => {
   if (context === EMOTE_CONTEXTS.NANA) return '/context/nana'
   if (context === EMOTE_CONTEXTS.PARALLEL) return '/context/parallel'
   if (context === EMOTE_CONTEXTS.PINGPPL) return '/context/pingppl'
+  if (context === EMOTE_CONTEXTS.TAU) return '/context/thinking-about-u'
 }
 
 export const getContextSummary = (context: string) => {
@@ -36,4 +38,5 @@ export const getContextSummary = (context: string) => {
   if (context === EMOTE_CONTEXTS.NANA) return 'context for shmoji\'s nana'
   if (context === EMOTE_CONTEXTS.PARALLEL) return 'be with others'
   if (context === EMOTE_CONTEXTS.PINGPPL) return 'plan and send events that people can follow. stay up to date with people and help them stay up to date with you'
+  if (context === EMOTE_CONTEXTS.TAU) return 'tell someone ur thinking about them or see if anyone is thinking about u'
 }

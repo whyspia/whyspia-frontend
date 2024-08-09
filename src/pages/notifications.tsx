@@ -50,9 +50,9 @@ const Notifications = () => {
   // console.log('notifsData==', notifsData)
 
   return (
-    <div className="h-screen flex flex-col items-center mt-10">
+    <div className="h-screen flex flex-col items-center mt-4">
 
-      <h1 className="text-4xl font-bold mb-4">notifications</h1>
+      <h1 className="text-4xl font-bold mb-8">notifications</h1>
 
       <>
         {notifsData?.map((notif) => {

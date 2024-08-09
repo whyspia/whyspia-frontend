@@ -100,7 +100,7 @@ const SearchPage: NextPage = () => {
             }}
             disabled={isSearchFetchingNextPage}
             className={classNames(
-              'flex items-center justify-center w-full py-2 mt-2 text-sm font-semibold text-white bg-blue-500 rounded-md',
+              'flex items-center justify-center w-full py-2 mt-2 text-sm font-semibold text-white bg-[#1d8f89] rounded-md',
               {
                 'opacity-50 cursor-not-allowed': isSearchFetchingNextPage,
               }

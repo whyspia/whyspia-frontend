@@ -35,7 +35,7 @@ export default function Modal({
           <div className="flex pb-2 pr-2 md:pr-0">
             <button
               type="button"
-              className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-very-dark-blue hover:text-gray-500 focus:outline-none focus:text-gray-500"
+              className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-red-500 border border-red-500 hover:border-white"
               aria-label="Close"
               onClick={close}
             >
@@ -46,7 +46,7 @@ export default function Modal({
         <div
           className={classNames(
             className,
-            'bg-white dark:bg-gray-700 rounded-lg'
+            'bg-white dark:bg-gray-700 rounded-lg flex justify-center'
           )}
         >
           {children}

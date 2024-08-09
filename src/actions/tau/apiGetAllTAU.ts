@@ -1,5 +1,13 @@
 import client from 'lib/axios'
 
+export type TAUResponse = {
+  id: string
+  senderSymbol: string
+  receiverSymbol: string
+  additionalMessage: string
+  createdAt: Date
+}
+
 /**
  * get all TAU
  */

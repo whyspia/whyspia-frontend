@@ -22,10 +22,10 @@ const PingPplPage = () => {
 
   const { jwtToken, user } = useContext(GlobalContext)
   const [selectedTab, setSelectedTab] = useState('pingppl')
-  const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [pingNow, setPingNow] = useState(false);
+  const [eventName, setEventName] = useState('')
+  const [eventDate, setEventDate] = useState('')
+  const [eventDescription, setEventDescription] = useState('')
+  const [pingNow, setPingNow] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isPingOrPlanSending, setIsPingOrPlanSending] = useState(false)
 
@@ -176,6 +176,9 @@ const PingPplPage = () => {
     }
 
     setIsPingOrPlanSending(false)
+    setEventName('')
+    setEventDescription('')
+    setPingNow(false)
 
     queryClient.invalidateQueries([`infiniteDefinedEvents-${user?.twitterUsername}`])
     queryClient.invalidateQueries([`infiniteSentEvents-${user?.twitterUsername}`])
@@ -184,6 +187,8 @@ const PingPplPage = () => {
   const definedEventsData = flatten(infiniteDefinedEvents?.pages || [])
   const sentEventsData = flatten(infiniteSentEvents?.pages || [])
   const notifsData = flatten(infinitePingNotifs?.pages || [])
+
+  const isPPValid = eventName?.length > 0
 
   return (
     <div className="h-screen flex flex-col items-center mt-4">
@@ -208,8 +213,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('pingppl')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedTab === 'pingppl' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'pingppl' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   pingppl
@@ -218,8 +223,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('plan-ping')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedTab === 'plan-ping' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'plan-ping' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   plan ping
@@ -228,8 +233,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('planned-pings')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedTab === 'planned-pings' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'planned-pings' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   ur planned pings
@@ -238,8 +243,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('sent-pings')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedTab === 'sent-pings' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'sent-pings' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   ur sent pings
@@ -248,8 +253,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('ping-notifications')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-                    selectedTab === 'ping-notifications' ? 'bg-purple-500' : '',
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'ping-notifications' ? 'bg-[#1d8f89]' : '',
                   )}
                 >
                   ping notifications
@@ -289,7 +294,7 @@ const PingPplPage = () => {
                   <button
                     onClick={pingpplClicked}
                     disabled={!selectedEvent}
-                    className="w-full px-4 py-2 bg-green-500 text-white rounded-md flex items-center justify-center disabled:opacity-50"
+                    className="w-full px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white text-white rounded-md flex items-center justify-center disabled:opacity-50"
                   >
                     {/* <Send className="w-4 h-4 mr-2" /> */}
                     pingppl
@@ -317,7 +322,7 @@ const PingPplPage = () => {
                     className="w-full px-3 py-2 border rounded-md"
                   /> */}
                   <textarea
-                    placeholder="ping description..."
+                    placeholder="ping description (optional)..."
                     value={eventDescription}
                     onChange={(e) => setEventDescription(e.target.value)}
                     rows={3}
@@ -335,7 +340,13 @@ const PingPplPage = () => {
                   </div>
 
                   <div className="flex space-x-2">
-                    <button type="submit" className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center">
+                    <button
+                      disabled={!isPPValid}
+                      type="submit"
+                      className={classNames(
+                        "flex-1 px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md flex items-center justify-center"
+                      )}
+                    >
                       {pingNow ? (
                         <>
                           {/* <PlusCircle className="w-4 h-4 mr-2" /> */}

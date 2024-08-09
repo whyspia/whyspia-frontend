@@ -18,6 +18,8 @@ import { PingpplSentEventResponse } from "actions/pingppl/apiGetAllSentEvents"
 import PingpplFollowReactModal from "modules/contexts/pingppl/components/PingpplFollowReactModal"
 import classNames from "classnames"
 import PingpplSentEventReactModal from "modules/contexts/pingppl/components/PingpplSentEventReactModal"
+import { TAUResponse } from "actions/tau/apiGetAllTAU"
+import TAUNotifReactModal from "modules/contexts/tau/components/TAUNotifReactModal"
 
 
 export const NotifBlock = ({
@@ -751,6 +753,107 @@ export const NotifBlock = ({
             </A>
           </div>
         
+        </div>
+      </div>
+    )
+  }
+
+  if (notif?.notifType === NOTIF_TYPE.TAU_SENT) {
+    return (
+      <div
+        onClick={(event) => ModalService.open(TAUNotifReactModal, { notif })}
+        className={classNames(
+          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex flex-col cursor-pointer",
+        )}
+      >
+        <div className="flex items-center mb-2">
+  
+          <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
+            {clientHasReadDirectly ? (
+              <EyeIcon className="w-6 h-6 inline text-green-500" />
+            ) : (
+              <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+            )}
+
+            {notifTooltipVisibility && (
+              <div
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setNotifTooltipVisibility(false)
+                }}
+                className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+              >
+                <div className="flex flex-col w-full text-black font-semibold">
+                  <div onClick={(event) => {
+                    event.stopPropagation()
+                    onMarkSeenChanged(true)
+                  }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
+                    <span>Mark seen</span>
+                  </div>
+                  <div onClick={(event) => {
+                    event.stopPropagation()
+                    onMarkSeenChanged(false)
+                  }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>Mark unseen</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          <div>
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {(notif)?.context ?? 'no context'}
+            </A> notification - {formatTimeAgo((notif as any)?.createdAt)}
+
+            
+
+          </div>
+        
+        </div>
+
+        {/* TAU card */}
+        <div className="p-4 mb-2 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
+
+          <div className="mb-2">to:{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverSymbol })
+              }}
+              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+            >{(notif?.notifData as TAUResponse)?.receiverSymbol}</A>
+          </div>
+
+          <div className="mb-2">im thinking about u and just wanted u to know.</div>
+
+          {(notif?.notifData as TAUResponse)?.additionalMessage && (notif?.notifData as TAUResponse)?.additionalMessage?.length > 0 && (
+            <div className="mb-2">
+              {(notif?.notifData as TAUResponse)?.additionalMessage}
+            </div>
+          )}
+
+          <div className="">~ from{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderSymbol })
+              }}
+              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+            >{(notif?.notifData as TAUResponse)?.senderSymbol}</A>{' '}
+            at {new Date((notif?.notifData as TAUResponse)?.createdAt).toLocaleString()}
+          </div>
+
         </div>
       </div>
     )

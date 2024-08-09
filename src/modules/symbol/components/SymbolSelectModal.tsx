@@ -34,7 +34,7 @@ export default function SymbolSelectModal({
           <A
             onClick={() => onOptionSelected('symbol')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
             view symbol
@@ -43,7 +43,7 @@ export default function SymbolSelectModal({
           <A
             onClick={() => onOptionSelected('user')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
             view user

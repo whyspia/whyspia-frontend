@@ -1,11 +1,13 @@
 import { PingpplFollowResponse } from 'actions/pingppl/apiGetAllPingpplFollows'
 import { PingpplSentEventResponse } from 'actions/pingppl/apiGetAllSentEvents'
+import { TAUResponse } from 'actions/tau/apiGetAllTAU'
 import client from 'lib/axios'
 
 export enum NOTIF_TYPE {
   EMOTE = 'EMOTE',
   PINGPPL_FOLLOW = 'PINGPPL_FOLLOW',
   PINGPPL_SENTEVENT = 'PINGPPL_SENTEVENT',
+  TAU_SENT = 'TAU_SENT',
 }
 
 export type EmoteResponse = {
@@ -21,7 +23,7 @@ export type EmoteResponse = {
 
 export type EmoteNotifSingleResponse = {
   id: string
-  notifData: EmoteResponse | PingpplFollowResponse | PingpplSentEventResponse | null
+  notifData: EmoteResponse | PingpplFollowResponse | PingpplSentEventResponse | TAUResponse | null
   notifType: NOTIF_TYPE
   receiverSymbol: string
   hasReadCasually: boolean

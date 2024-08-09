@@ -206,7 +206,7 @@ const ParallelPage = () => {
                               event.stopPropagation()
                               setIsPreviewDropdownOpen(!isPreviewDropdownOpen)
                             }}
-                            className="flex items-center mt-4 mb-2 py-2 px-4 rounded-md bg-purple-500 border border-purple-500 hover:border-white w-full cursor-pointer"
+                            className="flex items-center mt-4 mb-2 py-2 px-4 rounded-md border-[#1d8f89] border border-[#1d8f89] hover:border-white w-full cursor-pointer"
                           >
                             <div className="font-bold text-lg mb-1">two main options here</div>
                             {isPreviewDropdownOpen ? (

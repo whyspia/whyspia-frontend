@@ -21,6 +21,7 @@ import ContextSelectModal from 'modules/context/components/ContextSelectModal'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 import YouGottaLoginModal from './YouGottaLoginModal'
 import { PublicPlannedPingBlock } from 'modules/contexts/pingppl/components/PublicPlannedPingBlock'
+import PlannedPingReactModal from 'modules/contexts/pingppl/components/PlannedPingReactModal'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
@@ -277,8 +278,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('planned-pings')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-            activeTab === 'planned-pings' ? 'bg-purple-500' : '',
+            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'planned-pings' ? 'bg-[#1d8f89]' : '',
           )}
         >
           planned pings
@@ -287,8 +288,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('sent-pings')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-            activeTab === 'sent-pings' ? 'bg-purple-500' : '',
+            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'sent-pings' ? 'bg-[#1d8f89]' : '',
           )}
         >
           sent pings
@@ -297,8 +298,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('sent-emotes')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-            activeTab === 'sent-emotes' ? 'bg-purple-500' : '',
+            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'sent-emotes' ? 'bg-[#1d8f89]' : '',
           )}
         >
           sent emotes
@@ -307,8 +308,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('received-emotes')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-            activeTab === 'received-emotes' ? 'bg-purple-500' : '',
+            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'received-emotes' ? 'bg-[#1d8f89]' : '',
           )}
         >
           received emotes
@@ -317,8 +318,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('symbols')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-            activeTab === 'symbols' ? 'bg-purple-500' : '',
+            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'symbols' ? 'bg-[#1d8f89]' : '',
           )}
         >
           symbols
@@ -353,23 +354,23 @@ const ProfileReusable = () => {
 
       {activeTab === 'sent-pings' && (
         <div className="md:w-1/2 w-full text-white">
-          {sentEventsData.map((event) => (
+          {sentEventsData.map((sentEvent) => (
             <div
-              key={event.id}
-              onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
+              key={sentEvent.id}
+              onClick={(event) => ModalService.open(PlannedPingReactModal, { plannedEvent: sentEvent?.definedEvent })}
               className="relative w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
             >
-              <div className="">{event?.eventSender} sent{' '}
+              <div className="">{sentEvent?.eventSender} sent{' '}
               <A
                 onClick={(e) => {
                   e.stopPropagation()
-                  ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })
+                  ModalService.open(PlannedPingReactModal, { plannedEvent: sentEvent?.definedEvent })
                 }}
                 className="text-red-500 hover:text-red-700 cursor-pointer"
               >
-                {event.eventName}
+                {sentEvent.eventName}
               </A>{' '}
-              - {formatTimeAgo((event)?.createdAt)}</div>
+              - {formatTimeAgo((sentEvent)?.createdAt)}</div>
             </div>
           ))}
 

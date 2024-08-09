@@ -40,7 +40,7 @@ export default function AuthStatusWithConnectButton() {
       )}
 
       {user && user?.twitterUsername && (
-        <div className="flex  ">
+        <div className="flex relative z-[700]">
 
           {/* block dealing with BellIcon/notifications */}
           <A className="relative group cursor-pointer mr-4" href={`/notifications`}>

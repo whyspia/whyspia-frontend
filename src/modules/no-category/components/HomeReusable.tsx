@@ -21,14 +21,14 @@ const HomeReusable: NextPage = () => {
       <div className="flex flex-wrap justify-center mt-6">
 
         <A
-          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer"
           onClick={() => onDesireClicked('context')}
         >
           go to context
         </A>
 
         <A
-          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer"
           onClick={() => onDesireClicked('send')}
         >
           send symbol
@@ -36,7 +36,7 @@ const HomeReusable: NextPage = () => {
 
         <A
           // href="/all"
-          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer"
           onClick={() => onDesireClicked('define')}
         >
           define symbol
@@ -44,14 +44,14 @@ const HomeReusable: NextPage = () => {
 
         <A
           href={`/desire/search`}
-          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer"
         >
           search symbols or users
         </A>
 
         <A
           href={`/desire/about`}
-          className="p-3 mb-4 mr-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 cursor-pointer"
+          className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer"
         >
           about
         </A>

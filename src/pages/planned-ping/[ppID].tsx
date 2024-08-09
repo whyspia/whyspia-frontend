@@ -116,7 +116,7 @@ const PlannedPing = () => {
                     ModalService.open(PingpplUnfollowConfirmModal, { pingpplFollowId, eventNameFollowed: ppData?.eventName, eventSender: ppData?.eventCreator, eventDescription: ppData?.eventDescription })
                   }
                 }}
-                className="transition-colors duration-300 flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-purple-500 hover:border-white hover:bg-red-500 cursor-pointer"
+                className="transition-colors duration-300 flex items-center bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-[#1d8f89] hover:border-white hover:bg-red-500 cursor-pointer"
                 onMouseEnter={() => handleMouseEnter(ppData?.id)}
                 onMouseLeave={handleMouseLeave}
               >
@@ -132,7 +132,7 @@ const PlannedPing = () => {
                     ModalService.open(PingpplFollowConfirmModal, { eventNameFollowed: ppData?.eventName, eventSender: ppData?.eventCreator, eventDescription: ppData?.eventDescription })
                   }
                 }}
-                className="flex items-center bg-purple-500 rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-purple-500 hover:border-white cursor-pointer"
+                className="flex items-center bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-4 px-2 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
               >
                 follow
               </div>

@@ -79,7 +79,7 @@ export default function PingpplFollowConfirmModal({
         {/* follow button */}
         <button
           onClick={onFollowSend}
-          className="h-10 mt-4 flex items-center bg-purple-500 rounded-lg text-md text-white px-2 font-bold border border-purple-500 hover:border-white cursor-pointer"
+          className="h-10 mt-4 flex items-center bg-[#1d8f89] rounded-lg text-md text-white px-2 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
         >
           follow
         </button>

@@ -160,8 +160,8 @@ export default function SendEmoteModal({
           <button
             onClick={() => onDesireClicked('context')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-              selectedButton === 'context' ? 'bg-purple-500' : '',
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedButton === 'context' ? 'bg-[#1d8f89]' : '',
             )}
           >
             go to context
@@ -170,8 +170,8 @@ export default function SendEmoteModal({
           <button
             onClick={() => onDesireClicked('send')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-              selectedButton === 'send' ? 'bg-purple-500' : '',
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedButton === 'send' ? 'bg-[#1d8f89]' : '',
             )}
           >
             send symbol
@@ -180,8 +180,8 @@ export default function SendEmoteModal({
           <button
             onClick={() => onDesireClicked('define')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-              selectedButton === 'define' ? 'bg-purple-500' : '',
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedButton === 'define' ? 'bg-[#1d8f89]' : '',
             )}
           >
             define symbol
@@ -190,8 +190,8 @@ export default function SendEmoteModal({
           <button
             onClick={() => onDesireClicked('search')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-              selectedButton === 'search' ? 'bg-purple-500' : '',
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedButton === 'search' ? 'bg-[#1d8f89]' : '',
             )}
           >
             search symbols or users
@@ -200,8 +200,8 @@ export default function SendEmoteModal({
           <button
             onClick={() => onDesireClicked('about')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer',
-              selectedButton === 'about' ? 'bg-purple-500' : '',
+              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedButton === 'about' ? 'bg-[#1d8f89]' : '',
             )}
           >
             about
@@ -245,7 +245,7 @@ export default function SendEmoteModal({
                     'block rounded-lg text-white px-4 py-2 mt-4 font-bold',
                     {
                       'bg-gray-400': !isValid,
-                      'bg-blue-500 cursor-pointer': isValid,
+                      'bg-[#1d8f89] border border-[#1d8f89] hover:border-white cursor-pointer': isValid,
                     }
                   )}
                   disabled={!isValid}
@@ -287,44 +287,44 @@ export default function SendEmoteModal({
                   onClick={() => close()}
                   href={getContextPagePath(c)}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
                   )}
                 >
                   {c}
                 </A>
               ))}
             </div>
+
+            <div className="mt-3">
+
+              <button
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
+                }}
+                className="flex items-center py-2 px-4 rounded-md bg-[#1d8f89] w-full"
+              >
+                <div>context summaries:</div>
+                {isContextSummsDropdownOpen ? (
+                  <ChevronUpIcon className="w-5 h-5 ml-2" />
+                ) : (
+                  <ChevronDownIcon className="w-5 h-5 ml-2" />
+                )}
+              </button>
+
+              {isContextSummsDropdownOpen && (
+                <ul className="ml-10 list-disc mt-4">
+                  {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
+                    <li key={c} className="mb-2">
+                      <span className="font-bold">{c}</span>: {getContextSummary(c)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+            </div>
           </>
         )}
-
-        <div className="mt-3">
-
-          <button
-            onClick={(event) => {
-              event.stopPropagation()
-              setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
-            }}
-            className="flex items-center py-2 px-4 rounded-md border border-purple-500 w-full"
-          >
-            <div>context summaries:</div>
-            {isContextSummsDropdownOpen ? (
-              <ChevronUpIcon className="w-5 h-5 ml-2" />
-            ) : (
-              <ChevronDownIcon className="w-5 h-5 ml-2" />
-            )}
-          </button>
-
-          {isContextSummsDropdownOpen && (
-            <ul className="ml-10 list-disc mt-4">
-              {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
-                <li key={c} className="mb-2">
-                  <span className="font-bold">{c}</span>: {getContextSummary(c)}
-                </li>
-              ))}
-            </ul>
-          )}
-
-        </div>
 
       </div>
     </Modal>

@@ -189,7 +189,7 @@ const NouPage = () => {
                             event.stopPropagation()
                             ModalService.open(NouEmoteModal, { initialSymbol: 'hug', receiverSymbol: searchedUser?.twitterUsername })
                           }}
-                          className="bg-blue-500 rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-blue-500 hover:border-white cursor-pointer"
+                          className="bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
                         >
                           emote
                         </div>
@@ -206,7 +206,7 @@ const NouPage = () => {
 
                     <button
                       className={`px-4 py-2 ${
-                        activeTab === 'received' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                        activeTab === 'received' ? 'bg-[#1d8f89] text-white' : 'bg-gray-200 text-gray-500'
                       }`}
                       onClick={() => onTabChanged('received')}
                     >
@@ -215,7 +215,7 @@ const NouPage = () => {
 
                     <button
                       className={`px-4 py-2 ${
-                        activeTab === 'sent' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                        activeTab === 'sent' ? 'bg-[#1d8f89] text-white' : 'bg-gray-200 text-gray-500'
                       }`}
                       onClick={() => onTabChanged('sent')}
                     >

@@ -124,8 +124,8 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
           <button
             onClick={onSubmitDefinition}
             className={classNames(
-              `text-white p-4 text-xl shadow-lg rounded-lg mb-8`,
-              isValid ? `bg-yellow-500 cursor-pointer` : `bg-yellow-400`,
+              `text-white p-4 text-xl shadow-lg rounded-lg mb-8 border border-[#1d8f89] hover:border-white`,
+              isValid ? `bg-[#1d8f89] cursor-pointer` : `bg-[#1d8f89]/50`,
             )}
             disabled={!isValid}
           >

@@ -4,10 +4,11 @@ import A from 'components/A'
 import { EmoteNotifSingleResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { NotifBlock } from 'modules/notifs/components/NotifBlock'
 import { PingpplSentEventResponse } from 'actions/pingppl/apiGetAllSentEvents'
+import { TAUResponse } from 'actions/tau/apiGetAllTAU'
 
 
 // just used for when clicking on notif rn, but maybe used other places eventually like some activity item
-export default function PingpplSentEventReactModal({
+export default function TAUNotifReactModal({
   close,
   notif,
 }: {
@@ -30,12 +31,12 @@ export default function PingpplSentEventReactModal({
         <div className="flex flex-wrap justify-center mt-6">
           <A
             onClick={() => onOptionSelected('home')}
-            href={`/u/${(notif?.notifData as PingpplSentEventResponse)?.eventSender}`}
+            href={`/context/thinking-about-u`}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            view this planned ping on user profile of {(notif?.notifData as PingpplSentEventResponse)?.eventSender} 
+            tell someone ur thinking about them or see if anyone is thinking about u
           </A>
 
         </div>

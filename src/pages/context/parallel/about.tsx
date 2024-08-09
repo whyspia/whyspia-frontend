@@ -12,7 +12,7 @@ const ParallelAbout: NextPage = () => {
         <A
           href={`/context/parallel`}
           className={classNames(
-            'p-3 text-white rounded-lg hover:bg-purple-600 border border-purple-600 cursor-pointer'
+            'p-3 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
           )}
         >
           return to parallel context
