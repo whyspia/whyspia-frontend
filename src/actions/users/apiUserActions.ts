@@ -36,7 +36,9 @@ export const initiateTwitterLoginAPI = async (jwt: string): Promise<any> => {
   try {
     const response = await client.post(
       `/user-token/initiateTwitterLogin`,
-      {},
+      {
+        returnHere: window.location.href
+      },
       {
         headers: {
           Authorization: jwt ? `Bearer ${jwt}` : null,
