@@ -52,3 +52,14 @@ a {
     @apply mb-2;
   }
 }
+
+.selected-tab-triangle::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* Adjust the position of the triangle */
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #1d8f89; /* Color of the triangle */
+}

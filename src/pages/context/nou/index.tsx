@@ -4,14 +4,16 @@ import { flatten } from 'lodash'
 import { useContext, useRef, useState } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import { twitterLogin } from 'modules/users/services/UserService'
-import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
-import { getAllUserTokens } from 'actions/users/apiUserActions'
 import A from 'components/A'
 import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import ModalService from 'components/modals/ModalService'
 import NouEmoteModal from 'modules/symbol/components/NouEmoteModal'
 import apiGetUnrespondedEmotes from 'actions/emotes/apiGetUnrespondedEmotes'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import { NouEmoteBlock } from 'modules/contexts/nou/components/NouEmoteBlock'
+import classNames from 'classnames'
+
+const xUsernamePAttern = /^@?(\w){1,15}$/
 
 // i noticed this nou page is just YOUR received symbols. Which is different from notifications which can be so much more - especially once you can follow all kinds of things
 const NouPage = () => {
@@ -23,41 +25,13 @@ const NouPage = () => {
 
   const [activeTab, setActiveTab] = useState('received')
 
-  const fetchUserTokens = async ({ pageParam = 0 }) => {
-    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc' })
-    return userTokens
-  }
-
-  const { data: infiniteUserTokens, fetchNextPage: fetchSearchNextPage, hasNextPage: hasSearchNextPage, isFetchingNextPage: isSearchFetchingNextPage } = useInfiniteQuery(
-    ['search', 10, searchBarQuery],
-    ({ pageParam = 0 }) =>
-      fetchUserTokens({
-        pageParam
-      }),
-    {
-      enabled: Boolean(searchBarQuery && searchBarQuery?.length > 0), // disables query if this is not true
-      getNextPageParam: (lastGroup, allGroups) => {
-        const morePagesExist = lastGroup?.length === 10
-
-        if (!morePagesExist) {
-          return false
-        }
-
-        return allGroups.length * 10
-      },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-    }
-  )
-
   const fetchUnrespondedReceivedEmotes = async ({ pageParam = 0 }) => {
     const emotes = await apiGetUnrespondedEmotes({ jwt: jwtToken, fetchSentOrReceived: 'received', skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
   const { data: infiniteReceivedEmotes, fetchNextPage: fetchReceivedNextPage, hasNextPage: hasReceivedNextPage, isFetchingNextPage: isReceivedFetchingNextPage } = useInfiniteQuery(
-    ['unrespondedReceivedEmotes',],
+    [`unrespondedReceivedEmotes-${user?.twitterUsername}`,],
     ({ pageParam = 0 }) =>
     fetchUnrespondedReceivedEmotes({
         pageParam
@@ -85,7 +59,7 @@ const NouPage = () => {
   }
 
   const { data: infiniteSentEmotes, fetchNextPage: fetchSentNextPage, hasNextPage: hasSentNextPage, isFetchingNextPage: isSentFetchingNextPage } = useInfiniteQuery(
-    ['unrespondedSentEmotes',],
+    [`unrespondedSentEmotes-${user?.twitterUsername}`,],
     ({ pageParam = 0 }) =>
     fetchUnrespondedSentEmotes({
         pageParam
@@ -118,7 +92,9 @@ const NouPage = () => {
   const receivedEmotesData = flatten(infiniteReceivedEmotes?.pages || [])
   const sentEmotesData = flatten(infiniteSentEmotes?.pages || [])
 
-  const userTokens = flatten(infiniteUserTokens?.pages || [])
+  
+  const isPossibleXUser = xUsernamePAttern.test(searchBarQuery)
+  const isSearchQueryValid = isPossibleXUser
 
   return (
     <div className="h-screen flex flex-col items-center mt-10">
@@ -134,7 +110,7 @@ const NouPage = () => {
             <>
               <div
                 onClick={() => twitterLogin(null)}
-                className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+                className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
               >
                 connect X
               </div>
@@ -147,7 +123,7 @@ const NouPage = () => {
                   type="text"
                   value={searchBarQuery}
                   onChange={(e) => onSearchBarTyped(e.target.value)}
-                  placeholder="search for someone to send symbols to"
+                  placeholder="enter X user (case matters)"
                   className="block md:w-[30rem] w-full border border-gray-300 rounded px-3 py-2"
                 />
                 {/* {searchbarTooltipVisibility && (
@@ -162,61 +138,67 @@ const NouPage = () => {
 
               {Boolean(searchBarQuery && searchBarQuery?.length > 0) ? (
                 <>
-                  {userTokens?.map((searchedUser) => {
-
-                    return (
-                      <div
-                        // onClick={(event) => router.push(`/emote/${emote?.id}`)}
-                        className="relative w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
-                        key={searchedUser.id}
-                      >
-                        <div>
-                          <A
-                            onClick={(event) => {
-                              event.stopPropagation()
-                              ModalService.open(SymbolSelectModal, { symbol: searchedUser?.twitterUsername })
-                            }}
-                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                          >
-                            {searchedUser?.twitterUsername}
-                          </A>
-                
-                        </div>
-
-                        {/* Emote button */}
-                        <div
+                  {isSearchQueryValid && (
+                    <div
+                      className="relative w-full text-lg p-4 md:pl-12 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer"
+                    >
+                      <div>
+                        <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(NouEmoteModal, { initialSymbol: 'hug', receiverSymbol: searchedUser?.twitterUsername })
+                            ModalService.open(SymbolSelectModal, { symbol: searchBarQuery })
                           }}
-                          className="bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
+                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
                         >
-                          emote
-                        </div>
-                  
+                          {searchBarQuery}
+                        </A>
+              
                       </div>
-                    )
-                  })}
+
+                      {/* emote button */}
+                      <div
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          ModalService.open(NouEmoteModal, { initialSymbol: 'hug', receiverSymbol: searchBarQuery }, () => {
+                            setSearchBarQuery('')
+                          })
+                        }}
+                        className="bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
+                      >
+                        emote
+                      </div>
+                
+                    </div>
+                  )}
+
+                  {!isSearchQueryValid && (
+                    <div className="text-red-500">
+                      enter a real X username pls
+                    </div>
+                  )}
+
                 </>
  
               ): (
                 <>
 
-                  <div className="flex mb-4">
+                  <div className="flex mb-4 space-x-2">
 
                     <button
-                      className={`px-4 py-2 ${
-                        activeTab === 'received' ? 'bg-[#1d8f89] text-white' : 'bg-gray-200 text-gray-500'
-                      }`}
+                      className={classNames(
+                        'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                        activeTab === 'received' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+                      )}
                       onClick={() => onTabChanged('received')}
                     >
                       received
                     </button>
 
                     <button
-                      className={`px-4 py-2 ${
-                        activeTab === 'sent' ? 'bg-[#1d8f89] text-white' : 'bg-gray-200 text-gray-500'
-                      }`}
+                      className={classNames(
+                        'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                        activeTab === 'sent' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+                      )}
                       onClick={() => onTabChanged('sent')}
                     >
                       sent
@@ -229,7 +211,7 @@ const NouPage = () => {
                       {receivedEmotesData?.map((emote) => {
                       
                         return (
-                          <SentEmoteBlock context={EMOTE_CONTEXTS.NOU} isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
+                          <NouEmoteBlock context={EMOTE_CONTEXTS.NOU} isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
                         )
                       })}
 
@@ -242,7 +224,7 @@ const NouPage = () => {
                       {sentEmotesData?.map((emote) => {
                       
                         return (
-                          <SentEmoteBlock context='nou_sent' isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
+                          <NouEmoteBlock context='nou_sent' isPersonal={true} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
                         )
                       })}
 

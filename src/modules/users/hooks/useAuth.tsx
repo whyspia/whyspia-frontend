@@ -3,6 +3,7 @@ import { getUserToken } from 'actions/users/apiUserActions'
 import { GlobalContext } from 'lib/GlobalContext'
 import { deleteCookie } from 'modules/no-category/services/CookieService'
 import { useContext } from 'react'
+import toast from 'react-hot-toast'
 
 const useAuth = () => {
   const { setJwtToken, setUser, setUserNotifData } = useContext(GlobalContext)
@@ -30,6 +31,7 @@ const useAuth = () => {
     deleteCookie('tt')
     setUser(null)
     setJwtToken(null)
+    toast.error(`u disconnected successfully`)
   }
 
   return { setUserFromJwt, twitterLogout, }

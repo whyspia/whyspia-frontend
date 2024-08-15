@@ -17,7 +17,7 @@ const AboutHome: NextPage = () => {
       <div className="mt-6">
 
         <div className="mb-4 ">
-          good question. this website is a mix between emote protocol and whyspia based on terms below
+          good question.
         </div>
 
       </div>
@@ -29,7 +29,7 @@ const AboutHome: NextPage = () => {
             event.stopPropagation()
             setIsTermsDropdownOpen(!isTermsDropdownOpen)
           }}
-          className="flex items-center py-2 px-4 rounded-md border border-purple-500 w-full"
+          className="flex items-center py-2 px-4 rounded-md border border-[#1d8f89] w-full"
         >
           <div>terms:</div>
           {isTermsDropdownOpen ? (
@@ -41,6 +41,13 @@ const AboutHome: NextPage = () => {
 
         {isTermsDropdownOpen && (
           <ul className="ml-10 list-disc mt-4">
+            
+            <li className="mb-2">
+              <span className="font-bold mb-2">whyspia</span>: sanctuary for shared whispers of the soul to echo in flux. initially being manifested by shmoji as he tries to build all the things he feels called to build + art. Trying to build something in cyberspace that feels like a real place. Trying to build technology to connect people. Trying to build an everything app. Trying to build something that is still useful or beautiful even once we augment with BCI. Building a home and a community - no matter where you are physically. So, not really one single thing. And these are just some things shmoji is interested in, they wont limit what whyspia is and becomes
+            </li>
+            <li className="mb-2">
+              <span className="font-bold mb-2">context</span>: basically an app or a world
+            </li>
             <li className="mb-2">
               <span className="font-bold mb-2">emote (as a noun) #1</span>: sender(s), receiver(s), symbol(s), timeSent, id
             </li>
@@ -50,15 +57,10 @@ const AboutHome: NextPage = () => {
             <li className="mb-2">
               <span className="font-bold mb-2">emote (as a verb)</span>: to send symbol(s) to receiver(s)
             </li>
-            <li className="mb-2">
+            {/* <li className="mb-2">
               <span className="font-bold mb-2">emote protocol</span>: protocol for understanding and transparency. basically: you send symbols to receivers. a symbol is any text (like the text &quot;hug&quot;). at the lowest level, this is about symbols being sent. but that is kinda boring. so, contexts abstract this away and add more fun and functionality - it&apos;s no longer about sending symbols, instead it&apos;s about whatever the story of the context is. if the data is public, it helps with understanding and transparency. another key point is that the system is built so that even if all computation of apps stopped, you could view your data in files and everything would still make sense with emote format (compared to most data that isnt readable)
-            </li>
-            <li className="mb-2">
-              <span className="font-bold mb-2">context</span>: in the emote protocol, a context is specific data/symbols that define logic for some app/computation. in whyspia, a context is basically an app or a world, but doesnt have to be defined by specific data/symbols
-            </li>
-            <li className="mb-2">
-              <span className="font-bold mb-2">whyspia</span>: sanctuary for shared whispers of the soul to echo in flux. initially being manifested by shmoji as he tries to build all the things he feels called to build + art
-            </li>
+            </li> */}
+            
           </ul>
         )}
 
@@ -71,7 +73,7 @@ const AboutHome: NextPage = () => {
             event.stopPropagation()
             setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
           }}
-          className="flex items-center py-2 px-4 rounded-md border border-purple-500 w-full"
+          className="flex items-center py-2 px-4 rounded-md border border-[#1d8f89] w-full"
         >
           <div>context summaries:</div>
           {isContextSummsDropdownOpen ? (

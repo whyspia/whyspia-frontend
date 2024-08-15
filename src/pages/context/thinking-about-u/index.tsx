@@ -14,6 +14,8 @@ import CircleSpinner from 'components/animations/CircleSpinner'
 import { apiCreateTAU } from 'actions/tau/apiCreateTAU'
 import apiGetAllTAU from 'actions/tau/apiGetAllTAU'
 
+const xUsernamePAttern = /^@?(\w){1,15}$/
+
 const ThinkingAboutUPage = () => {
   const queryClient = useQueryClient()
 
@@ -116,7 +118,9 @@ const ThinkingAboutUPage = () => {
     setAdditionalMessage('')
   }
 
-  const isValid = !isTAUSending && receiverSymbol && receiverSymbol?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true)
+  const isPossibleXUser = xUsernamePAttern.test(receiverSymbol)
+  const isSearchQueryValid = isPossibleXUser 
+  const isValid = !isTAUSending && receiverSymbol && receiverSymbol?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true) && isSearchQueryValid
 
   const receivedTAUsData = flatten(infiniteReceivedTAUs?.pages || [])
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
@@ -136,7 +140,7 @@ const ThinkingAboutUPage = () => {
             <>
               <div
                 onClick={() => twitterLogin(null)}
-                className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+                className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
               >
                 connect X
               </div>
@@ -144,12 +148,12 @@ const ThinkingAboutUPage = () => {
           ): (
             <div className="flex flex-col justify-center items-center">
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 mb-2">
                 <button
                   onClick={() => onDesireClicked('send')}
                   className={classNames(
-                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedButton === 'send' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'send' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   send
@@ -158,8 +162,8 @@ const ThinkingAboutUPage = () => {
                 <button
                   onClick={() => onDesireClicked('sent')}
                   className={classNames(
-                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedButton === 'sent' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'sent' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   sent
@@ -168,8 +172,8 @@ const ThinkingAboutUPage = () => {
                 <button
                   onClick={() => onDesireClicked('received')}
                   className={classNames(
-                    'p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedButton === 'received' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'received' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   received
@@ -180,7 +184,21 @@ const ThinkingAboutUPage = () => {
                 <>
                 
                   <div className="flex flex-col">
-                    <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-[#1d8f89] border-4 shadow-lg rounded-lg mb-4" />
+                    <input
+                      type="text"
+                      placeholder="enter X username... (case matters)"
+                      onChange={(event) => onSetReceiverChanged(event.target.value)}
+                      className={classNames(
+                        isSearchQueryValid ? 'border-[#1d8f89]' : 'border-red-500',
+                        "p-4 text-xl border-4 shadow-lg rounded-lg mb-4"
+                      )}
+                    />
+
+                    {!isSearchQueryValid && (
+                      <div className="text-red-500 mb-4">
+                        enter a real X username pls
+                      </div>
+                    )}
 
                     <div className="flex items-center space-x-2 mb-2">
                       <input

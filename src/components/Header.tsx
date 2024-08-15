@@ -8,10 +8,10 @@ import classNames from 'classnames'
 import { flatten } from 'lodash'
 import AuthStatusWithConnectButton from 'modules/users/components/AuthStatusWithConnectButton'
 import ModalService from './modals/ModalService'
-import SendEmoteModal from 'modules/symbol/components/SendEmoteModal'
 import { SearchbarTooltipContent } from 'modules/no-category/components/SearchbarTooltipContent'
 import { getAllUserTokens } from 'actions/users/apiUserActions'
 import { useInfiniteQuery } from 'react-query'
+import DoStuffModal from 'modules/no-category/components/DoStuffModal'
 
 type MenuItemType = {
   name: string,
@@ -142,7 +142,8 @@ export default function Header() {
               onClick={() => {
                 const previousPathname = window.location.pathname
                 window.history.pushState(null, null, '/desire')
-                ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
+                // ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
+                ModalService.open(DoStuffModal)
               }}
               className="bg-[#1d8f89] rounded-lg text-white px-4 py-2 font-bold cursor-pointer"
             >

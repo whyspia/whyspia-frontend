@@ -14,6 +14,7 @@ import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath, getContextSummary } from 'mo
 import A from 'components/A'
 import { twitterLogin } from 'modules/users/services/UserService'
 import DefineUI from './DefineUI'
+import useAuth from 'modules/users/hooks/useAuth'
 
 const dontCloseOnURLStateChange = [
   '/desire', '/desire/send', '/desire/define', '/desire/search', '/desire/about', '/desire/context'
@@ -27,8 +28,10 @@ export default function SendEmoteModal({
   initialDesire: string
 }) {
   const { jwtToken, user } = useContext(GlobalContext)
+  const { twitterLogout } = useAuth()
 
   const [selectedButton, setSelectedButton] = useState(initialDesire)
+  const [selectedTabTop, setSelectedTabTop] = useState('all')
 
   const [receiverSymbol, setreceiverSymbol] = useState(null)
   const [selectedSymbol, setSelectedSymbol] = useState('')
@@ -156,173 +159,228 @@ export default function SendEmoteModal({
 
         <div className="text-2xl font-bold">why are you here? what do you desire?</div>
 
-        <div className="flex flex-wrap justify-center mt-6">
+        <div className="flex items-center space-x-2 mt-6">
           <button
-            onClick={() => onDesireClicked('context')}
+            onClick={() => setSelectedTabTop('simple')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-              selectedButton === 'context' ? 'bg-[#1d8f89]' : '',
+              'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedTabTop === 'simple' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
             )}
           >
-            go to context
+            simple options
           </button>
 
           <button
-            onClick={() => onDesireClicked('send')}
+            onClick={() => setSelectedTabTop('all')}
             className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-              selectedButton === 'send' ? 'bg-[#1d8f89]' : '',
+              'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+              selectedTabTop === 'all' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
             )}
           >
-            send symbol
-          </button>
-
-          <button
-            onClick={() => onDesireClicked('define')}
-            className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-              selectedButton === 'define' ? 'bg-[#1d8f89]' : '',
-            )}
-          >
-            define symbol
-          </button>
-
-          <button
-            onClick={() => onDesireClicked('search')}
-            className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-              selectedButton === 'search' ? 'bg-[#1d8f89]' : '',
-            )}
-          >
-            search symbols or users
-          </button>
-          
-          <button
-            onClick={() => onDesireClicked('about')}
-            className={classNames(
-              'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-              selectedButton === 'about' ? 'bg-[#1d8f89]' : '',
-            )}
-          >
-            about
+            all options
           </button>
         </div>
 
-        {selectedButton === 'send' && (
-          <>
-            {!user?.twitterUsername ? (
-              <>
-                <div
-                  onClick={() => twitterLogin(null)}
-                  className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
-                >
-                  connect X
-                </div>
-              </>
-            ) : (
-              <div>
-                
-                <div className="font-bold text-lg mb-1">send to:</div>
+        {selectedTabTop === 'simple' && (
+          <div className="flex flex-wrap justify-center mt-6">
 
-                <textarea
-                  onChange={(event) => onSetReceiverChanged(event.target.value)}
-                  placeholder="enter X username..."
-                  className="w-full rounded-lg px-2 py-1"
-                />
+            <A
+              href="/context/thinking-about-u"
+              className="w-[20rem] p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
+            >
+              tell someone ur thinking about them or see if anyone is thinking about u
+            </A>
 
-                <div className="font-bold text-lg mb-1">symbol to send:</div>
+            <A
+              href="/context/nou"
+              className="w-[20rem] p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
+            >
+              send symbol (like &quot;hug&quot;) back and forth with someone
+            </A>
 
-                <textarea
-                  value={selectedSymbol}
-                  onChange={(event) => onSymbolTyped(event.target.value)}
-                  placeholder="enter symbol..."
-                  className="w-full rounded-lg px-2 py-1"
-                />
+            <A
+              href={`/context/pingppl`}
+              className="w-[20rem] p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
+            >
+              plan and send events to people or subscribe to specific events from other people
+            </A>
 
-                <button
-                  onClick={onSendEmote}
-                  className={classNames(
-                    'block rounded-lg text-white px-4 py-2 mt-4 font-bold',
-                    {
-                      'bg-gray-400': !isValid,
-                      'bg-[#1d8f89] border border-[#1d8f89] hover:border-white cursor-pointer': isValid,
-                    }
-                  )}
-                  disabled={!isValid}
-                >
-                  send
-                </button>
-
-              </div>
-            )}
-            
-          </>
+          </div>
         )}
 
-        {selectedButton === 'define' && (
+        {selectedTabTop === 'all' && (
           <>
-            {!user?.twitterUsername ? (
-              <>
-                <div
-                  onClick={() => twitterLogin(null)}
-                  className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
-                >
-                  connect X
-                </div>
-              </>
-            ) : (
-              <DefineUI jwtToken={jwtToken} />
-            )}
-          </>
-        )}
-
-        {selectedButton === 'context' && (
-          <>
-            <div className="text-2xl font-bold mb-6">choose context to go to</div>
-
-            <div className="mb-4 flex flex-wrap">
-              {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
-                <A
-                  key={c}
-                  onClick={() => close()}
-                  href={getContextPagePath(c)}
-                  className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
-                  )}
-                >
-                  {c}
-                </A>
-              ))}
-            </div>
-
-            <div className="mt-3">
-
+            <div className="flex flex-wrap mt-6">
               <button
-                onClick={(event) => {
-                  event.stopPropagation()
-                  setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
-                }}
-                className="flex items-center py-2 px-4 rounded-md bg-[#1d8f89] w-full"
-              >
-                <div>context summaries:</div>
-                {isContextSummsDropdownOpen ? (
-                  <ChevronUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ChevronDownIcon className="w-5 h-5 ml-2" />
+                onClick={() => onDesireClicked('context')}
+                className={classNames(
+                  'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                  selectedButton === 'context' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                 )}
+              >
+                go to context
               </button>
 
-              {isContextSummsDropdownOpen && (
-                <ul className="ml-10 list-disc mt-4">
-                  {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
-                    <li key={c} className="mb-2">
-                      <span className="font-bold">{c}</span>: {getContextSummary(c)}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <button
+                onClick={() => onDesireClicked('define')}
+                className={classNames(
+                  'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                  selectedButton === 'define' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+                )}
+              >
+                define symbol
+              </button>
 
+              <button
+                onClick={() => onDesireClicked('search')}
+                className={classNames(
+                  'p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer',
+                )}
+              >
+                search symbols or users
+              </button>
+              
+              <button
+                onClick={() => onDesireClicked('about')}
+                className={classNames(
+                  'p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer',
+                )}
+              >
+                about
+              </button>
+
+              <div
+                onClick={() => twitterLogin(null)}
+                className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer"
+              >
+                connect X
+              </div>
+
+              <div
+                className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer"
+                onClick={() => twitterLogout()}
+              >
+                disconnect X
+              </div>
             </div>
+
+            {selectedButton === 'send' && (
+              <>
+                {!user?.twitterUsername ? (
+                  <>
+                    <div
+                      onClick={() => twitterLogin(null)}
+                      className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
+                    >
+                      connect X
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    
+                    <div className="font-bold text-lg mb-1">send to:</div>
+
+                    <textarea
+                      onChange={(event) => onSetReceiverChanged(event.target.value)}
+                      placeholder="enter X username..."
+                      className="w-full rounded-lg px-2 py-1"
+                    />
+
+                    <div className="font-bold text-lg mb-1">symbol to send:</div>
+
+                    <textarea
+                      value={selectedSymbol}
+                      onChange={(event) => onSymbolTyped(event.target.value)}
+                      placeholder="enter symbol..."
+                      className="w-full rounded-lg px-2 py-1"
+                    />
+
+                    <button
+                      onClick={onSendEmote}
+                      className={classNames(
+                        'block rounded-lg text-white px-4 py-2 mt-4 font-bold',
+                        {
+                          'bg-gray-400': !isValid,
+                          'bg-[#1d8f89] border border-[#1d8f89] hover:border-white cursor-pointer': isValid,
+                        }
+                      )}
+                      disabled={!isValid}
+                    >
+                      send
+                    </button>
+
+                  </div>
+                )}
+                
+              </>
+            )}
+
+            {selectedButton === 'define' && (
+              <>
+                {!user?.twitterUsername ? (
+                  <>
+                    <div
+                      onClick={() => twitterLogin(null)}
+                      className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
+                    >
+                      connect X
+                    </div>
+                  </>
+                ) : (
+                  <DefineUI jwtToken={jwtToken} />
+                )}
+              </>
+            )}
+
+            {selectedButton === 'context' && (
+              <>
+                <div className="text-2xl font-bold mb-6">choose context to go to</div>
+
+                <div className="mb-4 flex flex-wrap">
+                  {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
+                    <A
+                      key={c}
+                      onClick={() => close()}
+                      href={getContextPagePath(c)}
+                      className={classNames(
+                        'p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer'
+                      )}
+                    >
+                      {c}
+                    </A>
+                  ))}
+                </div>
+
+                <div className="mt-3">
+
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setIsContextSummsDropdownOpen(!isContextSummsDropdownOpen)
+                    }}
+                    className="flex items-center py-2 px-4 rounded-md bg-[#1d8f89] w-full"
+                  >
+                    <div>context summaries:</div>
+                    {isContextSummsDropdownOpen ? (
+                      <ChevronUpIcon className="w-5 h-5 ml-2" />
+                    ) : (
+                      <ChevronDownIcon className="w-5 h-5 ml-2" />
+                    )}
+                  </button>
+
+                  {isContextSummsDropdownOpen && (
+                    <ul className="ml-10 list-disc mt-4">
+                      {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
+                        <li key={c} className="mb-2">
+                          <span className="font-bold">{c}</span>: {getContextSummary(c)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                </div>
+              </>
+            )}
           </>
         )}
 

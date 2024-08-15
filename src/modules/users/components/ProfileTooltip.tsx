@@ -58,7 +58,7 @@ export const ProfileTooltip = () => {
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
         onClick={onClickDisconnectTwitter}
       >
-        <span className="ml-2 font-medium">Disconnect Twitter</span>
+        <span className="ml-2 font-medium">disconnect X</span>
       </div>
     </div>
   )

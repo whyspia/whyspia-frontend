@@ -20,6 +20,8 @@ import classNames from "classnames"
 import PingpplSentEventReactModal from "modules/contexts/pingppl/components/PingpplSentEventReactModal"
 import { TAUResponse } from "actions/tau/apiGetAllTAU"
 import TAUNotifReactModal from "modules/contexts/tau/components/TAUNotifReactModal"
+import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
+import NouEmoteBlockReactModal from "modules/contexts/nou/components/NouEmoteBlockReactModal"
 
 
 export const NotifBlock = ({
@@ -140,265 +142,17 @@ export const NotifBlock = ({
   }
 
   if (notif?.notifType === NOTIF_TYPE.EMOTE) {
-    return (
-      <div
-        onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
-        className={classNames(
-          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
-          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
-        )}
-      >
-  
-        {showDetails ? (
-          <div className="">
-  
-            <div className="flex items-center">
-  
-              <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
-                {clientHasReadDirectly ? (
-                  <EyeIcon className="w-6 h-6 inline text-green-500" />
-                ) : (
-                  <EyeOffIcon className="w-6 h-6 inline text-red-500" />
-                )}
-  
-                {notifTooltipVisibility && (
-                  <div
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setNotifTooltipVisibility(false)
-                    }}
-                    className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
-                  >
-                    <div className="flex flex-col w-full text-black font-semibold">
-                      <div onClick={(event) => {
-                        event.stopPropagation()
-                        onMarkSeenChanged(true)
-                      }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                        <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                        <span>Mark seen</span>
-                      </div>
-                      <div onClick={(event) => {
-                        event.stopPropagation()
-                        onMarkSeenChanged(false)
-                      }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                        <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                        <span>Mark unseen</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-  
-              </div>
-  
-              <div>
-                <A
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
-                  }}
-                  className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                >
-                  {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
-                </A> sent{' '}
-  
-                {isMultipleSentSymbols ? (
-  
-                  <span
-                    ref={sentSymbolsRef}
-                    onClick={(event) => event.stopPropagation()}
-                    className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
-                  >
-                    <span className="text-red-500 hover:text-red-700 cursor-pointer">{sentSymbolsCount} symbols</span>
-  
-                    {sentSymbolsTooltipVisibility && (
-                      <div
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          setSentSymbolsTooltipVisibility(false)
-                        }}
-                        className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
-                      >
-                        <div className="flex flex-col w-full text-black font-semibold">
-                          <div onClick={(event) => {
-                            event.stopPropagation()
-                            onShowDetailsChanged(!showDetails)
-                          }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                            <span>toggle details</span>
-                          </div>
-  
-                        </div>
-                      </div>
-                    )}
-  
-                  </span>
-                ): (
-                  <A
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.sentSymbols[0] })
-                    }}
-                    className="text-red-500 hover:text-red-700 cursor-pointer"
-                  >
-                    {(notif?.notifData as EmoteResponse)?.sentSymbols[0]}
-                  </A>
-                )} to{' '}
-  
-                {isMultipleReceivers ? (
-                  <span
-                    ref={receiversRef}
-                    onClick={(event) => event.stopPropagation()}
-                    className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
-                  >
-                    <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
-  
-                    {receiversTooltipVisibility && (
-                      <div
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          setReceiversTooltipVisibility(false)
-                        }}
-                        className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
-                      >
-                        <div className="flex flex-col w-full text-black font-semibold">
-                          <div onClick={(event) => {
-                            event.stopPropagation()
-                            onShowDetailsChanged(!showDetails)
-                          }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                            <span>toggle details</span>
-                          </div>
-  
-                        </div>
-                      </div>
-                    )}
-  
-                  </span>
-                ): (
-                  <A
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.receiverSymbols[0] })
-                    }}
-                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                  >
-                    you
-                  </A>
-                )} - {formatTimeAgo((notif as any)?.createdAt)}
-  
-                {' '}with{' '}
-                <A
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
-                  }}
-                  className="text-purple-500 hover:text-purple-700 cursor-pointer"
-                >
-                  {(notif)?.context ?? 'no context'}
-                </A>
-  
-              </div>
-  
-            </div>
-  
-            <div className="mt-3">
-  
-              <button onClick={(event) => {
-                event.stopPropagation()
-                setIsFromDropdownOpen(!isFromDropdownOpen)
-              }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
-                <div>FROM:</div>
-                {isFromDropdownOpen ? (
-                  <ChevronUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ChevronDownIcon className="w-5 h-5 ml-2" />
-                )}
-              </button>
-  
-              {isFromDropdownOpen && (
-                <ul className="ml-10 list-disc">
-                  <li><A href={`/u/${(notif?.notifData as EmoteResponse)?.senderTwitterUsername}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                    {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
-                  </A></li>
-                </ul>
-              )}
-  
-            </div>
-  
-            <div className="mt-3">
-  
-              <button onClick={(event) => {
-                event.stopPropagation()
-                setIsToDropdownOpen(!isToDropdownOpen)
-              }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
-                <div>TO:</div>
-                {isToDropdownOpen ? (
-                  <ChevronUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ChevronDownIcon className="w-5 h-5 ml-2" />
-                )}
-              </button>
-  
-              {isToDropdownOpen && (
-                <ul className="ml-10 list-disc">
-                  {(notif?.notifData as EmoteResponse)?.receiverSymbols && (notif?.notifData as EmoteResponse)?.receiverSymbols.map((receiverSymbol) => {
-  
-                    return (
-                      <li key={receiverSymbol}>
-                        <A
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: receiverSymbol })
-                          }}
-                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        >
-                          {receiverSymbol}
-                        </A>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-  
-            </div>
-  
-            <div className="mt-3">
-  
-              <button onClick={(event) => {
-                event.stopPropagation()
-                setIsSentSymbolsDropdownOpen(!isSentSymbolsDropdownOpen)
-              }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
-                <div>SENT SYMBOLS:</div>
-                {isSentSymbolsDropdownOpen ? (
-                  <ChevronUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ChevronDownIcon className="w-5 h-5 ml-2" />
-                )}
-              </button>
-  
-              {isSentSymbolsDropdownOpen && (
-                <ul className="ml-10 list-disc">
-                  {(notif?.notifData as EmoteResponse)?.sentSymbols && (notif?.notifData as EmoteResponse)?.sentSymbols.map((sentSymbol) => {
-  
-                    return (
-                      <li key={sentSymbol}>
-                        <A
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: sentSymbol })
-                          }}
-                          className="text-red-500 hover:text-red-700 cursor-pointer"
-                        >
-                          {sentSymbol}
-                        </A>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-  
-            </div>
-  
-          </div>
-        ): (
+
+    if (notif?.context === EMOTE_CONTEXTS.NOU) {
+      return (
+        <div
+          onClick={(event) => ModalService.open(NouEmoteBlockReactModal, { emote: notif?.notifData })}
+          className={classNames(
+            isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+            "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
+          )}
+        >
+    
           <div className="flex items-center">
   
             <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
@@ -544,50 +298,461 @@ export const NotifBlock = ({
             </div>
   
           </div>
-        )}
-  
-  
+    
+        </div>
+      )
+    } else {
+      return (
         <div
-          ref={optionsRef}
-          onClick={(event) => event.stopPropagation()}
-          className="absolute right-0 top-0 z-[600] w-10 h-10 ml-2 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer"
+          onClick={(event) => ModalService.open(EmoteSelectModal, { emote: notif?.notifData })}
+          className={classNames(
+            isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+            "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex items-center cursor-pointer",
+          )}
         >
-          <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
-  
-          {optionsTooltipVisibility && (
-            <div
-              onClick={(event) => {
-                event.stopPropagation()
-                setOptionsTooltipVisibility(false)
-              }}
-              className="absolute h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
-            >
-              <div className="flex flex-col w-full text-black font-semibold">
-  
-                <div onClick={(event) => {
-                  event.stopPropagation()
-                  onShowDetailsChanged(!showDetails)
-                }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                  <span>toggle details</span>
+    
+          {showDetails ? (
+            <div className="">
+    
+              <div className="flex items-center">
+    
+                <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
+                  {clientHasReadDirectly ? (
+                    <EyeIcon className="w-6 h-6 inline text-green-500" />
+                  ) : (
+                    <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+                  )}
+    
+                  {notifTooltipVisibility && (
+                    <div
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        setNotifTooltipVisibility(false)
+                      }}
+                      className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                    >
+                      <div className="flex flex-col w-full text-black font-semibold">
+                        <div onClick={(event) => {
+                          event.stopPropagation()
+                          onMarkSeenChanged(true)
+                        }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                          <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
+                          <span>Mark seen</span>
+                        </div>
+                        <div onClick={(event) => {
+                          event.stopPropagation()
+                          onMarkSeenChanged(false)
+                        }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                          <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                          <span>Mark unseen</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+    
                 </div>
-  
-                <div onClick={(event) => copyEmotePageURL(event)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                  <span>copy link</span>
+    
+                <div>
+                  <A
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
+                    }}
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                  >
+                    {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                  </A> sent{' '}
+    
+                  {isMultipleSentSymbols ? (
+    
+                    <span
+                      ref={sentSymbolsRef}
+                      onClick={(event) => event.stopPropagation()}
+                      className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
+                    >
+                      <span className="text-red-500 hover:text-red-700 cursor-pointer">{sentSymbolsCount} symbols</span>
+    
+                      {sentSymbolsTooltipVisibility && (
+                        <div
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            setSentSymbolsTooltipVisibility(false)
+                          }}
+                          className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                        >
+                          <div className="flex flex-col w-full text-black font-semibold">
+                            <div onClick={(event) => {
+                              event.stopPropagation()
+                              onShowDetailsChanged(!showDetails)
+                            }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                              <span>toggle details</span>
+                            </div>
+    
+                          </div>
+                        </div>
+                      )}
+    
+                    </span>
+                  ): (
+                    <A
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.sentSymbols[0] })
+                      }}
+                      className="text-red-500 hover:text-red-700 cursor-pointer"
+                    >
+                      {(notif?.notifData as EmoteResponse)?.sentSymbols[0]}
+                    </A>
+                  )} to{' '}
+    
+                  {isMultipleReceivers ? (
+                    <span
+                      ref={receiversRef}
+                      onClick={(event) => event.stopPropagation()}
+                      className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
+                    >
+                      <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+    
+                      {receiversTooltipVisibility && (
+                        <div
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            setReceiversTooltipVisibility(false)
+                          }}
+                          className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                        >
+                          <div className="flex flex-col w-full text-black font-semibold">
+                            <div onClick={(event) => {
+                              event.stopPropagation()
+                              onShowDetailsChanged(!showDetails)
+                            }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                              <span>toggle details</span>
+                            </div>
+    
+                          </div>
+                        </div>
+                      )}
+    
+                    </span>
+                  ): (
+                    <A
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.receiverSymbols[0] })
+                      }}
+                      className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                    >
+                      you
+                    </A>
+                  )} - {formatTimeAgo((notif as any)?.createdAt)}
+    
+                  {' '}with{' '}
+                  <A
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+                    }}
+                    className="text-purple-500 hover:text-purple-700 cursor-pointer"
+                  >
+                    {(notif)?.context ?? 'no context'}
+                  </A>
+    
                 </div>
-  
-                {/* <div onClick={() => onMarkSeenChanged(false)} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                  <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                  <span>Mark unseen</span>
-                </div> */}
-  
+    
               </div>
+    
+              <div className="mt-3">
+    
+                <button onClick={(event) => {
+                  event.stopPropagation()
+                  setIsFromDropdownOpen(!isFromDropdownOpen)
+                }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
+                  <div>FROM:</div>
+                  {isFromDropdownOpen ? (
+                    <ChevronUpIcon className="w-5 h-5 ml-2" />
+                  ) : (
+                    <ChevronDownIcon className="w-5 h-5 ml-2" />
+                  )}
+                </button>
+    
+                {isFromDropdownOpen && (
+                  <ul className="ml-10 list-disc">
+                    <li><A href={`/u/${(notif?.notifData as EmoteResponse)?.senderTwitterUsername}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+                      {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                    </A></li>
+                  </ul>
+                )}
+    
+              </div>
+    
+              <div className="mt-3">
+    
+                <button onClick={(event) => {
+                  event.stopPropagation()
+                  setIsToDropdownOpen(!isToDropdownOpen)
+                }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
+                  <div>TO:</div>
+                  {isToDropdownOpen ? (
+                    <ChevronUpIcon className="w-5 h-5 ml-2" />
+                  ) : (
+                    <ChevronDownIcon className="w-5 h-5 ml-2" />
+                  )}
+                </button>
+    
+                {isToDropdownOpen && (
+                  <ul className="ml-10 list-disc">
+                    {(notif?.notifData as EmoteResponse)?.receiverSymbols && (notif?.notifData as EmoteResponse)?.receiverSymbols.map((receiverSymbol) => {
+    
+                      return (
+                        <li key={receiverSymbol}>
+                          <A
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              ModalService.open(SymbolSelectModal, { symbol: receiverSymbol })
+                            }}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          >
+                            {receiverSymbol}
+                          </A>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+    
+              </div>
+    
+              <div className="mt-3">
+    
+                <button onClick={(event) => {
+                  event.stopPropagation()
+                  setIsSentSymbolsDropdownOpen(!isSentSymbolsDropdownOpen)
+                }} className="flex items-center py-2 px-4 rounded-md bg-[#374151] border border-[#374151] hover:border-white w-full">
+                  <div>SENT SYMBOLS:</div>
+                  {isSentSymbolsDropdownOpen ? (
+                    <ChevronUpIcon className="w-5 h-5 ml-2" />
+                  ) : (
+                    <ChevronDownIcon className="w-5 h-5 ml-2" />
+                  )}
+                </button>
+    
+                {isSentSymbolsDropdownOpen && (
+                  <ul className="ml-10 list-disc">
+                    {(notif?.notifData as EmoteResponse)?.sentSymbols && (notif?.notifData as EmoteResponse)?.sentSymbols.map((sentSymbol) => {
+    
+                      return (
+                        <li key={sentSymbol}>
+                          <A
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              ModalService.open(SymbolSelectModal, { symbol: sentSymbol })
+                            }}
+                            className="text-red-500 hover:text-red-700 cursor-pointer"
+                          >
+                            {sentSymbol}
+                          </A>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+    
+              </div>
+    
+            </div>
+          ): (
+            <div className="flex items-center">
+    
+              <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
+                {clientHasReadDirectly ? (
+                  <EyeIcon className="w-6 h-6 inline text-green-500" />
+                ) : (
+                  <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+                )}
+    
+                {notifTooltipVisibility && (
+                  <div
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setNotifTooltipVisibility(false)
+                    }}
+                    className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                  >
+                    <div className="flex flex-col w-full text-black font-semibold">
+                      <div onClick={(event) => {
+                        event.stopPropagation()
+                        onMarkSeenChanged(true)
+                        }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                        <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
+                        <span>Mark seen</span>
+                      </div>
+                      <div onClick={(event) => {
+                        event.stopPropagation()
+                        onMarkSeenChanged(false)}} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                        <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                        <span>Mark unseen</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+    
+              </div>
+    
+              <div>
+                <A
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
+                  }}
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                >
+                  {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                </A> sent{' '}
+    
+                {isMultipleSentSymbols ? (
+    
+                  <span
+                    ref={sentSymbolsRef}
+                    onClick={(event) => event.stopPropagation()}
+                    className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
+                  >
+                    <span className="text-red-500 hover:text-red-700 cursor-pointer">{sentSymbolsCount} symbols</span>
+    
+                    {sentSymbolsTooltipVisibility && (
+                      <div
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setSentSymbolsTooltipVisibility(false)
+                        }}
+                        className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                      >
+                        <div className="flex flex-col w-full text-black font-semibold">
+                          <div onClick={(event) => {
+                            event.stopPropagation()
+                            onShowDetailsChanged(!showDetails)
+                          }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                            <span>toggle details</span>
+                          </div>
+    
+                        </div>
+                      </div>
+                    )}
+    
+                  </span>
+                ): (
+                  <A
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.sentSymbols[0] })
+                    }}
+                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                  >
+                    {(notif?.notifData as EmoteResponse)?.sentSymbols[0]}
+                  </A>
+                )} to{' '}
+    
+                {isMultipleReceivers ? (
+                  <span
+                    ref={receiversRef}
+                    onClick={(event) => event.stopPropagation()}
+                    className="relative rounded-full inline-flex justify-center items-center cursor-pointer"
+                  >
+                    <span className="text-blue-500 hover:text-blue-700 cursor-pointer">you and {receiverSymbolsCount - 1} others</span>
+    
+                    {receiversTooltipVisibility && (
+                      <div
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setReceiversTooltipVisibility(false)
+                        }}
+                        className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+                      >
+                        <div className="flex flex-col w-full text-black font-semibold">
+                          <div onClick={(event) => {
+                            event.stopPropagation()
+                            onShowDetailsChanged(!showDetails)
+                          }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                            <span>toggle details</span>
+                          </div>
+    
+                        </div>
+                      </div>
+                    )}
+    
+                  </span>
+                ): (
+                  <A
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.receiverSymbols[0] })
+                    }}
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                  >
+                    you
+                  </A>
+                )} - {formatTimeAgo((notif as any)?.createdAt)}
+    
+                {' '}with{' '}
+                <A
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+                  }}
+                  className="text-purple-500 hover:text-purple-700 cursor-pointer"
+                >
+                  {(notif)?.context ?? 'no context'}
+                </A>
+    
+              </div>
+    
             </div>
           )}
-  
+    
+    
+          <div
+            ref={optionsRef}
+            onClick={(event) => event.stopPropagation()}
+            className="absolute right-0 top-0 z-[600] w-10 h-10 ml-2 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer"
+          >
+            <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+    
+            {optionsTooltipVisibility && (
+              <div
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setOptionsTooltipVisibility(false)
+                }}
+                className="absolute h-[6rem] w-[10rem] inset-y-0 right-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto z-[600]"
+              >
+                <div className="flex flex-col w-full text-black font-semibold">
+    
+                  <div onClick={(event) => {
+                    event.stopPropagation()
+                    onShowDetailsChanged(!showDetails)
+                  }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <span>toggle details</span>
+                  </div>
+    
+                  <div onClick={(event) => copyEmotePageURL(event)} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <span>copy link</span>
+                  </div>
+    
+                  {/* <div onClick={() => onMarkSeenChanged(false)} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>Mark unseen</span>
+                  </div> */}
+    
+                </div>
+              </div>
+            )}
+    
+          </div>
+    
         </div>
-  
-      </div>
-    )
+      )
+    }
+
+    
   }
 
   if (notif?.notifType === NOTIF_TYPE.PINGPPL_FOLLOW) {

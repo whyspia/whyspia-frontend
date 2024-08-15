@@ -1,8 +1,8 @@
 import Modal from 'components/modals/Modal'
 import { flatten } from 'lodash'
-import { SentEmoteBlock } from './SentEmoteBlock'
 import apiGetEmoteReplyChain from 'actions/emotes/apiGetEmoteReplyChain'
 import { useInfiniteQuery } from 'react-query'
+import { NouEmoteBlock } from 'modules/contexts/nou/components/NouEmoteBlock'
 
 // take in emoteID and display from that emote and down - all replies in chain (no u context will not have branches)
 export default function NouChainModal({
@@ -13,12 +13,12 @@ export default function NouChainModal({
   emoteID: string
 }) {
   const fetchEmoteReplyChain = async ({ pageParam = 0 }) => {
-    const { chain } = await apiGetEmoteReplyChain({ emoteID, skip: pageParam, limit: 10, orderBy: 'timestamp', orderDirection: 'desc' }) as any
+    const { chain } = await apiGetEmoteReplyChain({ emoteID, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' }) as any
     return chain
   }
 
   const { data: infiniteChain, fetchNextPage: fetchChainNextPage, hasNextPage: hasChainNextPage, isFetchingNextPage: isChainFetchingNextPage } = useInfiniteQuery(
-    ['emoteReplyChain',],
+    [`emoteReplyChain-${emoteID}`,],
     ({ pageParam = 0 }) =>
     fetchEmoteReplyChain({
         pageParam
@@ -51,7 +51,7 @@ export default function NouChainModal({
         {infiniteChainData && infiniteChainData?.length > 0 && infiniteChainData?.map((emote) => {
                       
           return (
-            <SentEmoteBlock context='nou_chain_preview' emote={emote} key={emote?.id} />
+            <NouEmoteBlock context='nou_chain_preview' emote={emote} key={emote?.id} />
           )
         })}
 

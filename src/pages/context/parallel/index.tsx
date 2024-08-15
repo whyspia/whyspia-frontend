@@ -144,7 +144,7 @@ const ParallelPage = () => {
           <>
             <div
               onClick={() => twitterLogin(null)}
-              className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+              className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
             >
               connect X
             </div>

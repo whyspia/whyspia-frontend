@@ -22,6 +22,7 @@ import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 import YouGottaLoginModal from './YouGottaLoginModal'
 import { PublicPlannedPingBlock } from 'modules/contexts/pingppl/components/PublicPlannedPingBlock'
 import PlannedPingReactModal from 'modules/contexts/pingppl/components/PlannedPingReactModal'
+import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
@@ -278,8 +279,8 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('planned-pings')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'planned-pings' ? 'bg-[#1d8f89]' : '',
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'planned-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
           planned pings
@@ -288,18 +289,18 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('sent-pings')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'sent-pings' ? 'bg-[#1d8f89]' : '',
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'sent-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
           sent pings
         </button>
 
-        <button
+        {/* <button
           onClick={() => onTabChanged('sent-emotes')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'sent-emotes' ? 'bg-[#1d8f89]' : '',
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'sent-emotes' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
           sent emotes
@@ -308,21 +309,21 @@ const ProfileReusable = () => {
         <button
           onClick={() => onTabChanged('received-emotes')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'received-emotes' ? 'bg-[#1d8f89]' : '',
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'received-emotes' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
           received emotes
-        </button>
+        </button> */}
 
         <button
           onClick={() => onTabChanged('symbols')}
           className={classNames(
-            'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'symbols' ? 'bg-[#1d8f89]' : '',
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'symbols' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
-          symbols
+          definitions
         </button>
       </div>
 
@@ -426,24 +427,32 @@ const ProfileReusable = () => {
             type="text"
             value={searchDefsQuery}
             onChange={(e) => onSymbolTyped(e.target.value)}
-            placeholder="Enter exact symbol..."
+            placeholder="enter exact symbol..."
             className="md:w-[30rem] w-full border border-gray-300 rounded px-3 py-2 my-8"
           />
 
           {definitionsData?.map((definitionItem) => (
             <div className="w-full flex flex-col items-center py-3 mb-8 border border-gray-300" key={definitionItem.id}>
-              <div className="font-bold text-4xl mb-2">{definitionItem.symbol}</div>
+              <A
+                onClick={(event) => {
+                  event.stopPropagation()
+                  ModalService.open(SymbolSelectModal, { symbol: definitionItem.symbol })
+                }}
+                className="font-bold text-4xl mb-2 text-red-500 hover:text-red-700 cursor-pointer"
+              >
+                {definitionItem.symbol}
+              </A>
               <div className="text-lg mb-2">{definitionItem.currentDefinition}</div>
-              <div className="text-xs mb-2">Last updated - {formatTimeAgo(definitionItem.timestamp) }</div>
+              <div className="text-xs mb-2">last updated - {formatTimeAgo(definitionItem.timestamp) }</div>
 
               {definitionItem?.pastDefinitions && definitionItem?.pastDefinitions?.length > 0 && (
-                <div className="mb-4 flex items-center text-blue-500">
-                  <div className="mr-1 font-bold text-sm cursor-pointer">Previous definitions</div>
+                <div
+                  onClick={() => setSelectedDefinitionId(selectedDefinitionId === definitionItem.id ? null : definitionItem.id)}
+                  className="mb-4 flex items-center text-blue-500"
+                >
+                  <div className="mr-1 font-bold text-sm cursor-pointer">previous definitions</div>
                   
-                  <div
-                    onClick={() => setSelectedDefinitionId(selectedDefinitionId === definitionItem.id ? null : definitionItem.id)}
-                    className="cursor-pointer"
-                  >
+                  <div className="cursor-pointer">
                     {selectedDefinitionId === definitionItem.id ? (
                       <ChevronUpIcon className="w-5" />
                     ) : (
@@ -458,7 +467,7 @@ const ProfileReusable = () => {
                   {definitionItem?.pastDefinitions?.map((prevDefinitionData) => (
                     <div className="w-full flex flex-col items-center py-4 border-t border-gray-300" key={prevDefinitionData._id}>
                       <div className="text-lg mb-2">{prevDefinitionData.definition}</div>
-                      <div className="text-xs">Created {formatTimeAgo(prevDefinitionData.dateCreated) }</div>
+                      <div className="text-xs">created {formatTimeAgo(prevDefinitionData.dateCreated) }</div>
                     </div>
                   ))}
                 </div>

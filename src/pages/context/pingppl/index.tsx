@@ -199,7 +199,7 @@ const PingPplPage = () => {
           <>
             <div
               onClick={() => twitterLogin(null)}
-              className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
+              className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
             >
               connect X
             </div>
@@ -213,8 +213,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('pingppl')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedTab === 'pingppl' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'pingppl' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   pingppl
@@ -223,8 +223,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('plan-ping')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedTab === 'plan-ping' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'plan-ping' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   plan ping
@@ -233,8 +233,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('planned-pings')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedTab === 'planned-pings' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'planned-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   ur planned pings
@@ -243,8 +243,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('sent-pings')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedTab === 'sent-pings' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'sent-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   ur sent pings
@@ -253,8 +253,8 @@ const PingPplPage = () => {
                 <button
                   onClick={() => setSelectedTab('ping-notifications')}
                   className={classNames(
-                    'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedTab === 'ping-notifications' ? 'bg-[#1d8f89]' : '',
+                    'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedTab === 'ping-notifications' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                   )}
                 >
                   ping notifications

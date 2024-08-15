@@ -4,12 +4,12 @@ import { GlobalContext } from 'lib/GlobalContext'
 import { useContext, useState } from 'react'
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import toast from 'react-hot-toast'
-import { SentEmoteBlock } from './SentEmoteBlock'
 import { getFrontendURL } from 'utils/seo-constants'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
 import { useQueryClient } from 'react-query'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import { NouEmoteBlock } from 'modules/contexts/nou/components/NouEmoteBlock'
 
 
 export default function NouEmoteModal({
@@ -30,8 +30,6 @@ export default function NouEmoteModal({
   const [isValid, setIsValid] = useState(Boolean(receiverSymbol))
   const [isEmoteSending, setIsEmoteSending] = useState(false)
   const [selectedSymbol, setSelectedSymbol] = useState(initialSymbol)
-
-  const [isShowAdditionaEmotesChecked, setIsShowAdditionaEmotesChecked] = useState(false)
 
   const [isPreviewDropdownOpen, setIsPreviewDropdownOpen] = useState(false)
 
@@ -87,8 +85,8 @@ export default function NouEmoteModal({
 
     setIsEmoteSending(false)
 
-    queryClient.invalidateQueries(['unrespondedReceivedEmotes'])
-    queryClient.invalidateQueries(['unrespondedSentEmotes'])
+    queryClient.invalidateQueries([`unrespondedReceivedEmotes-${user?.twitterUsername}`])
+    queryClient.invalidateQueries([`unrespondedSentEmotes-${user?.twitterUsername}`])
 
     toast.success(`"${selectedSymbol}" has been sent to ${receiverSymbol}!`)
 
@@ -121,7 +119,7 @@ export default function NouEmoteModal({
           }}
           className="flex items-center py-2 w-full cursor-pointer"
         >
-          <div className="font-bold text-lg mb-1">preview emotes:</div>
+          <div className="font-bold text-lg mb-1">preview emote:</div>
           {isPreviewDropdownOpen ? (
             <ChevronUpIcon className="w-5 h-5 ml-2" />
           ) : (
@@ -131,28 +129,7 @@ export default function NouEmoteModal({
 
         {isPreviewDropdownOpen && (
           <>
-            <SentEmoteBlock isPreview={true} emote={mainEmoteData} jwt={jwtToken} />
-
-            <div className="flex items-center mt-2">
-              <input
-                id="toggleCheckbox"
-                type="checkbox"
-                checked={isShowAdditionaEmotesChecked}
-                onChange={() => setIsShowAdditionaEmotesChecked(!isShowAdditionaEmotesChecked)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="toggleCheckbox" className="ml-2 text-sm text-white">
-                show additional emotes
-              </label>
-            </div>
-
-            {isShowAdditionaEmotesChecked && (
-              <div className="mt-2">
-                <div className='text-sm text-red-600 my-2'>NOTE: these are emotes being sent from your account by No U. if you&apos;re not cool with this, dont use the No U context</div>
-                <SentEmoteBlock isPreview={true} emote={nouContextEmoteData} jwt={jwtToken} />
-                {initialEmote && <SentEmoteBlock isPreview={true} emote={replyEmoteData} jwt={jwtToken} />}
-              </div>
-            )}
+            <NouEmoteBlock isPreview={true} emote={mainEmoteData} jwt={jwtToken} />
           </>
         )}
 

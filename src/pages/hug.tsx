@@ -94,10 +94,10 @@ const Hug: NextPage = () => {
         <Emoji text="🤗" className="text-6xl mb-8" />
 
         <h1 className="text-4xl font-bold mb-8">
-          Send &quot;hug&quot;
+          send &quot;hug&quot;
         </h1>
 
-        <input type="text" placeholder="Enter twitter username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
+        <input type="text" placeholder="enter X username..." onChange={(event) => onSetReceiverChanged(event.target.value)} className="p-4 text-xl border-yellow-500 border-4 shadow-lg rounded-lg mb-8" />
         
         <button
           onClick={handleSendHug}
@@ -107,7 +107,7 @@ const Hug: NextPage = () => {
           )}
           disabled={!isValid}
         >
-          Send
+          send
         </button>
 
         {isHugSending && <CircleSpinner color="white" bgcolor="#0857e0" />}
