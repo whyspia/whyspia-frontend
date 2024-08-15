@@ -270,7 +270,7 @@ const ProfileReusable = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center mt-10">
+    <div className="h-screen flex flex-col items-center mt-10 px-4">
 
       <h1 className="text-4xl font-bold mb-4">{userData?.twitterUsername}</h1>
 

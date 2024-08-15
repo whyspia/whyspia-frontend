@@ -126,7 +126,7 @@ const ThinkingAboutUPage = () => {
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
 
   return (
-    <div className="h-screen flex flex-col items-center mt-4">
+    <div className="h-screen flex flex-col items-center mt-4 px-4">
 
       <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
 

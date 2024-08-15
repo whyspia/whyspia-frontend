@@ -50,7 +50,7 @@ const Notifications = () => {
   // console.log('notifsData==', notifsData)
 
   return (
-    <div className="h-screen flex flex-col items-center mt-4">
+    <div className="h-screen flex flex-col items-center mt-4 px-4">
 
       <h1 className="text-4xl font-bold mb-8">notifications</h1>
 
