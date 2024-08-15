@@ -225,9 +225,9 @@ const ThinkingAboutUPage = () => {
 
                     <div className="font-bold text-lg mb-2">PREVIEW:</div>
 
-                    <div className="p-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
+                    <div className="p-6 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
 
-                      <div className="mb-2">to:{' '}
+                      <div className="mb-4 ">to:{' '}
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
@@ -237,10 +237,10 @@ const ThinkingAboutUPage = () => {
                         >{receiverSymbol}</A>
                       </div>
 
-                      <div className="mb-2">im thinking about u and just wanted u to know.</div>
+                      <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
 
                       {bAddMessage && (
-                        <div className="mb-2">
+                        <div className="mb-4 whitespace-pre-wrap break-words leading-5 italic">
                           {additionalMessage}
                         </div>
                       )}
@@ -281,9 +281,9 @@ const ThinkingAboutUPage = () => {
                   {sentTAUsData?.map((sentTAU) => {
                       
                       return (
-                        <div key={sentTAU?.id} className="p-4 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
+                        <div key={sentTAU?.id} className="p-6 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
 
-                          <div className="mb-2">to:{' '}
+                          <div className="mb-4 ">to:{' '}
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
@@ -293,10 +293,10 @@ const ThinkingAboutUPage = () => {
                             >{sentTAU?.receiverSymbol}</A>
                           </div>
 
-                          <div className="mb-2">im thinking about u and just wanted u to know.</div>
+                          <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
 
                           {sentTAU?.additionalMessage && sentTAU?.additionalMessage?.length > 0 && (
-                            <div className="mb-2">
+                            <div className="mb-4 whitespace-pre-wrap break-words leading-5 italic">
                               {sentTAU?.additionalMessage}
                             </div>
                           )}
@@ -328,9 +328,9 @@ const ThinkingAboutUPage = () => {
                   {receivedTAUsData?.map((receivedTAU) => {
                       
                       return (
-                        <div key={receivedTAU?.id} className="p-4 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
+                        <div key={receivedTAU?.id} className="p-6 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
 
-                          <div className="mb-2">to:{' '}
+                          <div className="mb-4 ">to:{' '}
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
@@ -340,10 +340,10 @@ const ThinkingAboutUPage = () => {
                             >{receivedTAU?.receiverSymbol}</A>
                           </div>
 
-                          <div className="mb-2">im thinking about u and just wanted u to know.</div>
+                          <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
 
                           {receivedTAU?.additionalMessage && receivedTAU?.additionalMessage?.length > 0 && (
-                            <div className="mb-2">
+                            <div className="mb-4 whitespace-pre-wrap break-words leading-5 italic">
                               {receivedTAU?.additionalMessage}
                             </div>
                           )}
