@@ -140,8 +140,8 @@ export default function Header() {
             {/* Send button */}
             <div
               onClick={() => {
-                const previousPathname = window.location.pathname
-                window.history.pushState(null, null, '/desire')
+                // const previousPathname = window.location.pathname
+                // window.history.pushState(null, null, '/desire')
                 // ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
                 ModalService.open(DoStuffModal)
               }}

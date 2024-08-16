@@ -25,7 +25,8 @@ a {
   }
   body {
     color: white;
-    background: black;
+    /* this defines lowest level bg color */
+    background: #202124;  
   }
 }
 
