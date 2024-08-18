@@ -71,7 +71,7 @@ export const PersonalPlannedEventBlock = ({
       className="relative w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
     >
       <div className="font-bold">{plannedEvent?.eventName}</div>
-      <div className="text-xs">{plannedEvent?.eventDescription}</div>
+      <div className="text-xs whitespace-pre-wrap break-words leading-5">{plannedEvent?.eventDescription}</div>
 
       <div
         ref={optionsRef}

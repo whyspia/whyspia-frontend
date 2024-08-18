@@ -105,7 +105,7 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
             {isPreviousDefinitionVisible && (
               <>
                 {currentDefinition ? (
-                  <div>{currentDefinition}</div>
+                  <div className="whitespace-pre-wrap break-words leading-5">{currentDefinition}</div>
                 ) : (
                   "You have not defined this symbol yet...loser"
                 )}

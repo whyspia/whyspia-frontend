@@ -442,7 +442,7 @@ const ProfileReusable = () => {
               >
                 {definitionItem.symbol}
               </A>
-              <div className="text-lg mb-2">{definitionItem.currentDefinition}</div>
+              <div className="text-lg mb-2 whitespace-pre-wrap break-words leading-5">{definitionItem.currentDefinition}</div>
               <div className="text-xs mb-2">last updated - {formatTimeAgo(definitionItem.timestamp) }</div>
 
               {definitionItem?.pastDefinitions && definitionItem?.pastDefinitions?.length > 0 && (
@@ -466,7 +466,7 @@ const ProfileReusable = () => {
                 <div className="w-full flex flex-col items-center">
                   {definitionItem?.pastDefinitions?.map((prevDefinitionData) => (
                     <div className="w-full flex flex-col items-center py-4 border-t border-gray-300" key={prevDefinitionData._id}>
-                      <div className="text-lg mb-2">{prevDefinitionData.definition}</div>
+                      <div className="text-lg mb-2 whitespace-pre-wrap break-words leading-5">{prevDefinitionData.definition}</div>
                       <div className="text-xs">created {formatTimeAgo(prevDefinitionData.dateCreated) }</div>
                     </div>
                   ))}

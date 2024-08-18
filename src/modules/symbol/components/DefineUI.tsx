@@ -80,7 +80,7 @@ const DefineUI = ({ jwtToken }) => {
           </div>
 
           {isPreviousDefinitionVisible && (
-            <div>{previousDefinition?.currentDefinition}</div>
+            <div className="whitespace-pre-wrap break-words leading-5">{previousDefinition?.currentDefinition}</div>
           )}
           
         </div>

@@ -67,7 +67,7 @@ export const PublicPlannedPingBlock = ({
     >
       <div>
         <div className="font-bold">{plannedEvent?.eventName}</div>
-        <div className="text-xs">{plannedEvent?.eventDescription}</div>
+        <div className="text-xs whitespace-pre-wrap break-words leading-5">{plannedEvent?.eventDescription}</div>
       </div>
 
       {isLoggedInUserFollowing ? (

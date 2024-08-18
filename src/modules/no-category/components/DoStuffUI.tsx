@@ -161,7 +161,7 @@ export default function DoStuffUI({
                 },
                 {
                   label: 'planned ping page',
-                  href: '/planned-ping/test',
+                  href: '/planned-ping/66bf9baf8f692399ce83c0b5',
                   onClick: () => close ? close() : null,
                 },
               ],
