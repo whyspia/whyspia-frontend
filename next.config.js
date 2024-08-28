@@ -22,6 +22,16 @@ const nextConfig = {
       // },
     ]
   },
+  async redirects() {
+    return [
+      // TODO: use this for maintenance and whatevs
+      {
+        source: '/',
+        destination: '/dead',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
