@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 export default function DefaultLayout({ children }: { children: ReactNode }) {
 
-  const isDowntimeMode = true
+  const isDowntimeMode = false
 
   return (
     <div className="min-h-screen py-20 dark:text-white">
