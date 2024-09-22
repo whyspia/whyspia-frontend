@@ -11,6 +11,8 @@ import { Toaster } from 'react-hot-toast'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+import { ParticleConnectkit } from "modules/particle-network/components/ParticleConnectkit"
+
 const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -25,20 +27,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalContextComponent>
-        <ClientWrapper>
-          <ThemeProvider attribute="class" defaultTheme="dark">
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+      <ParticleConnectkit>
+        <GlobalContextComponent>
+          <ClientWrapper>
+            <ThemeProvider attribute="class" defaultTheme="dark">
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
 
-              <ModalRoot />
+                <ModalRoot />
 
-              <Toaster />
+                <Toaster />
 
-          </ThemeProvider>
-        </ClientWrapper>
-      </GlobalContextComponent>
+            </ThemeProvider>
+          </ClientWrapper>
+        </GlobalContextComponent>
+      </ParticleConnectkit>
     </QueryClientProvider>
   )
 }

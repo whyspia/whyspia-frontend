@@ -2,9 +2,11 @@ import A from "components/A"
 import { GlobalContext } from "lib/GlobalContext"
 import Image from "next/image"
 import { useContext, useState } from "react"
-import { twitterLogin } from "../services/UserService"
 import { ProfileTooltip } from "./ProfileTooltip"
 import { BellIcon } from "@heroicons/react/outline"
+import {
+  ConnectButton,
+} from "@particle-network/connectkit"
 
 export default function AuthStatusWithConnectButton() {
   const { user, userNotifData } = useContext(GlobalContext)
@@ -30,12 +32,14 @@ export default function AuthStatusWithConnectButton() {
     <>
       {!user?.twitterUsername && (
         <>
-          <div
+          {/* <div
             onClick={() => twitterLogin(null)}
             className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
           >
             connect X
-          </div>
+          </div> */}
+
+          <ConnectButton label="Login" />
         </>
       )}
 
