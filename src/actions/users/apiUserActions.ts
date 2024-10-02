@@ -32,7 +32,7 @@ export const checkAccountEmailVerificationCode = ({ token, code, email }) =>
 /**
  *
  */
-export const initiateTwitterLoginAPI = async (jwt: string): Promise<any> => {
+export const initiateTwitterLoginAPI = async (jwt: string | null): Promise<any> => {
   try {
     const response = await client.post(
       `/user-token/initiateTwitterLogin`,
@@ -72,6 +72,11 @@ export const completeTwitterLogin = async (
   }
 }
 
+type GetUserTokenInput = {
+  username?: string | null
+  jwt?: string | null
+}
+
 /**
  * Get account for a walletAddress, username, or jwt
  */
@@ -79,7 +84,7 @@ export const getUserToken = async ({
   // walletAddress = null,
   username = null,
   jwt = null,
-}) => {
+}: GetUserTokenInput) => {
   if (!username && !jwt) return null
 
   try {
@@ -109,7 +114,7 @@ export const getAllUserTokens = async ({
   orderBy,
   orderDirection,
   search = null,
-}) => {
+}: any) => {
 
   try {
     const response = await client.get(`/user-token`, {

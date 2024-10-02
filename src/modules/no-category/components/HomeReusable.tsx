@@ -1,4 +1,3 @@
-import DefaultLayout from 'components/layouts/DefaultLayout'
 import type { NextPage } from 'next'
 import DoStuffUI from './DoStuffUI'
 
@@ -13,10 +12,6 @@ const HomeReusable: NextPage = () => {
 
     </div>
   )
-}
-
-(HomeReusable as any).layoutProps = {
-  Layout: DefaultLayout,
 }
 
 export default HomeReusable

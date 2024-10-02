@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import Modal from 'components/modals/Modal'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useContext, useState } from 'react'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import toast from 'react-hot-toast'
 import { getFrontendURL } from 'utils/seo-constants'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'

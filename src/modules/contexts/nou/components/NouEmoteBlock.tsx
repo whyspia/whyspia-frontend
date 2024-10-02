@@ -2,7 +2,7 @@ import { EmoteResponse } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
 import { useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import ModalService from "components/modals/ModalService"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'

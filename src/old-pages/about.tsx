@@ -1,5 +1,5 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { EMOTE_CONTEXTS_ACTIVE, getContextSummary } from 'modules/context/utils/ContextUtils'
 import type { NextPage } from 'next'
 import { useState } from 'react'

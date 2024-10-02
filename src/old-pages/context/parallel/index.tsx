@@ -1,6 +1,6 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
 import { useContext, useEffect, useState } from 'react'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
 import DropdownSelectMenu from 'modules/forms/components/DropdownSelectMenu'

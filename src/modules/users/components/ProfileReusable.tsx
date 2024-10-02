@@ -7,7 +7,7 @@ import { flatten } from 'lodash'
 import { formatTimeAgo } from 'utils/randomUtils'
 import A from 'components/A'
 import apiGetAllDefinitions from 'actions/symbol-definitions/apiGetAllDefinitions'
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline"
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 import apiGetAllSentEvents from 'actions/pingppl/apiGetAllSentEvents'
 import apiGetAllDefinedEvents from 'actions/pingppl/apiGetAllDefinedEvents'

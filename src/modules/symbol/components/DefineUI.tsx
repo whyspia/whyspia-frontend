@@ -4,7 +4,7 @@ import classNames from "classnames"
 import debounce from 'lodash/debounce'
 import { useState } from "react"
 import toast from 'react-hot-toast'
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline"
 
 const DefineUI = ({ jwtToken }) => {
   const [definition, setDefinition] = useState('')

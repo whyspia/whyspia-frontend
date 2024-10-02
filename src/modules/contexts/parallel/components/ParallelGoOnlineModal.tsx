@@ -1,5 +1,5 @@
 import Modal from 'components/modals/Modal'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'

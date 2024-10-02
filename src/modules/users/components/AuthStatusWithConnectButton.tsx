@@ -3,7 +3,7 @@ import { GlobalContext } from "lib/GlobalContext"
 import Image from "next/image"
 import { useContext, useState } from "react"
 import { ProfileTooltip } from "./ProfileTooltip"
-import { BellIcon } from "@heroicons/react/outline"
+import { BellIcon } from "@heroicons/react/24/outline"
 import {
   ConnectButton,
 } from "@particle-network/connectkit"
@@ -19,7 +19,7 @@ export default function AuthStatusWithConnectButton() {
     setTimerId(
       setTimeout(() => {
         setProfileTooltipVisibility(false)
-      }, 200)
+      }, 200) as any
     )
   }
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
-import { DotsHorizontalIcon } from "@heroicons/react/solid"
+import { DotsHorizontalIcon } from "@heroicons/react/24/solid"
 import ModalService from "components/modals/ModalService"
 import ContextSelectModal from "modules/context/components/ContextSelectModal"
 import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"

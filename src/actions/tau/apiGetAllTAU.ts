@@ -8,6 +8,17 @@ export type TAUResponse = {
   createdAt: Date
 }
 
+type GetAllTAUInput = {
+  jwt: null | string
+  skip: number
+  limit: number
+  orderBy: string
+  orderDirection: string
+  senderSymbol?: null | string
+  receiverSymbol?: null | string
+  additionalMessage?: null | string
+}
+
 /**
  * get all TAU
  */
@@ -20,7 +31,7 @@ export default async function apiGetAllTAU({
   senderSymbol = null,
   receiverSymbol = null,
   additionalMessage = null,
-}) {
+}: GetAllTAUInput) {
 
   try {
     const response = await client.get(`/tau`, {

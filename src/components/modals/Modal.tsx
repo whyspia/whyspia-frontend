@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/solid'
+import { XIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import { ReactNode } from 'react'
 

@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { EMOTE_CONTEXTS_ACTIVE, getContextPagePath, getContextSummary } from "../utils/ContextUtils"
 import A from "components/A"
 import { useState } from "react"

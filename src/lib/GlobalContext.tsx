@@ -1,3 +1,5 @@
+"use client"
+
 import { EmoteNotifResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import React, { useState } from 'react'
 import { UserProfile } from 'types/customTypes'

@@ -1,3 +1,5 @@
+"use client"
+
 import { useContext } from 'react'
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -25,7 +27,7 @@ export default function DoStuffUI({
         <div className="w-full flex flex-wrap justify-center">
 
           <A
-            onClick={close ? () => close() : null}
+            onClick={close ? () => close() : () => {}}
             href="/context/thinking-about-u"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
@@ -33,7 +35,7 @@ export default function DoStuffUI({
           </A>
 
           <A
-            onClick={close ? () => close() : null}
+            onClick={close ? () => close() : () => {}}
             href="/context/nou"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
@@ -41,7 +43,7 @@ export default function DoStuffUI({
           </A>
 
           <A
-            onClick={close ? () => close() : null}
+            onClick={close ? () => close() : () => {}}
             href={`/context/pingppl`}
             className="w-full p-3 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >

@@ -2,8 +2,8 @@ import { EmoteNotifSingleResponse, EmoteResponse, NOTIF_TYPE } from "actions/not
 import A from "components/A"
 import { useContext, useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline'
-import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/24/outline'
+import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
 import { GlobalContext } from "lib/GlobalContext"
 import ModalService from "components/modals/ModalService"

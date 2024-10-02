@@ -1,8 +1,9 @@
+"use client"
+
 /* eslint-disable @next/next/no-img-element */
-import { Router, useRouter } from 'next/dist/client/router'
+import { useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
-import { MenuIcon, XCircleIcon } from '@heroicons/react/solid'
-import NProgress from 'nprogress'
+import { Bars3Icon, XCircleIcon } from '@heroicons/react/24/solid'
 import A from './A'
 import classNames from 'classnames'
 import { flatten } from 'lodash'
@@ -59,22 +60,6 @@ export default function Header() {
       keepPreviousData: true,
     }
   )
-
-  useEffect(() => {
-    NProgress.configure({ trickleSpeed: 100 })
-  }, [])
-
-  useEffect(() => {
-    Router.events.on('routeChangeStart', () => NProgress.start())
-    Router.events.on('routeChangeComplete', () => NProgress.done())
-    Router.events.on('routeChangeError', () => NProgress.done())
-
-    return () => {
-      Router.events.on('routeChangeStart', () => NProgress.start())
-      Router.events.on('routeChangeComplete', () => NProgress.done())
-      Router.events.on('routeChangeError', () => NProgress.done())
-    }
-  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -178,7 +163,7 @@ export default function Header() {
                 aria-expanded="false"
                 onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
               >
-                <MenuIcon
+                <Bars3Icon
                   className={classNames(
                     'w-6 h-6',
                     isMobileNavOpen ? 'hidden' : 'block'

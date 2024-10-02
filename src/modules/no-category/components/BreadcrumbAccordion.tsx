@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRightIcon } from "@heroicons/react/solid"
+import { ChevronRightIcon } from "@heroicons/react/24/solid"
 import classNames from 'classnames';
 import A from 'components/A';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 
 
 interface DropdownSelectMenuProps {

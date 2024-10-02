@@ -2,7 +2,7 @@ import { apiCreateSymbolDefinition } from "actions/symbol-definitions/apiCreateS
 import classNames from "classnames"
 import { useState } from "react"
 import toast from 'react-hot-toast'
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline"
 import { useInfiniteQuery } from "react-query"
 import apiGetAllDefinitions from "actions/symbol-definitions/apiGetAllDefinitions"
 import { flatten } from "lodash"

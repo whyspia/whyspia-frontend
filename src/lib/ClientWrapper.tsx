@@ -1,3 +1,5 @@
+"use client"
+
 import { GlobalContext } from './GlobalContext'
 import { useContext, useEffect, useState } from 'react'
 import { getCookie } from 'modules/no-category/services/CookieService'
@@ -14,6 +16,10 @@ import {
 
 // maybe rename to UserDataInitializer or UserInitializer?
 export const ClientWrapper = ({ children }: any) => {
+  // Initialize account-related states from Particle's useAccount hook
+  const {
+    status,
+  } = useAccount()
   const { disconnect, disconnectAsync } = useDisconnect()
   const { getUserInfo } = useParticleAuth()
   // Retrieve the primary wallet from the Particle Wallets

@@ -73,7 +73,7 @@ const config = createConfig({
   ],
   chains: [
     mainnet, solana, base, arbitrum, arbitrumNova, avalanche, linea, bsc, optimism, polygon,
-    ...(process.env.NEXT_CHAIN_ENV === 'DEV' && [sepolia, baseSepolia, avalancheFuji]), // optionally add the dev chains if using dev env
+    ...(process.env.NEXT_PUBLIC_CHAIN_ENV! === 'DEV' ? [sepolia, baseSepolia, avalancheFuji] : []), // optionally add the dev chains if using dev env
   ],
 })
 

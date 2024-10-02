@@ -2,7 +2,7 @@ import { checkExistingTwitterProfile } from 'actions/users/apiUserActions'
 import Modal from 'components/modals/Modal'
 import { useContext, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import useOnClickOutside from 'utils/hooks/useOnClickOutside'
 import debounce from 'lodash/debounce'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'

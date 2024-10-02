@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import toast from 'react-hot-toast'
-import { DotsHorizontalIcon } from "@heroicons/react/solid"
+import { DotsHorizontalIcon } from "@heroicons/react/24/solid"
 import { apiDeleteDefinedEvent } from "actions/pingppl/apiDeleteDefinedEvent"
 import { useQueryClient } from "react-query"
 import { UserProfile } from "types/customTypes"

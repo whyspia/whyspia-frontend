@@ -1,7 +1,7 @@
 import DefaultLayout from 'components/layouts/DefaultLayout'
 import toast from 'react-hot-toast'
 import { debounce, flatten } from 'lodash'
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { useContext, useState } from 'react'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { GlobalContext } from 'lib/GlobalContext'
