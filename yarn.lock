@@ -1405,7 +1405,7 @@
     lzutf8 "^0.6.3"
     uuid "^9.0.1"
 
-"@particle-network/authkit@^2.0.2", "@particle-network/authkit@^2.0.5":
+"@particle-network/authkit@^2.0.5":
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@particle-network/authkit/-/authkit-2.0.5.tgz#4bd7dd6c2cc61f6ccc8b57623ba24508f947cf80"
   integrity sha512-8lO10i9iKX7JaF6735XsOyRIWuC5sJQTalB0ngfaqVzd5o4rH4SHx5f6zDhx3APuaXL19jYmFE37mpwjTs4Mhw==

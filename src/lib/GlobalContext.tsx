@@ -2,13 +2,19 @@
 
 import { EmoteNotifResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import React, { useState } from 'react'
-import { UserProfile } from 'types/customTypes'
+import { UserProfile, UserV2Profile } from 'types/customTypes'
 
 interface GlobalContextState {
+  isWhyspiaLoginHappening: boolean
+  setIsWhyspiaLoginHappening: (val: boolean) => void
+  isJwtLoadingFinished: boolean
+  setIsJwtLoadingFinished: (val: boolean) => void
   jwtToken: null | string
-  setJwtToken: (val: string) => void
+  setJwtToken: (val: string | null) => void
   user: UserProfile
+  userV2: UserV2Profile
   setUser: (val: any) => void
+  setUserV2: (val: any) => void
   isModalServiceLoaded: boolean
   setIsModalServiceLoaded: (val: boolean) => void
   
@@ -16,11 +22,18 @@ interface GlobalContextState {
   setUserNotifData: (userNotifData: EmoteNotifResponse) => void
 }
 
+
 export const initialState: GlobalContextState = {
+  isWhyspiaLoginHappening: false,
+  setIsWhyspiaLoginHappening: (val: boolean) => {},
+  isJwtLoadingFinished: false,
+  setIsJwtLoadingFinished: (val: boolean) => {},
   jwtToken: null,
-  setJwtToken: (val: string) => {},
+  setJwtToken: (val: string | null) => {},
   user: {},
+  userV2: {},
   setUser: (val: UserProfile) => {},
+  setUserV2: (val: UserV2Profile) => {},
   isModalServiceLoaded: false,
   setIsModalServiceLoaded: (val: boolean) => {},
 
@@ -33,18 +46,27 @@ export const GlobalContext = React.createContext(initialState)
 interface Props {}
 
 export const GlobalContextComponent: React.FC<Props> = ({ children }: any) => {
-  const [jwtToken, setJwtToken] = useState(null)
+  const [isWhyspiaLoginHappening, setIsWhyspiaLoginHappening] = useState<boolean>(false)
+  const [isJwtLoadingFinished, setIsJwtLoadingFinished] = useState<boolean>(false)
+  const [jwtToken, setJwtToken] = useState<string | null>(null)
   const [user, setUser] = useState({})
+  const [userV2, setUserV2] = useState({})
   const [isModalServiceLoaded, setIsModalServiceLoaded] = useState(false)
-  const [userNotifData, setUserNotifData] = useState(null)
+  const [userNotifData, setUserNotifData] = useState<any>(null)
 
   return (
     <GlobalContext.Provider
       value={{
+        isWhyspiaLoginHappening,
+        setIsWhyspiaLoginHappening,
+        isJwtLoadingFinished,
+        setIsJwtLoadingFinished,
         jwtToken,
         setJwtToken,
         user,
+        userV2,
         setUser,
+        setUserV2,
         isModalServiceLoaded,
         setIsModalServiceLoaded,
         userNotifData,

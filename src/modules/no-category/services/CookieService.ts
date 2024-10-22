@@ -1,3 +1,5 @@
+"use client"
+
 export const setCookie = (name, value, expirationDateUTC) => {
   // Good explanations of cookie attributes: https://blog.logrocket.com/javascript-developer-guide-browser-cookies/
   const cookie = `${name}=${encodeURIComponent(

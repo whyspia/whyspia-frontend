@@ -1,7 +1,7 @@
 "use client"
 
 import { ConnectKitProvider, createConfig } from "@particle-network/connectkit"
-import { authWalletConnectors } from "@particle-network/connectkit/auth"
+import { authWalletConnectors, } from "@particle-network/connectkit/auth"
 import {
   avalancheFuji,
   baseSepolia,
@@ -18,12 +18,7 @@ import {
   polygon,
 } from "@particle-network/connectkit/chains"
 import { evmWalletConnectors } from "@particle-network/connectkit/evm"
-import {
-  injected as solaInjected,
-  solanaWalletConnectors,
-} from "@particle-network/connectkit/solana"
 import { wallet, EntryPosition } from "@particle-network/connectkit/wallet"
-
 import React from "react"
 
 const config = createConfig({
@@ -38,26 +33,30 @@ const config = createConfig({
     ],
     splitEmailAndPhone: false,
     collapseWalletList: false,
-    hideContinueButton: true,
+    hideContinueButton: false,
     //  optional, sort wallet connectors
-    connectorsOrder: ["email", "phone", "social", "wallet"],
+    connectorsOrder: ["email", /*"phone", "social", "wallet"*/],
     language: "en-US",
     mode: "auto", // dark or auto.
-    logo: "/logo.png",
+    // logo: "/logo.png",
     filterCountryCallingCode: (countries) => {
       // set only support USA, default support all country code.
       return countries.filter((item) => item === "IT")
     },
+    theme: {
+      // foreground
+      '--pcm-body-color-tertiary': '#DCDFE6', // for some reason this fixed annoying input text placeholder color issue with Particle's modal
+    },
   },
   walletConnectors: [
-    evmWalletConnectors({
-      metadata: { name: "Connect 2.0", icon: "", description: "", url: "" }, // optional, your app metadata, use for WalletConnect and Coinbase.
-      walletConnectProjectId:
-        process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "", // optional, WalletConnect project id.
-    }), // optional, you need to configure it when using social or email/phone connect.
+    // evmWalletConnectors({
+    //   metadata: { name: "Connect 2.0", icon: "", description: "", url: "" }, // optional, your app metadata, use for WalletConnect and Coinbase.
+    //   walletConnectProjectId:
+    //     process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "", // optional, WalletConnect project id.
+    // }), // optional, you need to configure it when using social or email/phone connect.
     authWalletConnectors({
       // optional, supported login methods, and display sequence from Particle Auth
-      authTypes: ["email", "google", "apple", "twitter", "github"],
+      authTypes: ["email", /*"google", "apple", "twitter", "github"*/],
       fiatCoin: "USD",
       promptSettingConfig: {
         promptMasterPasswordSettingWhenLogin: 1, // optional
@@ -76,6 +75,7 @@ const config = createConfig({
     ...(process.env.NEXT_PUBLIC_CHAIN_ENV! === 'DEV' ? [sepolia, baseSepolia, avalancheFuji] : []), // optionally add the dev chains if using dev env
   ],
 })
+
 
 // Wrap your application with this component.
 export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {

@@ -1,5 +1,7 @@
+"use client"
+
 import { Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/24/solid'
+import { XCircleIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import { ReactNode } from 'react'
 
@@ -19,6 +21,7 @@ export default function Modal({
       <span className="inline-block h-screen align-middle"></span>
       &#8203;
       <Transition
+        as="div"
         show={true}
         enter="ease-out duration-300"
         enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -39,7 +42,7 @@ export default function Modal({
               aria-label="Close"
               onClick={close}
             >
-              <XIcon className="w-full h-full" />
+              <XCircleIcon className="w-full h-full" />
             </button>
           </div>
         )}

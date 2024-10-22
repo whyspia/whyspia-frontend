@@ -6,14 +6,63 @@ import { ProfileTooltip } from "./ProfileTooltip"
 import { BellIcon } from "@heroicons/react/24/outline"
 import {
   ConnectButton,
+  useConnect,
+  useAccount,
+  useConnectors,
+  useModal,
 } from "@particle-network/connectkit"
+import { type Connector } from '@particle-network/connector-core'
+import useAuth from "../hooks/useAuth"
 
 export default function AuthStatusWithConnectButton() {
-  const { user, userNotifData } = useContext(GlobalContext)
+  const { user, userNotifData, jwtToken, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
 
   const [timerId, setTimerId] = useState(null)
   const [profileTooltipVisibility, setProfileTooltipVisibility] =
     useState<Boolean>(false)
+
+  const { connectAsync } = useConnect()
+  const { isConnected } = useAccount()
+  const connectors = useConnectors()
+
+  const { setInitWhyspiaLoginFlag } = useAuth()
+
+  const handleConnect = ({
+    address,
+    connectorId,
+  }: {
+    address?: string;
+    connectorId?: string;
+  }) => {
+    console.log("Connected with address:", address, "via connector:", connectorId)
+    // initiateWhyspiaLogin()
+  }
+
+  const handleDisconnect = () => {
+    console.log("handleDisconnect");
+  }
+
+  // const { isOpen, setOpen } = useModal({
+  //   onConnect: handleConnect,
+  //   onDisconnect: handleDisconnect,
+  // })
+
+  // const openParticleModal = () => setOpen(true)
+  // const closeParticleModal = () => setOpen(false)
+
+  const handleLogin = async () => {
+    if (!isConnected) {
+      try {
+        const particleEVMConnector: Connector | undefined = connectors.find(connector => connector.id === "particleEVM")
+        // console.log('connectors==', connectors)
+        await setIsWhyspiaLoginHappening(true)
+        await connectAsync({ connector: particleEVMConnector as Connector })
+        await setInitWhyspiaLoginFlag(true)
+      } catch(err) {
+        console.error('particle login failed')
+      }
+    }
+  }
 
   const onMouseLeaveProfileTooltip = () => {
     setTimerId(
@@ -25,25 +74,25 @@ export default function AuthStatusWithConnectButton() {
 
   const onMouseEnterProfileTooltip = () => {
     timerId && clearTimeout(timerId)
-    user?.twitterUsername && setProfileTooltipVisibility(true)
+    jwtToken && setProfileTooltipVisibility(true)
   }
 
   return (
     <>
-      {!user?.twitterUsername && (
+      {!jwtToken && (
         <>
-          {/* <div
-            onClick={() => twitterLogin(null)}
+          <div
+            onClick={handleLogin}
             className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
           >
-            connect X
-          </div> */}
+            login
+          </div>
 
-          <ConnectButton label="Login" />
+          {/* <ConnectButton label="Login" /> */}
         </>
       )}
 
-      {user && user?.twitterUsername && (
+      {jwtToken && (
         <div className="flex relative z-[700]">
 
           {/* block dealing with BellIcon/notifications */}

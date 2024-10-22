@@ -3,10 +3,12 @@ import useAuth from '../hooks/useAuth'
 import Image from 'next/image'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
+import { useAccount, } from "@particle-network/connectkit"
 
 export const ProfileTooltip = () => {
   const { user } = useContext(GlobalContext)
-  const { twitterLogout } = useAuth()
+  const { whyspiaLogout, handleParticleDisconnect } = useAuth()
+  const { isConnected, } = useAccount()
 
   // const onClickSettings = async () => {
   //   // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
@@ -24,8 +26,11 @@ export const ProfileTooltip = () => {
   //   ModalService.open(ProfileSettingsModal)
   // }
 
-  const onClickDisconnectTwitter = async () => {
-    twitterLogout()
+  const handleDisconnect = async () => {
+    if (isConnected) {
+      await handleParticleDisconnect()
+      whyspiaLogout()
+    }
   }
 
   return (
@@ -56,9 +61,9 @@ export const ProfileTooltip = () => {
 
       <div
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
-        onClick={onClickDisconnectTwitter}
+        onClick={handleDisconnect}
       >
-        <span className="ml-2 font-medium">disconnect X</span>
+        <span className="ml-2 font-medium">logout</span>
       </div>
     </div>
   )

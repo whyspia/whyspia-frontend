@@ -1,6 +1,5 @@
 "use client"
 
-import DefaultLayout from 'components/layouts/DefaultLayout'
 import toast from 'react-hot-toast'
 import { debounce, flatten } from 'lodash'
 import { useContext, useState } from 'react'
@@ -126,6 +125,13 @@ const ThinkingAboutUPage = () => {
   const receivedTAUsData = flatten(infiniteReceivedTAUs?.pages || [])
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
 
+  const testSignMessage = async () => {
+    const msg = 'msg from backend i think'
+    // const result = await signMessage(msg)
+
+    // console.log('result of signed msg==', result)
+  }
+
   return (
     <div className="h-screen flex flex-col items-center mt-4 px-4">
 
@@ -140,7 +146,7 @@ const ThinkingAboutUPage = () => {
           {!user?.twitterUsername ? (
             <>
               <div
-                onClick={() => twitterLogin(null)}
+                onClick={() => testSignMessage()}
                 className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
               >
                 connect X
@@ -379,10 +385,6 @@ const ThinkingAboutUPage = () => {
       </div>
     </div>
   )
-}
-
-(ThinkingAboutUPage as any).layoutProps = {
-  Layout: DefaultLayout,
 }
 
 export default ThinkingAboutUPage

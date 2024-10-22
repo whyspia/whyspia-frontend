@@ -28,7 +28,7 @@ export default function SendEmoteModal({
   initialDesire: string
 }) {
   const { jwtToken, user } = useContext(GlobalContext)
-  const { twitterLogout } = useAuth()
+  const { whyspiaLogout } = useAuth()
 
   const [selectedButton, setSelectedButton] = useState(initialDesire)
   const [selectedTabTop, setSelectedTabTop] = useState('all')
@@ -258,7 +258,7 @@ export default function SendEmoteModal({
 
               <div
                 className="p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 border border-white cursor-pointer"
-                onClick={() => twitterLogout()}
+                onClick={() => whyspiaLogout()}
               >
                 disconnect X
               </div>

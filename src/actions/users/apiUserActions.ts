@@ -54,6 +54,37 @@ export const initiateTwitterLoginAPI = async (jwt: string | null): Promise<any> 
   }
 }
 
+type Wallet = {
+  chain_name: string
+  public_address: string
+  uuid: string
+}
+
+export const initiateUserV2LoginAPI = async (particleUUID: string, wallets: Wallet[], primaryWallet: string): Promise<any> => {
+  try {
+    const response = await client.post(
+      `/user-v2/initiateLogin`,
+      {
+        particleUUID,
+        wallets,
+        primaryWallet,
+      },
+      // {
+      //   headers: {
+      //     Authorization: jwt ? `Bearer ${jwt}` : null,
+      //   },
+      // }
+    )
+    return response?.data?.data?.messageToSign
+  } catch (error) {
+    console.error(
+      `could not generate access token for userv2 authentication`,
+      error
+    )
+    throw error // rethrow the error to be caught
+  }
+}
+
 /**
  *
  */
@@ -69,6 +100,23 @@ export const completeTwitterLogin = async (
     return response?.data?.data?.twitterVerification
   } catch (error) {
     console.error(`Could not complete twitter login`, error)
+  }
+}
+
+export const completeUserV2Login = async (
+  signature: string,
+  signingAddress: string,
+) => {
+  try {
+    const response = await client.post(
+      `/user-v2/completeLogin`,
+      { signature, signingAddress },
+      { withCredentials: true } // TODO: if issues arise, may need to make this only true in dev envs
+    )
+    return response?.data?.data?.userV2Verification
+  } catch (error) {
+    console.error(`could not complete userv2 login`, error)
+    throw error // rethrow the error to be caught
   }
 }
 

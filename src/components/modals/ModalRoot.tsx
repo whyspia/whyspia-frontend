@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect, useRef, useContext } from 'react'
 import ModalService from './ModalService'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -42,6 +44,10 @@ export default function ModalRoot() {
       }
 
       setModalList(newModalList)
+    })
+
+    ModalService.on('closeAll', () => {
+      setModalList([])
     })
 
     setIsModalServiceLoaded(true)

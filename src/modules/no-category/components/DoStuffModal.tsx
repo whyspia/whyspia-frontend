@@ -1,3 +1,5 @@
+"use client"
+
 import Modal from 'components/modals/Modal'
 import DoStuffUI from './DoStuffUI'
 

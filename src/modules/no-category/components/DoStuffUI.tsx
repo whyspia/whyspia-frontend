@@ -18,7 +18,7 @@ export default function DoStuffUI({
   close?: () => void
 }) {
   const { jwtToken, user } = useContext(GlobalContext)
-  const { twitterLogout } = useAuth()
+  const { whyspiaLogout } = useAuth()
 
   const doStuffItems = [
     {
@@ -93,7 +93,7 @@ export default function DoStuffUI({
         },
         {
           label: 'disconnect X',
-          onClick: jwtToken ? () => twitterLogout() : () => toast.error(`ur already disconnected yo`),
+          onClick: jwtToken ? () => whyspiaLogout() : () => toast.error(`ur already disconnected yo`),
         },
         {
           label: 'all pages',

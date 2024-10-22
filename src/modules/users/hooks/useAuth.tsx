@@ -1,12 +1,36 @@
 import apiGetAllEmoteNotifs from 'actions/notifs/apiGetAllEmoteNotifs'
-import { getUserToken } from 'actions/users/apiUserActions'
+import { completeUserV2Login, getUserToken, initiateUserV2LoginAPI } from 'actions/users/apiUserActions'
+import ModalService from 'components/modals/ModalService'
 import { GlobalContext } from 'lib/GlobalContext'
 import { deleteCookie } from 'modules/no-category/services/CookieService'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import {
+  useAccount,
+  useAddress,
+  useDisconnect,
+  useParticleAuth,
+  useWallets,
+} from "@particle-network/connectkit"
+
 const useAuth = () => {
-  const { setJwtToken, setUser, setUserNotifData } = useContext(GlobalContext)
+  // Initialize account-related states from Particle's useAccount hook
+  const {
+    status,
+    isConnected,
+  } = useAccount()
+  const address = useAddress()
+  const { disconnectAsync } = useDisconnect()
+  const { getUserInfo } = useParticleAuth()
+  // Retrieve the primary wallet from the Particle Wallets
+  const [primaryWallet] = useWallets()
+  // TODO: prob move these state values out to other places like GlobalContext or useAuth- formerly did stuff like setUserFromJwt in ClientWrapper
+  const [userInfo, setUserInfo] = useState<any>(null); // Store user's information
+  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState<boolean>(false); // Loading state for fetching user info
+  const { setJwtToken, setUser, setUserNotifData, setUserV2, jwtToken, isJwtLoadingFinished, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
+  // used to call method to init whyspia login...but only once all values are ready
+  const [bInitWhyspiaLoginFlag, setInitWhyspiaLoginFlag] = useState<boolean>(false)
 
   const setUserFromJwt = async (jwt: string) => {
     if (jwt) {
@@ -27,14 +51,87 @@ const useAuth = () => {
     }
   }
 
-  const twitterLogout = (): void => {
+  const whyspiaLogout = (): void => {
     deleteCookie('tt')
     setUser(null)
     setJwtToken(null)
-    toast.error(`u disconnected successfully`)
+    toast.error(`logout success!`)
   }
 
-  return { setUserFromJwt, twitterLogout, }
+  const fetchUserInfo = async () => {
+    setIsLoadingUserInfo(true)
+
+    if (primaryWallet?.connector?.walletConnectorType === "particleAuth") {
+      try {
+        const userInfo = getUserInfo()
+        setUserInfo(userInfo)
+      } catch (error) {
+        console.log("getUserInfo error: ", error)
+      } finally {
+        setIsLoadingUserInfo(false)
+      }
+    } else {
+      setIsLoadingUserInfo(false); // Ensure to stop loading if connector type doesn't match
+    }
+  }
+
+  const handleParticleDisconnect = async () => {
+    try {
+      await disconnectAsync()
+    } catch (error) {
+      console.error("error disconnecting:", error);
+    }
+  }
+
+  const initiateWhyspiaLogin = async () => {
+    try {
+      // console.log('userInfo inside initWhyspiaLogin==', userInfo)
+      // console.log('address inside initWhyspiaLogin==', address)
+      // console.log('primaryWallet inside initWhyspiaLogin==', primaryWallet)
+      const messageToSign = await initiateUserV2LoginAPI(userInfo?.uuid, userInfo?.wallets, address as string)
+      const walletClient = primaryWallet?.getWalletClient() ?? null
+      const sig = await walletClient.signMessage({ account: address as any, message: messageToSign })
+      const userV2Verification = await completeUserV2Login(sig, address as string)
+      setJwtToken(userV2Verification?.jwt)
+      setUserV2({
+        id: userV2Verification?.userToken?.id,
+        primaryWallet: address,
+        userInfo,
+      })
+    } catch(err) {
+      // close loading modal that is blocking action while user was logging in
+      ModalService.closeAll()
+      console.error('~~calling Particle disconnect in catch block~~', err)
+      await handleParticleDisconnect()
+      setIsWhyspiaLoginHappening(false)
+    }
+
+    // close loading modal that is blocking action while user was logging in
+    ModalService.closeAll()
+    setIsWhyspiaLoginHappening(false)
+  }
+
+  useEffect(() => {
+    if (status === "connected") {
+      fetchUserInfo()
+    }
+    // if Particle connected, but no JWT - that signals it's time for final step to auth with whyspia backend (wallet auth). If it fails, then need to sign out of Particle too
+    // if (isConnected && (!isJwtLoading && !jwtToken) && !hasInitiatedLogin.current && userInfo && address && primaryWallet) {
+    //   // TODO: maybe use this for disconnecting once jwt expires
+    // }
+
+    // login was inited with bInitWhyspiaLoginFlag 
+    if (bInitWhyspiaLoginFlag && isConnected && !jwtToken && userInfo && address && primaryWallet) {
+      setInitWhyspiaLoginFlag(false)
+      initiateWhyspiaLogin()
+    }
+
+    // if (status === "connecting" || status === "reconnecting") {
+    //   console.log('~~particle is either connecting or reconnecting~~')
+    // }
+  }, [isConnected, primaryWallet, getUserInfo, address, jwtToken, isJwtLoadingFinished])
+
+  return { setUserFromJwt, whyspiaLogout, setInitWhyspiaLoginFlag, handleParticleDisconnect }
 }
 
 export default useAuth
