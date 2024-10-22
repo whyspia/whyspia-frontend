@@ -24,7 +24,7 @@ export default function PingpplUnfollowConfirmModal({
   pingpplFollowId: string
 }) {
   const queryClient = useQueryClient()
-  const { jwtToken, user: loggedInUser } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
 
   const [isPingpplUnfollowSending, setisPingpplUnfollowSending] = useState(false)
 
@@ -47,7 +47,7 @@ export default function PingpplUnfollowConfirmModal({
     setisPingpplUnfollowSending(false)
 
     // to refresh data at runtime to show u now unfollow
-    queryClient.invalidateQueries([`pingpplFollows-${loggedInUser?.twitterUsername}`])
+    queryClient.invalidateQueries([`pingpplFollows-${loggedInUser?.primaryWallet}`])
 
     toast.success(`you successfully unfollowed "${eventNameFollowed}" from "${eventSender}"!`)
 

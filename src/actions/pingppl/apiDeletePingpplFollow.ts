@@ -7,7 +7,7 @@ export const apiDeletePingpplFollow = async ({
   jwt,
   pingpplFollowId,
 }: {
-  jwt: string
+  jwt: string | null
   pingpplFollowId: string
 }) => {
   

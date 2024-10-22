@@ -21,7 +21,7 @@ export default function PingpplFollowConfirmModal({
   eventDescription: string
 }) {
   const queryClient = useQueryClient()
-  const { jwtToken, user: loggedInUser } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
 
   const [isPingpplFollowSending, setisPingpplFollowSending] = useState(false)
 
@@ -45,7 +45,7 @@ export default function PingpplFollowConfirmModal({
     setisPingpplFollowSending(false)
 
     // to refresh data at runtime to show u now follow
-    queryClient.invalidateQueries([`pingpplFollows-${loggedInUser?.twitterUsername}`])
+    queryClient.invalidateQueries([`pingpplFollows-${loggedInUser?.primaryWallet}`])
 
     toast.success(`you successfully followed "${eventNameFollowed}" from "${eventSender}"!`)
 

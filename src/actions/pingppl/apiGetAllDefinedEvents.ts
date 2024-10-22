@@ -11,7 +11,7 @@ export default async function apiGetAllDefinedEvents({
   eventCreator = null,
   eventName = null,
   search = null,
-}) {
+}: any) {
 
   try {
     const response = await client.get(`/pingppl/definedEvent`, {

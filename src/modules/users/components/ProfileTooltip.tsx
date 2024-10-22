@@ -6,7 +6,7 @@ import { GlobalContext } from 'lib/GlobalContext'
 import { useAccount, } from "@particle-network/connectkit"
 
 export const ProfileTooltip = () => {
-  const { user } = useContext(GlobalContext)
+  const { user, userV2 } = useContext(GlobalContext)
   const { whyspiaLogout, handleParticleDisconnect } = useAuth()
   const { isConnected, } = useAccount()
 
@@ -36,7 +36,7 @@ export const ProfileTooltip = () => {
   return (
     <div className="flex flex-col w-64 text-black">
 
-      <A href={`/u/${user?.twitterUsername}`}>
+      <A href={`/u/${userV2?.primaryWallet}`}>
         <div className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300">
           <div className="relative w-6 h-6">
             <Image
@@ -45,7 +45,7 @@ export const ProfileTooltip = () => {
               layout="fill"
             />
           </div>
-          <span className="ml-2 font-medium">{user?.twitterUsername}</span>
+          <span className="ml-2 font-medium">{userV2?.displayName}</span>
         </div>
       </A>
 

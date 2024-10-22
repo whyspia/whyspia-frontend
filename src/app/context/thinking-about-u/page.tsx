@@ -19,7 +19,7 @@ const xUsernamePAttern = /^@?(\w){1,15}$/
 const ThinkingAboutUPage = () => {
   const queryClient = useQueryClient()
 
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken, userV2 } = useContext(GlobalContext)
 
   const [selectedButton, setSelectedButton] = useState('send')
 
@@ -28,12 +28,12 @@ const ThinkingAboutUPage = () => {
   const [isTAUSending, setIsTAUSending] = useState(false)
 
   const fetchSentTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, senderSymbol: user?.twitterUsername as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, senderSymbol: userV2?.primaryWallet as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
   const { data: infiniteSentTAUs, fetchNextPage: fetchSentTAUsNextPage, hasNextPage: hasSentTAUsNextPage, isFetchingNextPage: isSentTAUsFetchingNextPage } = useInfiniteQuery(
-    [`sent-taus-${user?.twitterUsername}`,],
+    [`sent-taus-${userV2?.primaryWallet}`,],
     ({ pageParam = 0 }) =>
       fetchSentTAU({
         pageParam
@@ -56,12 +56,12 @@ const ThinkingAboutUPage = () => {
   )
 
   const fetchReceivedTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverSymbol: user?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverSymbol: userV2?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
   const { data: infiniteReceivedTAUs, fetchNextPage: fetchReceivedTAUsNextPage, hasNextPage: hasReceivedTAUsNextPage, isFetchingNextPage: isReceivedTAUsFetchingNextPage } = useInfiniteQuery(
-    [`received-taus-${user?.twitterUsername}`,],
+    [`received-taus-${userV2?.primaryWallet}`,],
     ({ pageParam = 0 }) =>
       fetchReceivedTAU({
         pageParam
@@ -107,7 +107,7 @@ const ThinkingAboutUPage = () => {
     if (tau) {
       console.log('TAU created successfully:', tau)
       toast.success(`sent successfully to ${receiverSymbol}!`)
-      queryClient.invalidateQueries([`sent-taus-${user?.twitterUsername}`])
+      queryClient.invalidateQueries([`sent-taus-${userV2?.primaryWallet}`])
     } else {
       console.error('failed to send TAU')
       toast.success(`failed to send to ${receiverSymbol}!`)
@@ -143,7 +143,7 @@ const ThinkingAboutUPage = () => {
 
         <>
         
-          {!user?.twitterUsername ? (
+          {!userV2?.primaryWallet ? (
             <>
               <div
                 onClick={() => testSignMessage()}
@@ -256,10 +256,10 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: user?.twitterUsername })
+                            ModalService.open(SymbolSelectModal, { symbol: userV2?.primaryWallet })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        >{user?.twitterUsername}</A>{' '}
+                        >{userV2?.primaryWallet}</A>{' '}
                         at {new Date().toLocaleString()}
                       </div>
 

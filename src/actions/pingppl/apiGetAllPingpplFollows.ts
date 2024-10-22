@@ -19,7 +19,7 @@ export default async function apiGetAllPingpplFollows({
   eventNameFollowed = null,
   eventSender = null,
   followSender = null,
-}): Promise<PingpplFollowResponse[]> {
+}: any): Promise<PingpplFollowResponse[]> {
 
   try {
     const response = await client.get(`/pingppl/pingpplFollow`, {

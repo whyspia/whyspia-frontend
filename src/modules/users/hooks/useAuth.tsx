@@ -13,6 +13,7 @@ import {
   useParticleAuth,
   useWallets,
 } from "@particle-network/connectkit"
+import { formatWalletAddress } from '../utils/WalletUtils'
 
 const useAuth = () => {
   // Initialize account-related states from Particle's useAccount hook
@@ -96,6 +97,7 @@ const useAuth = () => {
       setUserV2({
         id: userV2Verification?.userToken?.id,
         primaryWallet: address,
+        displayName: formatWalletAddress(address),
         userInfo,
       })
     } catch(err) {

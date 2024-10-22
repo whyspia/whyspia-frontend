@@ -28,7 +28,7 @@ const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-e
 
 const ProfileReusable = () => {
   const router = useRouter()
-  const { user: loggedInUser, jwtToken } = useContext(GlobalContext)
+  const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
   const { username, tabName, symbol } = router.query as any
   const [selectedDefinitionId, setSelectedDefinitionId] = useState(null)
 
@@ -45,7 +45,7 @@ const ProfileReusable = () => {
     // }
   )
 
-  const [activeTab, setActiveTab] = useState(null)
+  const [activeTab, setActiveTab] = useState<string | null>(null)
 
   const [searchDefsQuery, setSearchDefsQuery] = useState('')
 
@@ -204,12 +204,12 @@ const ProfileReusable = () => {
   )
 
   const fetchLoggedInUsersPingpplFollows = async ({ pageParam = 0 }) => {
-    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.twitterUsername, followSender: loggedInUser?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.twitterUsername, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return follows
   }
 
   const { data: infinitePingpplFollows, fetchNextPage: fetchPingpplFollowsNextPage, hasNextPage: hasPingpplFollowsNextPage, isFetchingNextPage: isPingpplFollowsFetchingNextPage } = useInfiniteQuery(
-    [`pingpplFollows-${loggedInUser?.twitterUsername}`],
+    [`pingpplFollows-${loggedInUser?.primaryWallet}`],
     ({ pageParam = 0 }) =>
       fetchLoggedInUsersPingpplFollows({
         pageParam

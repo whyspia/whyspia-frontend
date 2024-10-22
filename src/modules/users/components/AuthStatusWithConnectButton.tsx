@@ -15,7 +15,7 @@ import { type Connector } from '@particle-network/connector-core'
 import useAuth from "../hooks/useAuth"
 
 export default function AuthStatusWithConnectButton() {
-  const { user, userNotifData, jwtToken, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
+  const { userV2, userNotifData, jwtToken, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
 
   const [timerId, setTimerId] = useState(null)
   const [profileTooltipVisibility, setProfileTooltipVisibility] =
@@ -121,10 +121,10 @@ export default function AuthStatusWithConnectButton() {
 
             <A
               href={
-                user && user.twitterUsername
+                userV2 && userV2?.primaryWallet
                   ? `/u/${
-                      user && user.twitterUsername
-                        ? user.twitterUsername
+                      userV2 && userV2?.primaryWallet
+                        ? userV2?.primaryWallet
                         : ''
                     }`
                   : '#'
@@ -132,7 +132,7 @@ export default function AuthStatusWithConnectButton() {
             >
               <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
                 <Image
-                  src={(user as any)?.profilePhoto || '/default-profile-pic.png'}
+                  src={(userV2 as any)?.profilePhoto || '/default-profile-pic.png'}
                   alt="Profile photo"
                   layout="fill"
                   objectFit="cover"

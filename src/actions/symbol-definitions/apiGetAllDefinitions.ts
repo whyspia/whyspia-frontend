@@ -10,7 +10,7 @@ export default async function apiGetAllDefinitions({
   orderDirection,
   senderTwitterUsername = null,
   symbol = null,
-}) {
+}: any) {
 
   try {
     const response = await client.get(`/symbol-definition`, {

@@ -21,7 +21,7 @@ export const PublicPlannedPingBlock = ({
   pingpplFollowId,  // if loggedinuser is following, this is id of their follow
 }: {
   plannedEvent: any
-  jwt?: string
+  jwt?: string | null
   isLoggedInUserFollowing?: boolean
   pingpplFollowId?: string
 }) => {
