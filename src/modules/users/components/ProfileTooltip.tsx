@@ -4,9 +4,13 @@ import Image from 'next/image'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useAccount, } from "@particle-network/connectkit"
+import ModalService from 'components/modals/ModalService'
+import UserSettingsModal from './UserSettingsModal'
+import { CogIcon } from '@heroicons/react/24/solid'
+import { isDefaultDisplayNameFormat } from '../utils/WalletUtils'
 
 export const ProfileTooltip = () => {
-  const { user, userV2 } = useContext(GlobalContext)
+  const { userV2 } = useContext(GlobalContext)
   const { whyspiaLogout, handleParticleDisconnect } = useAuth()
   const { isConnected, } = useAccount()
 
@@ -33,6 +37,8 @@ export const ProfileTooltip = () => {
     }
   }
 
+  const isDefaultDisplayNameUsed = userV2?.displayName && isDefaultDisplayNameFormat(userV2?.displayName)
+
   return (
     <div className="flex flex-col w-64 text-black">
 
@@ -49,15 +55,22 @@ export const ProfileTooltip = () => {
         </div>
       </A>
 
-      {/* {active && (
+      {isDefaultDisplayNameUsed && (
         <div
-          className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-brand-gray"
-          onClick={onClickSettings}
+          className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 bg-red-500 hover:bg-red-600 font-bold"
+          onClick={() => ModalService.open(UserSettingsModal)}
         >
-          <BiCog className="w-6 h-6  text-gray-400" />
-          <span className="ml-2 font-medium">Edit Profile</span>
+          <span className="ml-2 font-medium">CHANGE DISPLAY NAME</span>
         </div>
-      )} */}
+      )}
+
+      <div
+        className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
+        onClick={() => ModalService.open(UserSettingsModal)}
+      >
+        <CogIcon className="w-6 h-6 text-gray-400" />
+        <span className="ml-2 font-medium">settings</span>
+      </div>
 
       <div
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"

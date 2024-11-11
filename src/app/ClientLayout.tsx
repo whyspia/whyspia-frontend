@@ -29,6 +29,8 @@ export default function ClientLayout({
   return (
     // suppressHydrationWarning is needed bc warning caused by next-themes adding stuffz
     <html lang="en" suppressHydrationWarning> 
+      {/* this adds React devtools for debugging - need browser extension too tho */}
+      {/* <script src="http://localhost:8097"></script> */}
       <body>
         <QueryClientProvider client={queryClient}>
           <ParticleConnectkit>

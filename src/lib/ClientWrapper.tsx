@@ -20,8 +20,7 @@ export const ClientWrapper = ({ children }: any) => {
 
       // If there is JWT (they are signed in or faking it), then fetch user data using JWT
       if (jwtValue) {
-        // TODO
-        // await setUserFromJwt(jwtValue)
+        await setUserFromJwt(jwtValue)
         setJwtToken(jwtValue)
       }
       // if no JWT, but Particle is connected AND no whyspia login is happening, then disconnect it to sync it with whyspia auth

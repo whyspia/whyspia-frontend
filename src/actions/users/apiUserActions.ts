@@ -1,6 +1,6 @@
 import client from 'lib/axios'
 
-export const uploadAccountPhoto = ({ formData, token }) =>
+export const uploadAccountPhoto = ({ formData, token }: any) =>
   client.post(`/user-token/profilePhoto`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -8,7 +8,7 @@ export const uploadAccountPhoto = ({ formData, token }) =>
     },
   })
 
-export const sendVerificationCodeToAccountEmail = ({ token, email }) =>
+export const sendVerificationCodeToAccountEmail = ({ token, email }: any) =>
   client.get(`/user-token/emailVerification`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -18,7 +18,7 @@ export const sendVerificationCodeToAccountEmail = ({ token, email }) =>
     },
   })
 
-export const checkAccountEmailVerificationCode = ({ token, code, email }) =>
+export const checkAccountEmailVerificationCode = ({ token, code, email }: any) =>
   client.post(
     `/user-token/emailVerification`,
     { code, email },
@@ -54,13 +54,13 @@ export const initiateTwitterLoginAPI = async (jwt: string | null): Promise<any> 
   }
 }
 
-type Wallet = {
+type ParticleWallet = {
   chain_name: string
   public_address: string
   uuid: string
 }
 
-export const initiateUserV2LoginAPI = async (particleUUID: string, wallets: Wallet[], primaryWallet: string): Promise<any> => {
+export const initiateUserV2LoginAPI = async (particleUUID: string, wallets: ParticleWallet[], primaryWallet: string): Promise<any> => {
   try {
     const response = await client.post(
       `/user-v2/initiateLogin`,
@@ -130,15 +130,15 @@ type GetUserTokenInput = {
  */
 export const getUserToken = async ({
   // walletAddress = null,
-  username = null,
+  // username = null,
   jwt = null,
 }: GetUserTokenInput) => {
-  if (!username && !jwt) return null
+  if (!jwt) return null
 
   try {
-    const response = await client.get(`/user-token/single`, {
+    const response = await client.get(`/user-v2/single`, {
       params: {
-        twitterUsername: username,
+        // twitterUsername: username,
         // walletAddress,
       },
       headers: {
@@ -202,5 +202,37 @@ export async function checkExistingTwitterProfile(username: string) {
   } catch (error) {
     console.error('Could not check if twitter profile is existing', error)
     return { isExisting: false, userToken: null }
+  }
+}
+
+type UpdateUserTokenInput = {
+  updatedDisplayName: string
+  jwt: string
+}
+
+/**
+ * right now just for changing displayName
+ */
+export const updateUserToken = async ({
+  updatedDisplayName,
+  jwt,
+}: UpdateUserTokenInput) => {
+  if (!jwt || !updatedDisplayName) return null
+
+  const body = {
+    updatedDisplayName
+  }
+
+  try {
+    const response = await client.put(`/user-v2/update-profile`, body, {
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
+    })
+
+    return response?.data?.data?.userToken
+  } catch (error) {
+    console.error(`updateUserToken failed`)
+    return null
   }
 }

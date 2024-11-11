@@ -13,7 +13,6 @@ import {
   useParticleAuth,
   useWallets,
 } from "@particle-network/connectkit"
-import { formatWalletAddress } from '../utils/WalletUtils'
 
 const useAuth = () => {
   // Initialize account-related states from Particle's useAccount hook
@@ -37,7 +36,13 @@ const useAuth = () => {
     if (jwt) {
       const userToken = await getUserToken({ jwt })
       if (userToken) {
-        setUser(userToken)
+        // setUser(userToken)
+        setUserV2({
+          id: userToken?.id,
+          primaryWallet: userToken?.primaryWallet,
+          displayName: userToken?.displayName,
+          userInfo, // should this be from userToken instead??
+        })
       }
       try {
         // this is only to get hasReadCasuallyFalseCount and hasReadDirectlyFalseCount - i dont think can use this for emoteNotifs bc pagination needs to be done on notification page - not with some global var
@@ -97,7 +102,7 @@ const useAuth = () => {
       setUserV2({
         id: userV2Verification?.userToken?.id,
         primaryWallet: address,
-        displayName: formatWalletAddress(address),
+        displayName: userV2Verification?.userToken?.displayName,
         userInfo,
       })
     } catch(err) {
