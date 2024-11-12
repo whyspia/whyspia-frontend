@@ -1,13 +1,16 @@
 import A from 'components/A'
 import useAuth from '../hooks/useAuth'
+import { LinkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import toast from 'react-hot-toast'
+import copy from 'copy-to-clipboard'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useAccount, } from "@particle-network/connectkit"
 import ModalService from 'components/modals/ModalService'
 import UserSettingsModal from './UserSettingsModal'
 import { CogIcon } from '@heroicons/react/24/solid'
-import { isDefaultDisplayNameFormat } from '../utils/WalletUtils'
+import { formatWalletAddress, isDefaultDisplayNameFormat } from '../utils/WalletUtils'
 
 export const ProfileTooltip = () => {
   const { userV2 } = useContext(GlobalContext)
@@ -37,6 +40,13 @@ export const ProfileTooltip = () => {
     }
   }
 
+  const handleCopyWalletID = () => {
+    if (userV2?.primaryWallet) {
+      copy(userV2.primaryWallet) // Copy the wallet ID to clipboard
+      toast.success('whyspia ID copied to clipboard') // Show success toast
+    }
+  }
+
   const isDefaultDisplayNameUsed = userV2?.displayName && isDefaultDisplayNameFormat(userV2?.displayName)
 
   return (
@@ -46,14 +56,32 @@ export const ProfileTooltip = () => {
         <div className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300">
           <div className="relative w-6 h-6">
             <Image
-              src={'/x-logo-black.svg'}
-              alt="x-logo-black-icon"
+              src={(userV2 as any)?.profilePhoto || '/default-profile-pic.png'}
+              alt="Profile photo"
               layout="fill"
+              objectFit="cover"
+              className="rounded-full"
             />
           </div>
-          <span className="ml-2 font-medium">{userV2?.displayName}</span>
+
+          <div className="ml-2">
+            <div className="font-medium">{userV2?.displayName}</div>
+            {!isDefaultDisplayNameUsed && userV2?.primaryWallet && (
+              <div className="text-xs text-gray-500">{formatWalletAddress(userV2.primaryWallet)}</div>
+            )}
+          </div>
         </div>
       </A>
+
+      <div
+        className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
+        onClick={handleCopyWalletID}
+      >
+        <LinkIcon
+          className={'w-5 h-5'}
+        />
+        <span className="ml-2 font-medium">COPY WHYSPIA ID</span>
+      </div>
 
       {isDefaultDisplayNameUsed && (
         <div

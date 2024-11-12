@@ -120,23 +120,23 @@ export const completeUserV2Login = async (
   }
 }
 
-type GetUserTokenInput = {
+type GetUserTokenPrivateInput = {
   username?: string | null
   jwt?: string | null
 }
 
 /**
- * Get account for a walletAddress, username, or jwt
+ * get private account for a jwt
  */
-export const getUserToken = async ({
+export const getUserTokenPrivate = async ({
   // walletAddress = null,
   // username = null,
   jwt = null,
-}: GetUserTokenInput) => {
+}: GetUserTokenPrivateInput) => {
   if (!jwt) return null
 
   try {
-    const response = await client.get(`/user-v2/single`, {
+    const response = await client.get(`/user-v2/single-private`, {
       params: {
         // twitterUsername: username,
         // walletAddress,
@@ -148,7 +148,33 @@ export const getUserToken = async ({
 
     return response?.data?.data?.userToken
   } catch (error) {
-    console.error(`getUserToken failed`)
+    console.error(`getUserTokenPrivate failed`)
+    return null
+  }
+}
+
+type GetUserTokenPublicInput = {
+  primaryWallet?: string | null
+}
+
+/**
+ * get public account for a primaryWallet
+ */
+export const getUserTokenPublic = async ({
+  primaryWallet = null,
+}: GetUserTokenPublicInput) => {
+  if (!primaryWallet) return null
+
+  try {
+    const response = await client.get(`/user-v2/single-public`, {
+      params: {
+        primaryWallet,
+      },
+    })
+
+    return response?.data?.data?.userToken
+  } catch (error) {
+    console.error(`getUserTokenPublic failed`)
     return null
   }
 }

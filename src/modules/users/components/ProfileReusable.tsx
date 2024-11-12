@@ -1,10 +1,15 @@
+"use client"
+
 import { useInfiniteQuery, useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-import { getUserToken } from 'actions/users/apiUserActions'
+import { useParams  } from 'next/navigation'
+import { getUserTokenPublic } from 'actions/users/apiUserActions'
 import apiGetAllEmotes from 'actions/emotes/apiGetAllEmotes'
 import { useContext, useEffect, useState } from 'react'
 import { flatten } from 'lodash'
 import { formatTimeAgo } from 'utils/randomUtils'
+import toast from 'react-hot-toast'
+import copy from 'copy-to-clipboard'
+import { LinkIcon } from '@heroicons/react/24/outline'
 import A from 'components/A'
 import apiGetAllDefinitions from 'actions/symbol-definitions/apiGetAllDefinitions'
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline"
@@ -23,22 +28,24 @@ import YouGottaLoginModal from './YouGottaLoginModal'
 import { PublicPlannedPingBlock } from 'modules/contexts/pingppl/components/PublicPlannedPingBlock'
 import PlannedPingReactModal from 'modules/contexts/pingppl/components/PlannedPingReactModal'
 import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
+import { formatWalletAddress, isDefaultDisplayNameFormat } from '../utils/WalletUtils'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
 const ProfileReusable = () => {
-  const router = useRouter()
   const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
-  const { username, tabName, symbol } = router.query as any
+
+  const { primaryWallet, tabName, symbol } = useParams() as any
+
   const [selectedDefinitionId, setSelectedDefinitionId] = useState(null)
 
   const [plannedPingSearchBarQuery, setPlannedPingSearchBarQuery] = useState('')
 
   const { data: userData } = useQuery<any>(
-    [{ username }],
+    [{ primaryWallet }],
     () =>
-      getUserToken({
-        username,
+      getUserTokenPublic({
+        primaryWallet,
       }),
     // {
     //   enabled: !isTxPending,
@@ -64,12 +71,12 @@ const ProfileReusable = () => {
   }, [symbol])
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
-    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.twitterUsername, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.primaryWallet, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return definedEvents
   }
 
   const { data: infiniteDefinedEvents, fetchNextPage: fetchDENextPage, hasNextPage: hasDENextPage, isFetchingNextPage: isFetchingDENextPage } = useInfiniteQuery(
-    [`infiniteDefinedEvents-${userData?.twitterUsername}`, plannedPingSearchBarQuery],
+    [`infiniteDefinedEvents-${userData?.primaryWallet}`, plannedPingSearchBarQuery],
     ({ pageParam = 0 }) =>
       fetchDefinedEvents({
         pageParam
@@ -86,18 +93,18 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const fetchSentEvents = async ({ pageParam = 0 }) => {
-    const sentEvents = await apiGetAllSentEvents({ eventSender: userData?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const sentEvents = await apiGetAllSentEvents({ eventSender: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return sentEvents
   }
 
   const { data: infiniteSentEvents, fetchNextPage: fetchSENextPage, hasNextPage: hasSENextPage, isFetchingNextPage: isFetchingSENextPage } = useInfiniteQuery(
-    [`infiniteSentEvents-${userData?.twitterUsername}`],
+    [`infiniteSentEvents-${userData?.primaryWallet}`],
     ({ pageParam = 0 }) =>
       fetchSentEvents({
         pageParam
@@ -114,18 +121,18 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const fetchSentEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ senderTwitterUsername: username, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ senderTwitterUsername: primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
   const { data: infiniteSentEmotes, fetchNextPage: fetchSentNextPage, hasNextPage: hasSentNextPage, isFetchingNextPage: isSentFetchingNextPage } = useInfiniteQuery(
-    ['sent-emotes', 10, username],
+    ['sent-emotes', 10, primaryWallet],
     ({ pageParam = 0 }) =>
       fetchSentEmotes({
         pageParam
@@ -142,18 +149,18 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const fetchReceivedEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ receiverSymbols: [username], skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ receiverSymbols: [primaryWallet], skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
   const { data: infiniteReceivedEmotes, fetchNextPage: fetchReceivedNextPage, hasNextPage: hasReceivedNextPage, isFetchingNextPage: isReceivedFetchingNextPage } = useInfiniteQuery(
-    ['received-emotes', 10, username],
+    ['received-emotes', 10, primaryWallet],
     ({ pageParam = 0 }) =>
     fetchReceivedEmotes({
         pageParam
@@ -170,18 +177,18 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const fetchDefinitions = async ({ pageParam = 0 }) => {
-    const defintions = await apiGetAllDefinitions({ symbol: searchDefsQuery, senderTwitterUsername: userData?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const defintions = await apiGetAllDefinitions({ symbol: searchDefsQuery, senderTwitterUsername: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return defintions
   }
 
   const { data: infiniteDefinitions, fetchNextPage: fetchDefinitionsNextPage, hasNextPage: hasDefinitionsNextPage, isFetchingNextPage: isDefinitionsFetchingNextPage } = useInfiniteQuery(
-    ['definitions', 10, userData?.twitterUsername, searchDefsQuery, symbol],
+    ['definitions', 10, userData?.primaryWallet, searchDefsQuery, symbol],
     ({ pageParam = 0 }) =>
     fetchDefinitions({
         pageParam
@@ -198,13 +205,13 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const fetchLoggedInUsersPingpplFollows = async ({ pageParam = 0 }) => {
-    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.twitterUsername, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.primaryWallet, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return follows
   }
 
@@ -227,14 +234,14 @@ const ProfileReusable = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: Boolean(userData?.twitterUsername),
+      enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
   )
 
   const onTabChanged = (tabName: string) => {
     setActiveTab(tabName)
-    const updatedURL = `/u/${username}/${tabName}`
+    const updatedURL = `/u/${primaryWallet}/${tabName}`
     window.history.pushState(null, null, updatedURL)
     setSelectedDefinitionId(null)
   }
@@ -242,9 +249,16 @@ const ProfileReusable = () => {
   const onSymbolTyped = (symbol: string) => {
     setSearchDefsQuery(symbol)
 
-    const updatedURL = `/u/${username}/symbols/${symbol}`
+    const updatedURL = `/u/${primaryWallet}/symbols/${symbol}`
     window.history.pushState(null, null, updatedURL)
     setSelectedDefinitionId(null)
+  }
+
+  const handleCopyWalletID = () => {
+    if (userData?.primaryWallet) {
+      copy(userData.primaryWallet) // Copy the wallet ID to clipboard
+      toast.success('whyspia ID copied to clipboard') // Show success toast
+    }
   }
 
   const definedEventsData = flatten(infiniteDefinedEvents?.pages || [])
@@ -269,10 +283,23 @@ const ProfileReusable = () => {
     )
   }
 
+  const isDefaultDisplayNameUsed = userData?.displayName && isDefaultDisplayNameFormat(userData?.displayName)
+
   return (
     <div className="h-screen flex flex-col items-center mt-10 px-4">
 
-      <h1 className="text-4xl font-bold mb-4">{userData?.twitterUsername}</h1>
+      <h1 className="text-4xl font-bold mb-4">{userData?.displayName}</h1>
+      {!isDefaultDisplayNameUsed && userData?.primaryWallet && (
+        <div
+          onClick={handleCopyWalletID}
+          className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"
+        >
+          <LinkIcon
+            className={'w-4 h-4'}
+          />
+          <span className="ml-1">{formatWalletAddress(userData.primaryWallet)}</span>
+        </div>
+      )}
 
       <div className="flex flex-wrap mb-4">
 

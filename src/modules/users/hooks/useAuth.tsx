@@ -1,5 +1,5 @@
 import apiGetAllEmoteNotifs from 'actions/notifs/apiGetAllEmoteNotifs'
-import { completeUserV2Login, getUserToken, initiateUserV2LoginAPI } from 'actions/users/apiUserActions'
+import { completeUserV2Login, getUserTokenPrivate, initiateUserV2LoginAPI } from 'actions/users/apiUserActions'
 import ModalService from 'components/modals/ModalService'
 import { GlobalContext } from 'lib/GlobalContext'
 import { deleteCookie } from 'modules/no-category/services/CookieService'
@@ -34,7 +34,7 @@ const useAuth = () => {
 
   const setUserFromJwt = async (jwt: string) => {
     if (jwt) {
-      const userToken = await getUserToken({ jwt })
+      const userToken = await getUserTokenPrivate({ jwt })
       if (userToken) {
         // setUser(userToken)
         setUserV2({

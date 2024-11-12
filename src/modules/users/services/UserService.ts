@@ -1,11 +1,11 @@
-import { getUserToken, initiateTwitterLoginAPI } from 'actions/users/apiUserActions'
+import { getUserTokenPrivate, initiateTwitterLoginAPI } from 'actions/users/apiUserActions'
 
 /**
  * User clicked to login to Twitter. Take user to external Twitter login page if account NOT already logged in. This should never get called when user already has JWT. The frontend just won't offer button to verify.
  * @returns true if account is already verified
  */
 export const twitterLogin = async (jwt: string | null): Promise<boolean> => {
-  const userToken = await getUserToken({ jwt })
+  const userToken = await getUserTokenPrivate({ jwt })
   const alreadyVerified = userToken?.twitterUsername
 
   if (!alreadyVerified) {
