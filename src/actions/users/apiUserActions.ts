@@ -179,6 +179,19 @@ export const getUserTokenPublic = async ({
   }
 }
 
+export type UserV2TokenPrivateResponse = {
+  id: string
+  particleUUID: string
+  wallets: ParticleWallet[]
+  primaryWallet: string
+  displayName: string
+}
+
+export type UserV2TokenPublicResponse = {
+  primaryWallet: string
+  displayName: string
+}
+
 /**
  * Get all user tokens
  */

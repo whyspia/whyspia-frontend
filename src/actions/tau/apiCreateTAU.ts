@@ -5,11 +5,11 @@ import client from 'lib/axios'
  */
 export const apiCreateTAU = async ({
   jwt,
-  receiverSymbol,
+  receiverPrimaryWallet,
   additionalMessage,
 }) => {
   const body = {
-    receiverSymbol,
+    receiverPrimaryWallet,
     additionalMessage,
   }
 

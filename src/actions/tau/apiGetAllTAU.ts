@@ -1,9 +1,10 @@
+import { UserV2TokenPublicResponse } from 'actions/users/apiUserActions'
 import client from 'lib/axios'
 
 export type TAUResponse = {
   id: string
-  senderSymbol: string
-  receiverSymbol: string
+  senderUser: UserV2TokenPublicResponse
+  receiverUser: UserV2TokenPublicResponse
   additionalMessage: string
   createdAt: Date
 }
@@ -14,8 +15,8 @@ type GetAllTAUInput = {
   limit: number
   orderBy: string
   orderDirection: string
-  senderSymbol?: null | string
-  receiverSymbol?: null | string
+  senderPrimaryWallet?: null | string
+  receiverPrimaryWallet?: null | string
   additionalMessage?: null | string
 }
 
@@ -28,8 +29,8 @@ export default async function apiGetAllTAU({
   limit,
   orderBy,
   orderDirection,
-  senderSymbol = null,
-  receiverSymbol = null,
+  senderPrimaryWallet = null,
+  receiverPrimaryWallet = null,
   additionalMessage = null,
 }: GetAllTAUInput) {
 
@@ -43,8 +44,8 @@ export default async function apiGetAllTAU({
         limit,
         orderBy,
         orderDirection,
-        senderSymbol,
-        receiverSymbol,
+        senderPrimaryWallet,
+        receiverPrimaryWallet,
         additionalMessage,
       },
     })

@@ -1,8 +1,10 @@
+"use client"
+
 import { EmoteResponse } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
 import { useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
-import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
+import { EllipsisHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import ModalService from "components/modals/ModalService"
 import SymbolSelectModal from "./SymbolSelectModal"
 import toast from 'react-hot-toast'
@@ -587,7 +589,7 @@ export const SentEmoteBlock = ({
             <EyeOffIcon className="w-6 h-6 inline text-red-500" />
           )} */}
 
-          <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+          <EllipsisHorizontalIcon className="w-5 h-5 inline text-white" />
 
 
           {optionsTooltipVisibility && (

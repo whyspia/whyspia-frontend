@@ -3,7 +3,7 @@ import A from "components/A"
 import { useContext, useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/24/outline'
-import { DotsHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
+import { EllipsisHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
 import { GlobalContext } from "lib/GlobalContext"
 import ModalService from "components/modals/ModalService"
@@ -714,7 +714,7 @@ export const NotifBlock = ({
             onClick={(event) => event.stopPropagation()}
             className="absolute right-0 top-0 z-[600] w-10 h-10 ml-2 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer"
           >
-            <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+            <EllipsisHorizontalIcon className="w-5 h-5 inline text-white" />
     
             {optionsTooltipVisibility && (
               <div
@@ -994,10 +994,10 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverSymbol })
+                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverUser?.primaryWallet })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.receiverSymbol}</A>
+            >{(notif?.notifData as TAUResponse)?.receiverUser?.displayName}</A>
           </div>
 
           <div className="mb-2">im thinking about u and just wanted u to know.</div>
@@ -1012,10 +1012,10 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderSymbol })
+                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderUser?.primaryWallet })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.senderSymbol}</A>{' '}
+            >{(notif?.notifData as TAUResponse)?.senderUser?.displayName}</A>{' '}
             at {new Date((notif?.notifData as TAUResponse)?.createdAt).toLocaleString()}
           </div>
 

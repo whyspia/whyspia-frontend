@@ -28,7 +28,7 @@ const ThinkingAboutUPage = () => {
   const [isTAUSending, setIsTAUSending] = useState(false)
 
   const fetchSentTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, senderSymbol: userV2?.primaryWallet as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, senderPrimaryWallet: userV2?.primaryWallet as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
@@ -56,7 +56,7 @@ const ThinkingAboutUPage = () => {
   )
 
   const fetchReceivedTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverSymbol: userV2?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverPrimaryWallet: userV2?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
@@ -88,10 +88,10 @@ const ThinkingAboutUPage = () => {
     setSelectedButton(desire)
   }
 
-  const [receiverSymbol, setreceiverSymbol] = useState<null | string>(null)
+  const [receiverPrimaryWallet, setReceiverPrimaryWallet] = useState<null | string>(null)
 
   const onSetReceiverChanged = debounce(async (username: string) => {
-    setreceiverSymbol(username)
+    setReceiverPrimaryWallet(username)
     // setIsValid(isExisting)
   }, 500)
 
@@ -100,27 +100,27 @@ const ThinkingAboutUPage = () => {
 
     const tau = await apiCreateTAU({
       jwt: jwtToken,
-      receiverSymbol,
+      receiverPrimaryWallet,
       additionalMessage,
     })
   
     if (tau) {
       console.log('TAU created successfully:', tau)
-      toast.success(`sent successfully to ${receiverSymbol}!`)
+      toast.success(`sent successfully to ${receiverPrimaryWallet}!`)
       queryClient.invalidateQueries([`sent-taus-${userV2?.primaryWallet}`])
     } else {
       console.error('failed to send TAU')
-      toast.success(`failed to send to ${receiverSymbol}!`)
+      toast.success(`failed to send to ${receiverPrimaryWallet}!`)
     }
 
     setIsTAUSending(false)
-    setreceiverSymbol(null)
+    setReceiverPrimaryWallet(null)
     setAdditionalMessage('')
   }
 
-  const isPossibleXUser = xUsernamePAttern.test(receiverSymbol as string)
+  const isPossibleXUser = xUsernamePAttern.test(receiverPrimaryWallet as string)
   const isSearchQueryValid = isPossibleXUser 
-  const isValid = !isTAUSending && receiverSymbol && receiverSymbol?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true) && isSearchQueryValid
+  const isValid = !isTAUSending && receiverPrimaryWallet && receiverPrimaryWallet?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true) && isSearchQueryValid
 
   const receivedTAUsData = flatten(infiniteReceivedTAUs?.pages || [])
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
@@ -238,10 +238,10 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: receiverSymbol })
+                            ModalService.open(SymbolSelectModal, { symbol: receiverPrimaryWallet })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        >{receiverSymbol}</A>
+                        >{receiverPrimaryWallet}</A>
                       </div>
 
                       <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -294,10 +294,10 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.receiverSymbol })
+                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.receiverSymbol}</A>
+                            >{sentTAU?.receiverUser?.displayName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -312,10 +312,10 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.senderSymbol })
+                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.senderSymbol}</A>{' '}
+                            >{sentTAU?.senderUser?.displayName}</A>{' '}
                             at {new Date(sentTAU?.createdAt).toLocaleString()}
                           </div>
 
@@ -341,10 +341,10 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.receiverSymbol })
+                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.receiverSymbol}</A>
+                            >{receivedTAU?.receiverUser?.displayName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -359,10 +359,10 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.senderSymbol })
+                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.senderSymbol}</A>{' '}
+                            >{receivedTAU?.senderUser?.displayName}</A>{' '}
                             at {new Date(receivedTAU?.createdAt).toLocaleString()}
                           </div>
 

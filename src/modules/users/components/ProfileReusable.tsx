@@ -289,17 +289,15 @@ const ProfileReusable = () => {
     <div className="h-screen flex flex-col items-center mt-10 px-4">
 
       <h1 className="text-4xl font-bold mb-4">{userData?.displayName}</h1>
-      {!isDefaultDisplayNameUsed && userData?.primaryWallet && (
-        <div
-          onClick={handleCopyWalletID}
-          className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"
-        >
-          <LinkIcon
-            className={'w-4 h-4'}
-          />
-          <span className="ml-1">{formatWalletAddress(userData.primaryWallet)}</span>
-        </div>
-      )}
+      <div
+        onClick={handleCopyWalletID}
+        className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"
+      >
+        <LinkIcon
+          className={'w-4 h-4'}
+        />
+        <span className="ml-1">{formatWalletAddress(userData.primaryWallet)}</span>
+      </div>
 
       <div className="flex flex-wrap mb-4">
 
