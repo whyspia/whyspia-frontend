@@ -9,6 +9,6 @@ export type UserProfile = {
 export type UserV2Profile = {
   id?: string
   primaryWallet?: string
-  displayName?: string
+  chosenPublicName?: string
   userInfo?: UserInfo
 }

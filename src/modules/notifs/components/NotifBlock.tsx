@@ -997,7 +997,7 @@ export const NotifBlock = ({
                 ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverUser?.primaryWallet })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.receiverUser?.displayName}</A>
+            >{(notif?.notifData as TAUResponse)?.receiverUser?.chosenPublicName}</A>
           </div>
 
           <div className="mb-2">im thinking about u and just wanted u to know.</div>
@@ -1015,7 +1015,7 @@ export const NotifBlock = ({
                 ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderUser?.primaryWallet })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.senderUser?.displayName}</A>{' '}
+            >{(notif?.notifData as TAUResponse)?.senderUser?.chosenPublicName}</A>{' '}
             at {new Date((notif?.notifData as TAUResponse)?.createdAt).toLocaleString()}
           </div>
 

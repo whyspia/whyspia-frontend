@@ -7,12 +7,15 @@ import { useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import {
+  useConnect,
   useAccount,
+  useConnectors,
   useAddress,
   useDisconnect,
   useParticleAuth,
   useWallets,
 } from "@particle-network/connectkit"
+import { type Connector } from '@particle-network/connector-core'
 
 const useAuth = () => {
   // Initialize account-related states from Particle's useAccount hook
@@ -40,7 +43,7 @@ const useAuth = () => {
         setUserV2({
           id: userToken?.id,
           primaryWallet: userToken?.primaryWallet,
-          displayName: userToken?.displayName,
+          chosenPublicName: userToken?.chosenPublicName,
           userInfo, // should this be from userToken instead??
         })
       }
@@ -89,6 +92,14 @@ const useAuth = () => {
     }
   }
 
+  // the reusable main method for logging out in general
+  const handleParticleAndWhyspiaDisconnect = async () => {
+    if (isConnected) {
+      await handleParticleDisconnect()
+      whyspiaLogout()
+    }
+  }
+
   const initiateWhyspiaLogin = async () => {
     try {
       // console.log('userInfo inside initWhyspiaLogin==', userInfo)
@@ -102,7 +113,7 @@ const useAuth = () => {
       setUserV2({
         id: userV2Verification?.userToken?.id,
         primaryWallet: address,
-        displayName: userV2Verification?.userToken?.displayName,
+        chosenPublicName: userV2Verification?.userToken?.chosenPublicName,
         userInfo,
       })
     } catch(err) {
@@ -116,6 +127,24 @@ const useAuth = () => {
     // close loading modal that is blocking action while user was logging in
     ModalService.closeAll()
     setIsWhyspiaLoginHappening(false)
+  }
+
+  const { connectAsync } = useConnect()
+  const connectors = useConnectors()
+
+  // the reusable main method for logging in in general
+  const handleParticleAndWhyspiaLogin = async () => {
+    if (!isConnected) {
+      try {
+        const particleEVMConnector: Connector | undefined = connectors.find(connector => connector.id === "particleEVM")
+        // console.log('connectors==', connectors)
+        await setIsWhyspiaLoginHappening(true)
+        await connectAsync({ connector: particleEVMConnector as Connector })
+        await setInitWhyspiaLoginFlag(true)
+      } catch(err) {
+        console.error('particle login failed')
+      }
+    }
   }
 
   useEffect(() => {
@@ -138,7 +167,7 @@ const useAuth = () => {
     // }
   }, [isConnected, primaryWallet, getUserInfo, address, jwtToken, isJwtLoadingFinished])
 
-  return { setUserFromJwt, whyspiaLogout, setInitWhyspiaLoginFlag, handleParticleDisconnect }
+  return { setUserFromJwt, whyspiaLogout, setInitWhyspiaLoginFlag, handleParticleAndWhyspiaDisconnect, handleParticleAndWhyspiaLogin }
 }
 
 export default useAuth

@@ -1,11 +1,10 @@
 "use client"
 
 import toast from 'react-hot-toast'
-import { debounce, flatten } from 'lodash'
+import { flatten } from 'lodash'
 import { useContext, useState } from 'react'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { GlobalContext } from 'lib/GlobalContext'
-import { twitterLogin } from 'modules/users/services/UserService'
 import classNames from 'classnames'
 import A from 'components/A'
 import ModalService from 'components/modals/ModalService'
@@ -13,13 +12,13 @@ import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import CircleSpinner from 'components/animations/CircleSpinner'
 import { apiCreateTAU } from 'actions/tau/apiCreateTAU'
 import apiGetAllTAU from 'actions/tau/apiGetAllTAU'
-
-const xUsernamePAttern = /^@?(\w){1,15}$/
+import ChoosePersonModal from 'modules/users/components/ChoosePersonModal'
+import useAuth from 'modules/users/hooks/useAuth'
 
 const ThinkingAboutUPage = () => {
   const queryClient = useQueryClient()
 
-  const { jwtToken, userV2 } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
 
   const [selectedButton, setSelectedButton] = useState('send')
 
@@ -27,13 +26,15 @@ const ThinkingAboutUPage = () => {
   const [additionalMessage, setAdditionalMessage] = useState('')
   const [isTAUSending, setIsTAUSending] = useState(false)
 
+  const { handleParticleAndWhyspiaLogin } = useAuth()
+
   const fetchSentTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, senderPrimaryWallet: userV2?.primaryWallet as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, senderPrimaryWallet: loggedInUser?.primaryWallet as string, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
   const { data: infiniteSentTAUs, fetchNextPage: fetchSentTAUsNextPage, hasNextPage: hasSentTAUsNextPage, isFetchingNextPage: isSentTAUsFetchingNextPage } = useInfiniteQuery(
-    [`sent-taus-${userV2?.primaryWallet}`,],
+    [`sent-taus-${loggedInUser?.primaryWallet}`,],
     ({ pageParam = 0 }) =>
       fetchSentTAU({
         pageParam
@@ -56,12 +57,12 @@ const ThinkingAboutUPage = () => {
   )
 
   const fetchReceivedTAU = async ({ pageParam = 0 }) => {
-    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverPrimaryWallet: userV2?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const taus = await apiGetAllTAU({ jwt: jwtToken, receiverPrimaryWallet: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return taus
   }
 
   const { data: infiniteReceivedTAUs, fetchNextPage: fetchReceivedTAUsNextPage, hasNextPage: hasReceivedTAUsNextPage, isFetchingNextPage: isReceivedTAUsFetchingNextPage } = useInfiniteQuery(
-    [`received-taus-${userV2?.primaryWallet}`,],
+    [`received-taus-${loggedInUser?.primaryWallet}`,],
     ({ pageParam = 0 }) =>
       fetchReceivedTAU({
         pageParam
@@ -88,49 +89,46 @@ const ThinkingAboutUPage = () => {
     setSelectedButton(desire)
   }
 
-  const [receiverPrimaryWallet, setReceiverPrimaryWallet] = useState<null | string>(null)
+  const [selectedPerson, setSelectedPerson] = useState<{ chosenName: string, primaryWalletSaved: string } | null>(null)
 
-  const onSetReceiverChanged = debounce(async (username: string) => {
-    setReceiverPrimaryWallet(username)
-    // setIsValid(isExisting)
-  }, 500)
+  const setNewSelectedPerson = (newSelectedPerson: { chosenName: string, primaryWalletSaved: string }) => {
+    if (newSelectedPerson) {
+      setSelectedPerson(newSelectedPerson)
+    }
+  }
 
   async function handleSendTAU() {
     setIsTAUSending(true)
 
     const tau = await apiCreateTAU({
       jwt: jwtToken,
-      receiverPrimaryWallet,
+      receiverPrimaryWallet: selectedPerson.primaryWalletSaved,
       additionalMessage,
     })
+
+    const displayedName = selectedPerson.chosenName ?? selectedPerson.primaryWalletSaved
   
     if (tau) {
       console.log('TAU created successfully:', tau)
-      toast.success(`sent successfully to ${receiverPrimaryWallet}!`)
-      queryClient.invalidateQueries([`sent-taus-${userV2?.primaryWallet}`])
+      toast.success(`sent successfully to ${displayedName}!`)
+      queryClient.invalidateQueries([`sent-taus-${loggedInUser?.primaryWallet}`])
     } else {
       console.error('failed to send TAU')
-      toast.success(`failed to send to ${receiverPrimaryWallet}!`)
+      toast.success(`failed to send to ${displayedName}!`)
     }
 
     setIsTAUSending(false)
-    setReceiverPrimaryWallet(null)
+    setSelectedPerson(null)
     setAdditionalMessage('')
   }
 
-  const isPossibleXUser = xUsernamePAttern.test(receiverPrimaryWallet as string)
-  const isSearchQueryValid = isPossibleXUser 
-  const isValid = !isTAUSending && receiverPrimaryWallet && receiverPrimaryWallet?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true) && isSearchQueryValid
+  const isValid = !isTAUSending && selectedPerson && selectedPerson?.primaryWalletSaved?.length > 0 && (bAddMessage ? additionalMessage?.length > 0 : true)
 
   const receivedTAUsData = flatten(infiniteReceivedTAUs?.pages || [])
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
 
-  const testSignMessage = async () => {
-    const msg = 'msg from backend i think'
-    // const result = await signMessage(msg)
-
-    // console.log('result of signed msg==', result)
-  }
+  const selectedPersonDisplayedName = selectedPerson?.chosenName ?? selectedPerson?.primaryWalletSaved
+  const loggedInUserDisplayedName = loggedInUser?.chosenPublicName ?? loggedInUser?.primaryWallet
 
   return (
     <div className="h-screen flex flex-col items-center mt-4 px-4">
@@ -143,17 +141,17 @@ const ThinkingAboutUPage = () => {
 
         <>
         
-          {!userV2?.primaryWallet ? (
+          {!jwtToken ? (
             <>
               <div
-                onClick={() => testSignMessage()}
+                onClick={handleParticleAndWhyspiaLogin}
                 className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
               >
-                connect X
+                login
               </div>
             </>
           ): (
-            <div className="flex flex-col justify-center items-center">
+            <div className="w-full flex flex-col justify-center items-center">
 
               <div className="flex items-center space-x-2 mb-2">
                 <button
@@ -190,22 +188,27 @@ const ThinkingAboutUPage = () => {
               {selectedButton === 'send' && (
                 <>
                 
-                  <div className="flex flex-col">
-                    <input
-                      type="text"
-                      placeholder="enter X username... (case matters)"
-                      onChange={(event) => onSetReceiverChanged(event.target.value)}
+                  <div className="w-full flex flex-col">
+                    <button
+                      onClick={() => ModalService.open(ChoosePersonModal, { setNewSelectedPerson }) }
                       className={classNames(
-                        isSearchQueryValid ? 'border-[#1d8f89]' : 'border-red-500',
-                        "p-4 text-xl border-4 shadow-lg rounded-lg mb-4"
+                        "p-4 text-xl text-left border-4",
+                        selectedPerson ? "border-[#1d8f89]" : "border-red-500",
+                        "shadow-lg rounded-lg mb-4 cursor-pointer"
                       )}
-                    />
-
-                    {!isSearchQueryValid && (
-                      <div className="text-red-500 mb-4">
-                        enter a real X username pls
-                      </div>
-                    )}
+                    >
+                      {selectedPerson ? (
+                        <>
+                          <div className="opacity-[50%] mb-2">change person to interact with...</div>
+                          <div className="p-3 rounded-lg bg-[#3a3a3a]">
+                            {selectedPerson.chosenName && (<strong>{selectedPerson.chosenName}</strong>)}
+                            <div>{selectedPerson.primaryWalletSaved}</div>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="opacity-[50%]">select person to interact with...</span>
+                      )}
+                    </button>
 
                     <div className="flex items-center space-x-2 mb-2">
                       <input
@@ -238,10 +241,10 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: receiverPrimaryWallet })
+                            ModalService.open(SymbolSelectModal, { symbol: selectedPersonDisplayedName })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        >{receiverPrimaryWallet}</A>
+                        >{selectedPersonDisplayedName}</A>
                       </div>
 
                       <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -256,10 +259,10 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: userV2?.primaryWallet })
+                            ModalService.open(SymbolSelectModal, { symbol: loggedInUserDisplayedName })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        >{userV2?.primaryWallet}</A>{' '}
+                        >{loggedInUserDisplayedName}</A>{' '}
                         at {new Date().toLocaleString()}
                       </div>
 
@@ -297,7 +300,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: sentTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.receiverUser?.displayName}</A>
+                            >{sentTAU?.receiverUser?.chosenPublicName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -315,7 +318,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: sentTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.senderUser?.displayName}</A>{' '}
+                            >{sentTAU?.senderUser?.chosenPublicName}</A>{' '}
                             at {new Date(sentTAU?.createdAt).toLocaleString()}
                           </div>
 
@@ -344,7 +347,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.receiverUser?.displayName}</A>
+                            >{receivedTAU?.receiverUser?.chosenPublicName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -362,7 +365,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.senderUser?.displayName}</A>{' '}
+                            >{receivedTAU?.senderUser?.chosenPublicName}</A>{' '}
                             at {new Date(receivedTAU?.createdAt).toLocaleString()}
                           </div>
 

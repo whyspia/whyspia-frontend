@@ -28,7 +28,7 @@ import YouGottaLoginModal from './YouGottaLoginModal'
 import { PublicPlannedPingBlock } from 'modules/contexts/pingppl/components/PublicPlannedPingBlock'
 import PlannedPingReactModal from 'modules/contexts/pingppl/components/PlannedPingReactModal'
 import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
-import { formatWalletAddress, isDefaultDisplayNameFormat } from '../utils/WalletUtils'
+import { formatWalletAddress } from '../utils/WalletUtils'
 
 const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
 
@@ -283,12 +283,10 @@ const ProfileReusable = () => {
     )
   }
 
-  const isDefaultDisplayNameUsed = userData?.displayName && isDefaultDisplayNameFormat(userData?.displayName)
-
   return (
     <div className="h-screen flex flex-col items-center mt-10 px-4">
 
-      <h1 className="text-4xl font-bold mb-4">{userData?.displayName}</h1>
+      <h1 className="text-4xl font-bold mb-4">{userData?.chosenPublicName}</h1>
       <div
         onClick={handleCopyWalletID}
         className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"

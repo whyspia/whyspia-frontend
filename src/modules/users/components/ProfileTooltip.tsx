@@ -6,16 +6,14 @@ import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
-import { useAccount, } from "@particle-network/connectkit"
 import ModalService from 'components/modals/ModalService'
 import UserSettingsModal from './UserSettingsModal'
 import { CogIcon } from '@heroicons/react/24/solid'
-import { formatWalletAddress, isDefaultDisplayNameFormat } from '../utils/WalletUtils'
+import { formatWalletAddress, isDefaultChosenPublicNameFormat } from '../utils/WalletUtils'
 
 export const ProfileTooltip = () => {
   const { userV2 } = useContext(GlobalContext)
-  const { whyspiaLogout, handleParticleDisconnect } = useAuth()
-  const { isConnected, } = useAccount()
+  const { handleParticleAndWhyspiaDisconnect } = useAuth()
 
   // const onClickSettings = async () => {
   //   // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
@@ -33,13 +31,6 @@ export const ProfileTooltip = () => {
   //   ModalService.open(ProfileSettingsModal)
   // }
 
-  const handleDisconnect = async () => {
-    if (isConnected) {
-      await handleParticleDisconnect()
-      whyspiaLogout()
-    }
-  }
-
   const handleCopyWalletID = () => {
     if (userV2?.primaryWallet) {
       copy(userV2.primaryWallet) // Copy the wallet ID to clipboard
@@ -47,7 +38,7 @@ export const ProfileTooltip = () => {
     }
   }
 
-  const isDefaultDisplayNameUsed = userV2?.displayName && isDefaultDisplayNameFormat(userV2?.displayName)
+  const isDefaultChosenPublicNameUsed = userV2?.chosenPublicName && isDefaultChosenPublicNameFormat(userV2?.chosenPublicName)
 
   return (
     <div className="flex flex-col w-64 text-black">
@@ -65,8 +56,8 @@ export const ProfileTooltip = () => {
           </div>
 
           <div className="ml-2">
-            <div className="font-medium">{userV2?.displayName}</div>
-            {!isDefaultDisplayNameUsed && userV2?.primaryWallet && (
+            <div className="font-medium">{userV2?.chosenPublicName}</div>
+            {!isDefaultChosenPublicNameUsed && userV2?.primaryWallet && (
               <div className="text-xs text-gray-500">{formatWalletAddress(userV2.primaryWallet)}</div>
             )}
           </div>
@@ -83,7 +74,7 @@ export const ProfileTooltip = () => {
         <span className="ml-2 font-medium">COPY WHYSPIA ID</span>
       </div>
 
-      {isDefaultDisplayNameUsed && (
+      {isDefaultChosenPublicNameUsed && (
         <div
           className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 bg-red-500 hover:bg-red-600 font-bold"
           onClick={() => ModalService.open(UserSettingsModal)}
@@ -102,7 +93,7 @@ export const ProfileTooltip = () => {
 
       <div
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
-        onClick={handleDisconnect}
+        onClick={handleParticleAndWhyspiaDisconnect}
       >
         <span className="ml-2 font-medium">logout</span>
       </div>

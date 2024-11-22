@@ -4,65 +4,17 @@ import Image from "next/image"
 import { useContext, useState } from "react"
 import { ProfileTooltip } from "./ProfileTooltip"
 import { BellIcon } from "@heroicons/react/24/outline"
-import {
-  ConnectButton,
-  useConnect,
-  useAccount,
-  useConnectors,
-  useModal,
-} from "@particle-network/connectkit"
-import { type Connector } from '@particle-network/connector-core'
 import useAuth from "../hooks/useAuth"
 
 export default function AuthStatusWithConnectButton() {
-  const { userV2, userNotifData, jwtToken, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
+  const { userV2, userNotifData, jwtToken } = useContext(GlobalContext)
 
   const [timerId, setTimerId] = useState(null)
   const [profileTooltipVisibility, setProfileTooltipVisibility] =
     useState<Boolean>(false)
 
-  const { connectAsync } = useConnect()
-  const { isConnected } = useAccount()
-  const connectors = useConnectors()
 
-  const { setInitWhyspiaLoginFlag } = useAuth()
-
-  const handleConnect = ({
-    address,
-    connectorId,
-  }: {
-    address?: string;
-    connectorId?: string;
-  }) => {
-    console.log("Connected with address:", address, "via connector:", connectorId)
-    // initiateWhyspiaLogin()
-  }
-
-  const handleDisconnect = () => {
-    console.log("handleDisconnect");
-  }
-
-  // const { isOpen, setOpen } = useModal({
-  //   onConnect: handleConnect,
-  //   onDisconnect: handleDisconnect,
-  // })
-
-  // const openParticleModal = () => setOpen(true)
-  // const closeParticleModal = () => setOpen(false)
-
-  const handleLogin = async () => {
-    if (!isConnected) {
-      try {
-        const particleEVMConnector: Connector | undefined = connectors.find(connector => connector.id === "particleEVM")
-        // console.log('connectors==', connectors)
-        await setIsWhyspiaLoginHappening(true)
-        await connectAsync({ connector: particleEVMConnector as Connector })
-        await setInitWhyspiaLoginFlag(true)
-      } catch(err) {
-        console.error('particle login failed')
-      }
-    }
-  }
+  const { handleParticleAndWhyspiaLogin } = useAuth()
 
   const onMouseLeaveProfileTooltip = () => {
     setTimerId(
@@ -82,7 +34,7 @@ export default function AuthStatusWithConnectButton() {
       {!jwtToken && (
         <>
           <div
-            onClick={handleLogin}
+            onClick={handleParticleAndWhyspiaLogin}
             className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
           >
             login

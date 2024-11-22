@@ -184,12 +184,12 @@ export type UserV2TokenPrivateResponse = {
   particleUUID: string
   wallets: ParticleWallet[]
   primaryWallet: string
-  displayName: string
+  chosenPublicName: string
 }
 
 export type UserV2TokenPublicResponse = {
   primaryWallet: string
-  displayName: string
+  chosenPublicName: string
 }
 
 /**
@@ -245,21 +245,21 @@ export async function checkExistingTwitterProfile(username: string) {
 }
 
 type UpdateUserTokenInput = {
-  updatedDisplayName: string
+  updatedChosenPublicName: string
   jwt: string
 }
 
 /**
- * right now just for changing displayName
+ * right now just for changing chosenPublicName
  */
 export const updateUserToken = async ({
-  updatedDisplayName,
+  updatedChosenPublicName,
   jwt,
 }: UpdateUserTokenInput) => {
-  if (!jwt || !updatedDisplayName) return null
+  if (!jwt || !updatedChosenPublicName) return null
 
   const body = {
-    updatedDisplayName
+    updatedChosenPublicName
   }
 
   try {

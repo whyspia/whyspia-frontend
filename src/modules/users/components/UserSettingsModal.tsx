@@ -12,19 +12,19 @@ const UserSettingsModal = ({
   close: () => void
 }) => {
   const { userV2, setUserV2, jwtToken, } = useContext(GlobalContext)
-  const [currentDisplayName, setCurrentDisplayName] = useState(userV2?.displayName ?? '')
-  const [newDisplayName, setNewDisplayName] = useState('')
+  const [currentChosenPublicName, setCurrentChosenPublicName] = useState(userV2?.chosenPublicName ?? '')
+  const [newChosenPublicName, setNewChosenPublicName] = useState('')
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     const updatedUserToken = await updateUserToken({
-      updatedDisplayName: newDisplayName,
+      updatedChosenPublicName: newChosenPublicName,
       jwt: jwtToken as string,
     })
 
     if (!updatedUserToken) {
-      toast.error(`failed to update display name`)
+      toast.error(`failed to update chosen public name`)
       return
     }
 
@@ -32,11 +32,11 @@ const UserSettingsModal = ({
       ...userV2, // retain previous userV2 state
       id: updatedUserToken?.id,
       primaryWallet: updatedUserToken?.primaryWallet,
-      displayName: updatedUserToken?.displayName,
+      chosenPublicName: updatedUserToken?.chosenPublicName,
       // userInfo remains unchanged
     })
 
-    setCurrentDisplayName(newDisplayName)
+    setCurrentChosenPublicName(newChosenPublicName)
   }
 
   return (
@@ -45,19 +45,19 @@ const UserSettingsModal = ({
 
         <h2 className="text-2xl font-bold mb-4">edit display name</h2>
 
-        <div>current: <span className="text-blue-500">{currentDisplayName}</span></div>
+        <div>current: <span className="text-blue-500">{currentChosenPublicName}</span></div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="chosenPublicName" className="block text-sm font-medium text-gray-700">
               display name
             </label>
             <input
               type="text"
-              id="displayName"
+              id="chosenPublicName"
               placeholder='enter new name...'
-              value={newDisplayName}
-              onChange={(e) => setNewDisplayName(e.target.value)}
+              value={newChosenPublicName}
+              onChange={(e) => setNewChosenPublicName(e.target.value)}
               className="block w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>

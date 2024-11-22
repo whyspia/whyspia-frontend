@@ -8,9 +8,9 @@ import { useAccount } from '@particle-network/connectkit'
 
 // maybe rename to UserDataInitializer or UserInitializer?
 export const ClientWrapper = ({ children }: any) => {
-  const { setJwtToken, jwtToken, setUserV2, setIsJwtLoadingFinished, isWhyspiaLoginHappening } = useContext(GlobalContext)
+  const { setJwtToken, setIsJwtLoadingFinished, isWhyspiaLoginHappening } = useContext(GlobalContext)
 
-  const { setUserFromJwt, handleParticleDisconnect } = useAuth()
+  const { setUserFromJwt, handleParticleAndWhyspiaDisconnect } = useAuth()
 
   const { isConnected, } = useAccount()
 
@@ -18,15 +18,15 @@ export const ClientWrapper = ({ children }: any) => {
     const initUserData = async () => {
       const jwtValue = getCookie('tt') || null
 
-      // If there is JWT (they are signed in or faking it), then fetch user data using JWT
-      if (jwtValue) {
+      // If there is JWT (they are signed in or faking it) AND connected to Particle, then fetch user data using JWT
+      if (jwtValue && isConnected) {
         await setUserFromJwt(jwtValue)
         setJwtToken(jwtValue)
       }
       // if no JWT, but Particle is connected AND no whyspia login is happening, then disconnect it to sync it with whyspia auth
       if (!jwtValue && isConnected && !isWhyspiaLoginHappening) {
         // console.error('~~calling Particle disconnect bc JWT expired~~')
-        handleParticleDisconnect()
+        handleParticleAndWhyspiaDisconnect()
       }
 
       setIsJwtLoadingFinished(true)  // no longer loading
