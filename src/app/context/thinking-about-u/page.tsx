@@ -89,9 +89,9 @@ const ThinkingAboutUPage = () => {
     setSelectedButton(desire)
   }
 
-  const [selectedPerson, setSelectedPerson] = useState<{ chosenName: string, primaryWalletSaved: string } | null>(null)
+  const [selectedPerson, setSelectedPerson] = useState<{ calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string } | null>(null)
 
-  const setNewSelectedPerson = (newSelectedPerson: { chosenName: string, primaryWalletSaved: string }) => {
+  const setNewSelectedPerson = (newSelectedPerson: { calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string }) => {
     if (newSelectedPerson) {
       setSelectedPerson(newSelectedPerson)
     }
@@ -106,7 +106,7 @@ const ThinkingAboutUPage = () => {
       additionalMessage,
     })
 
-    const displayedName = selectedPerson.chosenName ?? selectedPerson.primaryWalletSaved
+    const displayedName = selectedPerson.calculatedDisplayName ?? selectedPerson.primaryWalletSaved
   
     if (tau) {
       console.log('TAU created successfully:', tau)
@@ -127,7 +127,7 @@ const ThinkingAboutUPage = () => {
   const receivedTAUsData = flatten(infiniteReceivedTAUs?.pages || [])
   const sentTAUsData = flatten(infiniteSentTAUs?.pages || [])
 
-  const selectedPersonDisplayedName = selectedPerson?.chosenName ?? selectedPerson?.primaryWalletSaved
+  const selectedPersonDisplayedName = selectedPerson?.calculatedDisplayName ?? selectedPerson?.primaryWalletSaved
   const loggedInUserDisplayedName = loggedInUser?.chosenPublicName ?? loggedInUser?.primaryWallet
 
   return (
@@ -201,7 +201,7 @@ const ThinkingAboutUPage = () => {
                         <>
                           <div className="opacity-[50%] mb-2">change person to interact with...</div>
                           <div className="p-3 rounded-lg bg-[#3a3a3a]">
-                            {selectedPerson.chosenName && (<strong>{selectedPerson.chosenName}</strong>)}
+                            {selectedPerson.calculatedDisplayName && (<strong>{selectedPerson.calculatedDisplayName}</strong>)}
                             <div>{selectedPerson.primaryWalletSaved}</div>
                           </div>
                         </>
@@ -300,7 +300,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: sentTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.receiverUser?.chosenPublicName}</A>
+                            >{sentTAU?.receiverUser?.calculatedDisplayName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -318,7 +318,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: sentTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.senderUser?.chosenPublicName}</A>{' '}
+                            >{sentTAU?.senderUser?.calculatedDisplayName}</A>{' '}
                             at {new Date(sentTAU?.createdAt).toLocaleString()}
                           </div>
 
@@ -347,7 +347,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.receiverUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.receiverUser?.chosenPublicName}</A>
+                            >{receivedTAU?.receiverUser?.calculatedDisplayName}</A>
                           </div>
 
                           <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
@@ -365,7 +365,7 @@ const ThinkingAboutUPage = () => {
                                 ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.senderUser?.primaryWallet })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{receivedTAU?.senderUser?.chosenPublicName}</A>{' '}
+                            >{receivedTAU?.senderUser?.calculatedDisplayName}</A>{' '}
                             at {new Date(receivedTAU?.createdAt).toLocaleString()}
                           </div>
 

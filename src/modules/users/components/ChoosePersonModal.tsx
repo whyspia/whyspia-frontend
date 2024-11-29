@@ -7,7 +7,7 @@ import apiGetAllSavedPersons from 'actions/saved-person/apiGetAllSavedPersons';
 import Modal from 'components/modals/Modal'
 import { GlobalContext } from 'lib/GlobalContext';
 import { useContext, useState } from 'react';
-import { isValidWalletAddress } from '../utils/WalletUtils';
+import { formatWalletAddress, isValidWalletAddress } from '../utils/WalletUtils';
 import { apiCreateSavedPerson } from 'actions/saved-person/apiCreateSavedPerson';
 
 const MockContacts = [
@@ -21,12 +21,12 @@ export default function ChoosePersonModal({
   setNewSelectedPerson,
 }: {
   close: () => void
-  setNewSelectedPerson: (newSelectedPerson: { chosenName: string, primaryWalletSaved: string }) => void
+  setNewSelectedPerson: (newSelectedPerson: { calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string }) => void
 }) {
   const queryClient = useQueryClient()
 
   const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
-  const [selectedPerson, setSelectedPerson] = useState<{ chosenName: string, primaryWalletSaved: string } | null>(null)
+  const [selectedPerson, setSelectedPerson] = useState<{ calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string } | null>(null)
   const [personInput, setPersonInput] = useState('')
   const [showCreateSavedPersonPrompt, setShowCreateSavedPersonPrompt] = useState(false)
 
@@ -71,6 +71,9 @@ export default function ChoosePersonModal({
 
   const handleSavedPersonClick = (selectedPerson) => {
     setSelectedPerson({
+      // only time there should be no primaryWalletSavedUser?.calculatedDisplayName is if there is no user token for that user...
+      // currently you can indeed save wallets that have no userToken in our system...soooo yea
+      calculatedDisplayName: selectedPerson.primaryWalletSavedUser?.calculatedDisplayName ?? selectedPerson.chosenName,
       chosenName: selectedPerson.chosenName,
       primaryWalletSaved: selectedPerson.primaryWalletSaved
     })
@@ -101,7 +104,8 @@ export default function ChoosePersonModal({
 
   const handleSkipSaving = () => {
     setShowCreateSavedPersonPrompt(false)
-    setSelectedPerson({ chosenName: null, primaryWalletSaved: personInput })
+    // NOTE how despite no chosenName there is still a calculatedDisplayName
+    setSelectedPerson({ calculatedDisplayName: formatWalletAddress(personInput), chosenName: null, primaryWalletSaved: personInput })
   }
 
   const handleConfirmSelectedPerson = () => {
@@ -174,7 +178,7 @@ export default function ChoosePersonModal({
             </div>
 
             <div className="p-3 rounded-lg border-4 bg-[#3a3a3a] border-[#1d8f89]">
-              {selectedPerson.chosenName && (<strong>{selectedPerson.chosenName}</strong>)}
+              <strong>{selectedPerson?.calculatedDisplayName ?? selectedPerson.chosenName}</strong>
               <div>{selectedPerson.primaryWalletSaved}</div>
               {/* <small>last interaction: meep</small> */}
             </div>
@@ -192,7 +196,7 @@ export default function ChoosePersonModal({
                 className="p-3 rounded-lg mb-2 cursor-pointer hover:bg-[#3a3a3a] hover:border-[#1d8f89] border-4 "
                 onClick={() => handleSavedPersonClick(savedPerson)}
               >
-                <strong>{savedPerson.chosenName}</strong>
+                <strong>{savedPerson.primaryWalletSavedUser?.calculatedDisplayName ?? savedPerson.chosenName}</strong>
                 <div>{savedPerson.primaryWalletSaved}</div>
                 {/* <small>last interaction: meep</small> */}
               </div>
@@ -209,7 +213,7 @@ export default function ChoosePersonModal({
             onClick={handleConfirmSelectedPerson}
             className="mt-4 px-4 py-2 bg-[#1d8f89] text-white rounded-md"
           >
-            Confirm Selected Person
+            confirm selected person
           </button>
         )}
 
