@@ -155,6 +155,7 @@ export const getUserTokenPrivate = async ({
 
 type GetUserTokenPublicInput = {
   primaryWallet?: string | null
+  jwt?: string | null
 }
 
 /**
@@ -162,6 +163,7 @@ type GetUserTokenPublicInput = {
  */
 export const getUserTokenPublic = async ({
   primaryWallet = null,
+  jwt = null,
 }: GetUserTokenPublicInput) => {
   if (!primaryWallet) return null
 
@@ -169,6 +171,9 @@ export const getUserTokenPublic = async ({
     const response = await client.get(`/user-v2/single-public`, {
       params: {
         primaryWallet,
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
       },
     })
 

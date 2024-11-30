@@ -1,7 +1,8 @@
+"use client"
+
 import Modal from 'components/modals/Modal'
 import classNames from 'classnames'
 import A from 'components/A'
-import { useRouter } from 'next/router'
 
 
 export default function SymbolSelectModal({
@@ -11,16 +12,8 @@ export default function SymbolSelectModal({
   close: () => void
   symbol: string
 }) {
-  const router = useRouter()
 
   const onOptionSelected = (option: string) => {
-    if (option === 'symbol') {
-      router.push(`/symbol/${symbol}`)
-    } else if (option === 'user') {
-      router.push(`/u/${symbol}`)
-    }
-    
-
     close()
   }
 
@@ -33,6 +26,7 @@ export default function SymbolSelectModal({
         <div className="flex flex-wrap justify-center mt-6">
           <A
             onClick={() => onOptionSelected('symbol')}
+            href={`/symbol/${symbol}`}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
@@ -42,6 +36,7 @@ export default function SymbolSelectModal({
 
           <A
             onClick={() => onOptionSelected('user')}
+            href={`/u/${symbol}`}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}

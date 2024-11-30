@@ -14,6 +14,7 @@ import { apiCreateTAU } from 'actions/tau/apiCreateTAU'
 import apiGetAllTAU from 'actions/tau/apiGetAllTAU'
 import ChoosePersonModal from 'modules/users/components/ChoosePersonModal'
 import useAuth from 'modules/users/hooks/useAuth'
+import PersonClickModal from 'modules/users/components/PersonClickModal'
 
 const ThinkingAboutUPage = () => {
   const queryClient = useQueryClient()
@@ -241,7 +242,7 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: selectedPersonDisplayedName })
+                            ModalService.open(PersonClickModal, { userToken: selectedPerson })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
                         >{selectedPersonDisplayedName}</A>
@@ -259,7 +260,7 @@ const ThinkingAboutUPage = () => {
                         <A
                           onClick={(event) => {
                             event.stopPropagation()
-                            ModalService.open(SymbolSelectModal, { symbol: loggedInUserDisplayedName })
+                            ModalService.open(PersonClickModal, { userToken: loggedInUser })
                           }}
                           className="text-blue-500 hover:text-blue-700 cursor-pointer"
                         >{loggedInUserDisplayedName}</A>{' '}
@@ -297,7 +298,7 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.receiverUser?.primaryWallet })
+                                ModalService.open(PersonClickModal, { userToken: sentTAU?.receiverUser })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
                             >{sentTAU?.receiverUser?.calculatedDisplayName}</A>
@@ -315,7 +316,7 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: sentTAU?.senderUser?.primaryWallet })
+                                ModalService.open(PersonClickModal, { userToken: sentTAU?.senderUser })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
                             >{sentTAU?.senderUser?.calculatedDisplayName}</A>{' '}
@@ -344,7 +345,7 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.receiverUser?.primaryWallet })
+                                ModalService.open(PersonClickModal, { userToken: receivedTAU?.receiverUser })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
                             >{receivedTAU?.receiverUser?.calculatedDisplayName}</A>
@@ -362,7 +363,7 @@ const ThinkingAboutUPage = () => {
                             <A
                               onClick={(event) => {
                                 event.stopPropagation()
-                                ModalService.open(SymbolSelectModal, { symbol: receivedTAU?.senderUser?.primaryWallet })
+                                ModalService.open(PersonClickModal, { userToken: receivedTAU?.senderUser })
                               }}
                               className="text-blue-500 hover:text-blue-700 cursor-pointer"
                             >{receivedTAU?.senderUser?.calculatedDisplayName}</A>{' '}

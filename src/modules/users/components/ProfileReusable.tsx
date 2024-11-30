@@ -46,10 +46,11 @@ const ProfileReusable = () => {
     () =>
       getUserTokenPublic({
         primaryWallet,
+        jwt: jwtToken,
       }),
-    // {
-    //   enabled: !isTxPending,
-    // }
+    {
+      enabled: Boolean(jwtToken),
+    }
   )
 
   const [activeTab, setActiveTab] = useState<string | null>(null)
@@ -283,10 +284,15 @@ const ProfileReusable = () => {
     )
   }
 
+  const showCalculatedDisplayNameIfDiff = (userData?.calculatedDisplayName && userData?.calculatedDisplayName !== userData?.chosenPublicName) ? userData?.calculatedDisplayName : null
+
   return (
     <div className="h-screen flex flex-col items-center mt-10 px-4">
 
-      <h1 className="text-4xl font-bold mb-4">{userData?.chosenPublicName}</h1>
+      <h1 className="text-4xl font-bold mb-4">
+        {userData?.chosenPublicName}
+        {showCalculatedDisplayNameIfDiff && (<span className="text-xs ml-2">({userData?.calculatedDisplayName})</span>)}
+      </h1>
       <div
         onClick={handleCopyWalletID}
         className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"

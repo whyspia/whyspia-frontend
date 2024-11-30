@@ -1,8 +1,9 @@
 "use client"
 
 import { EmoteNotifResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
+import { UserV2PrivateProfile } from 'modules/users/types/UserNameTypes'
 import React, { useState } from 'react'
-import { UserProfile, UserV2Profile } from 'types/customTypes'
+import { UserProfile } from 'types/customTypes'
 
 interface GlobalContextState {
   isWhyspiaLoginHappening: boolean
@@ -12,7 +13,7 @@ interface GlobalContextState {
   jwtToken: null | string
   setJwtToken: (val: string | null) => void
   user: UserProfile
-  userV2: UserV2Profile
+  userV2: UserV2PrivateProfile
   setUser: (val: any) => void
   setUserV2: (val: any) => void
   isModalServiceLoaded: boolean
@@ -33,7 +34,7 @@ export const initialState: GlobalContextState = {
   user: {},
   userV2: {},
   setUser: (val: UserProfile) => {},
-  setUserV2: (val: UserV2Profile) => {},
+  setUserV2: (val: UserV2PrivateProfile) => {},
   isModalServiceLoaded: false,
   setIsModalServiceLoaded: (val: boolean) => {},
 
