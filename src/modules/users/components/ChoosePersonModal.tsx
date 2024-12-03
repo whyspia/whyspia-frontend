@@ -10,11 +10,6 @@ import { useContext, useState } from 'react';
 import { formatWalletAddress, isValidWalletAddress } from '../utils/WalletUtils';
 import { apiCreateSavedPerson } from 'actions/saved-person/apiCreateSavedPerson';
 
-const MockContacts = [
-  { username: 'vitalik.eth', name: 'Vitalik', lastInteraction: '2 hours ago' },
-  { username: 'CryptoKitties', name: 'Kitties Official', lastInteraction: '1 day ago' },
-  { username: 'web3_world', name: 'Web3 News', lastInteraction: '3 days ago' },
-]
 
 export default function ChoosePersonModal({
   close,
@@ -47,7 +42,7 @@ export default function ChoosePersonModal({
   }
 
   const { data: infiniteSavedPersons, fetchNextPage: fetchSavedPersonsNextPage, hasNextPage: hasSavedPersonsNextPage, isFetchingNextPage: isSavedPersonsFetchingNextPage, refetch: refetchSavedPersons } = useInfiniteQuery(
-    [`saved-persons-${loggedInUser?.primaryWallet}`, personInput],
+    [`saved-persons-${loggedInUser?.primaryWallet}`, personInput?.toLowerCase()],
     ({ pageParam = 0 }) =>
       fetchSavedPersons({
         pageParam
@@ -88,7 +83,7 @@ export default function ChoosePersonModal({
       if (results) {
         console.log('new person saved successfully')
         toast.success(`new person named "${chosenName}" saved successfully!`)
-        queryClient.invalidateQueries([`saved-persons-${loggedInUser?.primaryWallet}`, personInput])
+        queryClient.invalidateQueries([`saved-persons-${loggedInUser?.primaryWallet}`, personInput?.toLowerCase()])
 
         setShowCreateSavedPersonPrompt(false)
         const itemOneOfSavedPersonsList = savedPersonsData[0];
@@ -131,9 +126,7 @@ export default function ChoosePersonModal({
 
         <input
           type="text"
-          className={`w-full px-4 py-4 text-lg border-4 rounded-lg mb-4 ${personInput && !MockContacts.some((contact) =>
-            contact.username.toLowerCase() === personInput.toLowerCase()
-          ) ? 'border-[#ef4444]' : 'border-[#1d8f89]'}`}
+          className={`w-full px-4 py-4 text-lg border-4 rounded-lg mb-4 border-[#1d8f89]`}
           placeholder="search person OR paste whyspiaID..."
           value={personInput}
           onChange={(e) => {
@@ -143,7 +136,7 @@ export default function ChoosePersonModal({
 
         {showCreateSavedPersonPrompt && (
           <div className="bg-[#e5fff3] p-4 rounded-lg border-2 border-[#1d8f89] mb-4">
-            <p className="text-black text-sm font-bold">would you like to save a new person for this new whyspiaID "{personInput}"?</p>
+            <p className="text-black text-sm font-bold">would you like to save a person for this new whyspiaID "{personInput}"?</p>
             <div className="text-black text-xs">NOTE: this is good idea for people you plan to interact with more than once</div>
             
             <div className="flex gap-2 mt-2">
@@ -202,9 +195,15 @@ export default function ChoosePersonModal({
               </div>
             ))}
 
-            {hasSavedPersonsNextPage && <button onClick={() => fetchSavedPersonsNextPage()} disabled={!hasSavedPersonsNextPage || isSavedPersonsFetchingNextPage}>
-              {isSavedPersonsFetchingNextPage ? 'Loading...' : 'Load More'}
-            </button>}
+            {hasSavedPersonsNextPage && (
+              <button 
+                onClick={() => fetchSavedPersonsNextPage()} 
+                disabled={!hasSavedPersonsNextPage || isSavedPersonsFetchingNextPage}
+                className="mt-2 px-2 py-1 bg-[#1d8f89] text-white rounded-md hover:opacity-[75%]"
+              >
+                {isSavedPersonsFetchingNextPage ? 'Loading...' : 'load more'}
+              </button>
+            )}
           </div>
         </div>
 

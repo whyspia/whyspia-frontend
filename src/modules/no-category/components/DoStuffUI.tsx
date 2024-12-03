@@ -10,6 +10,7 @@ import DefineUI from 'modules/symbol/components/DefineUI'
 import BreadcrumbAccordion from './BreadcrumbAccordion'
 import GoToContext from 'modules/context/components/GoToContext'
 import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import SavedPeopleUI from 'modules/users/components/SavedPeopleUI'
 
 
 export default function DoStuffUI({
@@ -18,7 +19,7 @@ export default function DoStuffUI({
   close?: () => void
 }) {
   const { jwtToken, user } = useContext(GlobalContext)
-  const { whyspiaLogout } = useAuth()
+  const { handleParticleAndWhyspiaLogin, handleParticleAndWhyspiaDisconnect } = useAuth()
 
   const doStuffItems = [
     {
@@ -64,16 +65,35 @@ export default function DoStuffUI({
           )
         },
         {
+          label: 'ur saved people',
+          content: (
+            <>
+              {!jwtToken ? (
+                <>
+                  <div
+                    onClick={handleParticleAndWhyspiaLogin}
+                    className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
+                  >
+                    login
+                  </div>
+                </>
+              ) : (
+                <SavedPeopleUI />
+              )}
+            </>
+          )
+        },
+        {
           label: 'define symbol',
           content: (
             <>
-              {!user?.twitterUsername ? (
+              {!jwtToken ? (
                 <>
                   <div
-                    onClick={() => twitterLogin(null)}
+                    onClick={handleParticleAndWhyspiaLogin}
                     className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
                   >
-                    connect X
+                    login
                   </div>
                 </>
               ) : (
@@ -88,12 +108,12 @@ export default function DoStuffUI({
           onClick: () => close ? close() : null,
         },
         {
-          label: 'connect X',
-          onClick: jwtToken ? () => toast.error(`ur already connected yo`) : () => twitterLogin(null),
+          label: 'login',
+          onClick: jwtToken ? () => toast.error(`ur already connected yo`) : handleParticleAndWhyspiaLogin,
         },
         {
-          label: 'disconnect X',
-          onClick: jwtToken ? () => whyspiaLogout() : () => toast.error(`ur already disconnected yo`),
+          label: 'logout',
+          onClick: jwtToken ? handleParticleAndWhyspiaDisconnect : () => toast.error(`ur already disconnected yo`),
         },
         {
           label: 'all pages',

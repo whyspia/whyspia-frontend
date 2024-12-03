@@ -1,6 +1,6 @@
 import A from 'components/A'
 import useAuth from '../hooks/useAuth'
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { LinkIcon, UserIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
@@ -10,6 +10,7 @@ import ModalService from 'components/modals/ModalService'
 import UserSettingsModal from './UserSettingsModal'
 import { CogIcon } from '@heroicons/react/24/solid'
 import { formatWalletAddress, isDefaultChosenPublicNameFormat } from '../utils/WalletUtils'
+import SavedPeopleModal from './SavedPeopleModal'
 
 export const ProfileTooltip = () => {
   const { userV2 } = useContext(GlobalContext)
@@ -68,9 +69,7 @@ export const ProfileTooltip = () => {
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
         onClick={handleCopyWalletID}
       >
-        <LinkIcon
-          className={'w-5 h-5'}
-        />
+        <LinkIcon className={'w-5 h-5'} />
         <span className="ml-2 font-medium">COPY WHYSPIA ID</span>
       </div>
 
@@ -85,6 +84,14 @@ export const ProfileTooltip = () => {
 
       <div
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
+        onClick={() => ModalService.open(SavedPeopleModal)}
+      >
+        <UserIcon className={'w-5 h-5'} />
+        <span className="ml-2 font-medium">saved people</span>
+      </div>
+
+      <div
+        className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
         onClick={() => ModalService.open(UserSettingsModal)}
       >
         <CogIcon className="w-6 h-6 text-gray-400" />
@@ -95,6 +102,7 @@ export const ProfileTooltip = () => {
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-gray-300"
         onClick={handleParticleAndWhyspiaDisconnect}
       >
+        <ArrowLeftEndOnRectangleIcon className={'w-5 h-5'} />
         <span className="ml-2 font-medium">logout</span>
       </div>
     </div>

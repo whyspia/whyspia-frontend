@@ -8,6 +8,10 @@ import { UserV2PublicProfile } from '../types/UserNameTypes'
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { formatWalletAddress } from '../utils/WalletUtils'
+import { apiUpdateSavedPerson } from 'actions/saved-person/apiUpdateSavedPerson'
+import { useContext, useState } from 'react'
+import { useQueryClient } from "react-query"
+import { GlobalContext } from 'lib/GlobalContext'
 
 
 export default function PersonClickModal({
@@ -17,6 +21,10 @@ export default function PersonClickModal({
   close: () => void
   userToken: UserV2PublicProfile
 }) {
+  const queryClient = useQueryClient()
+  const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
+
+  const [displayedName, setDisplayedName] = useState(userToken.calculatedDisplayName ?? userToken.chosenPublicName)
 
   const onOptionSelected = (option: string) => {
     close()
@@ -24,19 +32,48 @@ export default function PersonClickModal({
 
   const handleCopyWalletID = () => {
     copy(userToken.primaryWallet) // Copy the wallet ID to clipboard
-    toast.success('whyspia ID copied to clipboard') // Show success toast
+    toast.success('whyspiaID copied to clipboard')
+  }
+
+  const handleEditSavedName = async () => {
+    const newChosenName = prompt('enter a new name for this person:')
+    if (newChosenName) {
+      const result = await apiUpdateSavedPerson({
+        jwt: jwtToken,
+        savedPersonID: userToken.id,
+        updatedChosenName: newChosenName,
+      })
+
+      if (result) {
+        setDisplayedName(newChosenName)
+        toast.success(`new name "${newChosenName}" saved successfully!`)
+        // invalidate any key starting with saved-persons-${loggedInUser?.primaryWallet}
+        queryClient.invalidateQueries({
+          predicate: (query) => 
+            query.queryKey[0].toString().startsWith(`saved-persons-${loggedInUser?.primaryWallet}`)
+        })
+
+      } else {
+        console.error('failed to save new name')
+        toast.error(`failed to save new name ${newChosenName}`)
+      }
+    }
   }
 
   const primaryWallet = userToken?.primaryWallet
-  const chosenPublicName = userToken?.chosenPublicName
-  const calculatedDisplayName = userToken?.calculatedDisplayName
 
   return (
     <Modal close={close}>
-      <div className="p-6 w-96 md:w-[30rem] text-white">
+      <div className="relative p-6 w-96 md:w-[30rem] text-white">
+
+        {userToken?.isRequestedUserSavedByRequestingUser && (
+          <div className="absolute top-0 right-0 bg-[#1d8f89]/[0.5] border-b-2 border-l-2 border-[#1d8f89] rounded-bl-lg text-white p-2 text-xs">
+            you saved this person
+          </div>
+        )}
 
         {/* really only time there is no calculatedDisplayName iz if privateUserToken */}
-        <div className="text-2xl font-bold mb-4">{calculatedDisplayName ?? chosenPublicName}</div>
+        <div className="text-2xl font-bold mb-4">{displayedName}</div>
         <div
           onClick={handleCopyWalletID}
           className="text-xs text-gray-500 mb-4 flex items-center cursor-pointer"
@@ -67,6 +104,15 @@ export default function PersonClickModal({
           >
             go to user profile
           </A>
+
+          {userToken?.isRequestedUserSavedByRequestingUser && (
+            <button
+              onClick={handleEditSavedName}
+              className="p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer"
+            >
+              edit saved name
+            </button>
+          )}
         </div>
 
 
