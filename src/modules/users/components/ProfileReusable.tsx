@@ -72,7 +72,7 @@ const ProfileReusable = () => {
   }, [symbol])
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
-    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.primaryWallet, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: userData?.primaryWallet, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return definedEvents
   }
 
@@ -100,7 +100,7 @@ const ProfileReusable = () => {
   )
 
   const fetchSentEvents = async ({ pageParam = 0 }) => {
-    const sentEvents = await apiGetAllSentEvents({ eventSender: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const sentEvents = await apiGetAllSentEvents({ eventSender: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return sentEvents
   }
 
@@ -212,7 +212,7 @@ const ProfileReusable = () => {
   )
 
   const fetchLoggedInUsersPingpplFollows = async ({ pageParam = 0 }) => {
-    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.primaryWallet, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const follows = await apiGetAllPingpplFollows({ eventSender: userData?.primaryWallet, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return follows
   }
 
@@ -390,7 +390,7 @@ const ProfileReusable = () => {
               onClick={(event) => ModalService.open(PlannedPingReactModal, { plannedEvent: sentEvent?.definedEvent })}
               className="relative w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
             >
-              <div className="">{sentEvent?.eventSender} sent{' '}
+              <div className="">{sentEvent?.eventSenderUser?.calculatedDisplayName} sent{' '}
               <A
                 onClick={(e) => {
                   e.stopPropagation()

@@ -1,8 +1,10 @@
+"use client"
+
 import { EmoteNotifSingleResponse, EmoteResponse, NOTIF_TYPE } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
 import { useContext, useEffect, useRef, useState } from "react"
 import { formatTimeAgo } from "utils/randomUtils"
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/24/outline'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { EllipsisHorizontalIcon, ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { apiUpdateEmoteNotif } from "actions/notifs/apiUpdateEmoteNotif"
 import { GlobalContext } from "lib/GlobalContext"
@@ -22,6 +24,7 @@ import { TAUResponse } from "actions/tau/apiGetAllTAU"
 import TAUNotifReactModal from "modules/contexts/tau/components/TAUNotifReactModal"
 import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
 import NouEmoteBlockReactModal from "modules/contexts/nou/components/NouEmoteBlockReactModal"
+import PersonClickModal from "modules/users/components/PersonClickModal"
 
 
 export const NotifBlock = ({
@@ -141,6 +144,7 @@ export const NotifBlock = ({
     toast.success('Copied emote page URL')
   }
 
+  // TODO: havent touched this since new user system lolz
   if (notif?.notifType === NOTIF_TYPE.EMOTE) {
 
     if (notif?.context === EMOTE_CONTEXTS.NOU) {
@@ -159,7 +163,7 @@ export const NotifBlock = ({
               {clientHasReadDirectly ? (
                 <EyeIcon className="w-6 h-6 inline text-green-500" />
               ) : (
-                <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+                <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
               )}
   
               {notifTooltipVisibility && (
@@ -176,13 +180,13 @@ export const NotifBlock = ({
                       onMarkSeenChanged(true)
                       }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                       <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                      <span>Mark seen</span>
+                      <span>mark seen</span>
                     </div>
                     <div onClick={(event) => {
                       event.stopPropagation()
                       onMarkSeenChanged(false)}} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                      <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                      <span>Mark unseen</span>
+                      <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                      <span>mark unseen</span>
                     </div>
                   </div>
                 </div>
@@ -320,7 +324,7 @@ export const NotifBlock = ({
                   {clientHasReadDirectly ? (
                     <EyeIcon className="w-6 h-6 inline text-green-500" />
                   ) : (
-                    <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+                    <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
                   )}
     
                   {notifTooltipVisibility && (
@@ -337,14 +341,14 @@ export const NotifBlock = ({
                           onMarkSeenChanged(true)
                         }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                           <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                          <span>Mark seen</span>
+                          <span>mark seen</span>
                         </div>
                         <div onClick={(event) => {
                           event.stopPropagation()
                           onMarkSeenChanged(false)
                         }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                          <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                          <span>Mark unseen</span>
+                          <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                          <span>mark unseen</span>
                         </div>
                       </div>
                     </div>
@@ -567,7 +571,7 @@ export const NotifBlock = ({
                 {clientHasReadDirectly ? (
                   <EyeIcon className="w-6 h-6 inline text-green-500" />
                 ) : (
-                  <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+                  <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
                 )}
     
                 {notifTooltipVisibility && (
@@ -584,13 +588,13 @@ export const NotifBlock = ({
                         onMarkSeenChanged(true)
                         }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                         <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                        <span>Mark seen</span>
+                        <span>mark seen</span>
                       </div>
                       <div onClick={(event) => {
                         event.stopPropagation()
                         onMarkSeenChanged(false)}} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                        <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                        <span>Mark unseen</span>
+                        <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                        <span>mark unseen</span>
                       </div>
                     </div>
                   </div>
@@ -738,8 +742,8 @@ export const NotifBlock = ({
                   </div>
     
                   {/* <div onClick={() => onMarkSeenChanged(false)} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                    <span>Mark unseen</span>
+                    <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>mark unseen</span>
                   </div> */}
     
                 </div>
@@ -770,7 +774,7 @@ export const NotifBlock = ({
             {clientHasReadDirectly ? (
               <EyeIcon className="w-6 h-6 inline text-green-500" />
             ) : (
-              <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+              <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
             )}
 
             {notifTooltipVisibility && (
@@ -787,14 +791,14 @@ export const NotifBlock = ({
                     onMarkSeenChanged(true)
                   }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                     <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                    <span>Mark seen</span>
+                    <span>mark seen</span>
                   </div>
                   <div onClick={(event) => {
                     event.stopPropagation()
                     onMarkSeenChanged(false)
                   }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                    <span>Mark unseen</span>
+                    <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>mark unseen</span>
                   </div>
                 </div>
               </div>
@@ -806,11 +810,12 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplFollowResponse)?.followSender })
+                // ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplFollowResponse)?.followSender })
+                ModalService.open(PersonClickModal, { userToken: (notif?.notifData as PingpplFollowResponse)?.followSenderUser })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
             >
-              {(notif?.notifData as PingpplFollowResponse)?.followSender}
+              {(notif?.notifData as PingpplFollowResponse)?.followSenderUser?.calculatedDisplayName}
             </A>{' '}
             followed your planned ping:{' '}
             <A
@@ -854,7 +859,7 @@ export const NotifBlock = ({
             {clientHasReadDirectly ? (
               <EyeIcon className="w-6 h-6 inline text-green-500" />
             ) : (
-              <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+              <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
             )}
 
             {notifTooltipVisibility && (
@@ -871,14 +876,14 @@ export const NotifBlock = ({
                     onMarkSeenChanged(true)
                   }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                     <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                    <span>Mark seen</span>
+                    <span>mark seen</span>
                   </div>
                   <div onClick={(event) => {
                     event.stopPropagation()
                     onMarkSeenChanged(false)
                   }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                    <span>Mark unseen</span>
+                    <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>mark unseen</span>
                   </div>
                 </div>
               </div>
@@ -890,11 +895,12 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplSentEventResponse)?.eventSender })
+                // ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as PingpplSentEventResponse)?.eventSender })
+                ModalService.open(PersonClickModal, { userToken: (notif?.notifData as PingpplSentEventResponse)?.eventSenderUser })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
             >
-              {(notif?.notifData as PingpplSentEventResponse)?.eventSender}
+              {(notif?.notifData as PingpplSentEventResponse)?.eventSenderUser?.calculatedDisplayName}
             </A>{' '}
             pinged:{' '}
             <A
@@ -938,7 +944,7 @@ export const NotifBlock = ({
             {clientHasReadDirectly ? (
               <EyeIcon className="w-6 h-6 inline text-green-500" />
             ) : (
-              <EyeOffIcon className="w-6 h-6 inline text-red-500" />
+              <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
             )}
 
             {notifTooltipVisibility && (
@@ -955,14 +961,14 @@ export const NotifBlock = ({
                     onMarkSeenChanged(true)
                   }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
                     <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
-                    <span>Mark seen</span>
+                    <span>mark seen</span>
                   </div>
                   <div onClick={(event) => {
                     event.stopPropagation()
                     onMarkSeenChanged(false)
                   }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
-                    <EyeOffIcon className="w-4 h-4 mr-1 inline text-red-500" />
-                    <span>Mark unseen</span>
+                    <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>mark unseen</span>
                   </div>
                 </div>
               </div>
@@ -971,6 +977,7 @@ export const NotifBlock = ({
           </div>
 
           <div>
+            someone is{' '}
             <A
               onClick={(event) => {
                 event.stopPropagation()
@@ -979,7 +986,7 @@ export const NotifBlock = ({
               className="text-purple-500 hover:text-purple-700 cursor-pointer"
             >
               {(notif)?.context ?? 'no context'}
-            </A> notification - {formatTimeAgo((notif as any)?.createdAt)}
+            </A> - {formatTimeAgo((notif as any)?.createdAt)}
 
             
 
@@ -994,16 +1001,17 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverUser?.primaryWallet })
+                // ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.receiverUser?.primaryWallet })
+                ModalService.open(PersonClickModal, { userToken: (notif?.notifData as TAUResponse)?.receiverUser })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.receiverUser?.chosenPublicName}</A>
+            >{(notif?.notifData as TAUResponse)?.receiverUser?.calculatedDisplayName}</A>
           </div>
 
-          <div className="mb-2">im thinking about u and just wanted u to know.</div>
+          <div className="mb-2 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
 
           {(notif?.notifData as TAUResponse)?.additionalMessage && (notif?.notifData as TAUResponse)?.additionalMessage?.length > 0 && (
-            <div className="mb-2">
+            <div className="mb-2 whitespace-pre-wrap break-words leading-5 italic">
               {(notif?.notifData as TAUResponse)?.additionalMessage}
             </div>
           )}
@@ -1012,10 +1020,11 @@ export const NotifBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderUser?.primaryWallet })
+                // ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as TAUResponse)?.senderUser?.primaryWallet })
+                ModalService.open(PersonClickModal, { userToken: (notif?.notifData as TAUResponse)?.senderUser })
               }}
               className="text-blue-500 hover:text-blue-700 cursor-pointer"
-            >{(notif?.notifData as TAUResponse)?.senderUser?.chosenPublicName}</A>{' '}
+            >{(notif?.notifData as TAUResponse)?.senderUser?.calculatedDisplayName}</A>{' '}
             at {new Date((notif?.notifData as TAUResponse)?.createdAt).toLocaleString()}
           </div>
 

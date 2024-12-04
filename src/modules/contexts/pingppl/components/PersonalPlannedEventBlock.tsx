@@ -1,11 +1,14 @@
+"use client"
+
 // it's personal bc has options for editing and deleting the planned event
 
 import { useEffect, useRef, useState } from "react"
 import toast from 'react-hot-toast'
-import { DotsHorizontalIcon } from "@heroicons/react/24/solid"
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import { apiDeleteDefinedEvent } from "actions/pingppl/apiDeleteDefinedEvent"
 import { useQueryClient } from "react-query"
 import { UserProfile } from "types/customTypes"
+import { UserV2PublicProfile } from "modules/users/types/UserNameTypes"
 
 
 export const PersonalPlannedEventBlock = ({
@@ -15,7 +18,7 @@ export const PersonalPlannedEventBlock = ({
 }: {
   plannedEvent: any
   jwt?: string
-  user?: UserProfile
+  user?: UserV2PublicProfile
 }) => {
   const queryClient = useQueryClient()
 
@@ -60,7 +63,11 @@ export const PersonalPlannedEventBlock = ({
 
     setIsPlannedPingDeleting(false)
 
-    queryClient.invalidateQueries([`infiniteDefinedEvents-${user?.twitterUsername}`])
+    // invalidate any key starting with infiniteDefinedEvents-${loggedInUser?.primaryWallet}
+    queryClient.invalidateQueries({
+      predicate: (query) => 
+        query.queryKey[0].toString().startsWith(`infiniteDefinedEvents-${user?.primaryWallet}`)
+    })
 
     toast.success(`successfully deleted planned ping!`)
   }
@@ -78,7 +85,7 @@ export const PersonalPlannedEventBlock = ({
         onClick={(event) => event.stopPropagation()}
         className="absolute right-0 top-0 z-[600] w-10 h-10 ml-2 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer"
       >
-        <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+        <EllipsisHorizontalIcon className="w-5 h-5 inline text-white" />
 
 
         {optionsTooltipVisibility && (

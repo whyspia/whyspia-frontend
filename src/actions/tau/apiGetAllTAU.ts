@@ -1,10 +1,10 @@
-import { UserV2TokenPublicResponse } from 'actions/users/apiUserActions'
 import client from 'lib/axios'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 export type TAUResponse = {
   id: string
-  senderUser: UserV2TokenPublicResponse
-  receiverUser: UserV2TokenPublicResponse
+  senderUser: UserV2PublicProfile
+  receiverUser: UserV2PublicProfile
   additionalMessage: string
   createdAt: Date
 }

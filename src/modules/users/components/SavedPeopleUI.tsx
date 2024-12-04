@@ -89,7 +89,7 @@ const SavedPeopleUI = () => {
           />
 
           <div className="mb-4">
-            <div className="text-xs opacity-[50%] mb-4">saved people</div>
+            <div className="text-xs opacity-[50%] mb-4">your saved people list</div>
 
             <div className="">
 

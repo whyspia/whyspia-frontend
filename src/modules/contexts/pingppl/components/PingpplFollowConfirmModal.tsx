@@ -1,23 +1,25 @@
+"use client"
+
 import Modal from 'components/modals/Modal'
 import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
-import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import ModalService from 'components/modals/ModalService'
 import A from 'components/A'
 import { apiCreatePingpplFollow } from 'actions/pingppl/apiCreatePingpplFollow'
 import { useQueryClient } from 'react-query'
+import PersonClickModal from 'modules/users/components/PersonClickModal'
 
 
 export default function PingpplFollowConfirmModal({
   close,
   eventNameFollowed,
-  eventSender,
+  eventSenderUser,
   eventDescription,
 }: {
   close: () => void
   eventNameFollowed: string
-  eventSender: string
+  eventSenderUser: any
   eventDescription: string
 }) {
   const queryClient = useQueryClient()
@@ -31,7 +33,7 @@ export default function PingpplFollowConfirmModal({
     const response = await apiCreatePingpplFollow({
       jwt: jwtToken,
       eventNameFollowed,
-      eventSender,
+      eventSender: eventSenderUser?.primaryWallet,
     })
 
     if (response) {
@@ -47,7 +49,7 @@ export default function PingpplFollowConfirmModal({
     // to refresh data at runtime to show u now follow
     queryClient.invalidateQueries([`pingpplFollows-${loggedInUser?.primaryWallet}`])
 
-    toast.success(`you successfully followed "${eventNameFollowed}" from "${eventSender}"!`)
+    toast.success(`you successfully followed "${eventNameFollowed}" from "${eventSenderUser?.calculatedDisplayName}"!`)
 
     close()
   }
@@ -60,10 +62,11 @@ export default function PingpplFollowConfirmModal({
         <A
           onClick={(event) => {
             event.stopPropagation()
-            ModalService.open(SymbolSelectModal, { symbol: eventSender })
+            // ModalService.open(SymbolSelectModal, { symbol: eventSenderUser?.primaryWallet })
+            ModalService.open(PersonClickModal, { userToken: eventSenderUser })
           }}
         >
-          <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{eventSender}</span>
+          <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{eventSenderUser?.calculatedDisplayName}</span>
         </A>?
         </div>
 

@@ -1,3 +1,5 @@
+"use client"
+
 import Modal from 'components/modals/Modal'
 import classNames from 'classnames'
 import A from 'components/A'

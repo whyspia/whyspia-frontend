@@ -1,10 +1,10 @@
-import { UserV2TokenPublicResponse } from 'actions/users/apiUserActions'
 import client from 'lib/axios'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 export type SavedPersonsResponse = {
   id: string
   savedBy: string
-  primaryWalletSavedUser: UserV2TokenPublicResponse
+  primaryWalletSavedUser: UserV2PublicProfile
   chosenName: string
   createdAt: Date
 }

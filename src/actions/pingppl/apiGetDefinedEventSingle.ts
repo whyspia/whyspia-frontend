@@ -5,14 +5,19 @@ import client from 'lib/axios'
  */
 export default async function apiGetDefinedEventSingle({
   definedEventId,
+  jwt,
 }: {
   definedEventId: string
+  jwt: null | string
 }) {
 
   try {
     const response = await client.get(`/pingppl/definedEvent/single`, {
       params: {
         definedEventId
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 

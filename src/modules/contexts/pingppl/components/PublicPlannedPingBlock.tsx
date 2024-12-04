@@ -1,9 +1,11 @@
+"use client"
+
 // it's public bc does not have options for editing and deleting the planned event
 
 import { useEffect, useRef, useState } from "react"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
-import { DotsHorizontalIcon } from "@heroicons/react/24/solid"
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import ModalService from "components/modals/ModalService"
 import ContextSelectModal from "modules/context/components/ContextSelectModal"
 import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
@@ -77,7 +79,7 @@ export const PublicPlannedPingBlock = ({
             if (!jwt) {
               ModalService.open(YouGottaLoginModal, {  })
             } else {
-              ModalService.open(PingpplUnfollowConfirmModal, { pingpplFollowId, eventNameFollowed: plannedEvent?.eventName, eventSender: plannedEvent?.eventCreator, eventDescription: plannedEvent?.eventDescription })
+              ModalService.open(PingpplUnfollowConfirmModal, { pingpplFollowId, eventNameFollowed: plannedEvent?.eventName, eventSenderUser: plannedEvent?.eventCreatorUser, eventDescription: plannedEvent?.eventDescription })
             }
             
           }}
@@ -94,7 +96,7 @@ export const PublicPlannedPingBlock = ({
             if (!jwt) {
               ModalService.open(YouGottaLoginModal, {  })
             } else {
-              ModalService.open(PingpplFollowConfirmModal, { eventNameFollowed: plannedEvent?.eventName, eventSender: plannedEvent?.eventCreator, eventDescription: plannedEvent?.eventDescription })
+              ModalService.open(PingpplFollowConfirmModal, { eventNameFollowed: plannedEvent?.eventName, eventSenderUser: plannedEvent?.eventCreatorUser, eventDescription: plannedEvent?.eventDescription })
             }
             
           }}
@@ -115,7 +117,7 @@ export const PublicPlannedPingBlock = ({
           <EyeOffIcon className="w-6 h-6 inline text-red-500" />
         )} */}
 
-        <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+        <EllipsisHorizontalIcon className="w-5 h-5 inline text-white" />
 
 
         {optionsTooltipVisibility && (

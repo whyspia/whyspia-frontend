@@ -65,7 +65,7 @@ export default function DoStuffUI({
           )
         },
         {
-          label: 'ur saved people',
+          label: 'your saved people list',
           content: (
             <>
               {!jwtToken ? (

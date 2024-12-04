@@ -1,9 +1,11 @@
 import client from 'lib/axios'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 export type PingpplSentEventResponse = {
   id: string
   eventName: string
   eventSender: string
+  eventSenderUser: UserV2PublicProfile
   createdAt: Date
 }
 
@@ -17,6 +19,7 @@ export default async function apiGetAllSentEvents({
   orderDirection,
   eventSender = null,
   eventName = null,
+  jwt,
 }) {
 
   try {
@@ -28,6 +31,9 @@ export default async function apiGetAllSentEvents({
         orderDirection,
         eventSender,
         eventName,
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 

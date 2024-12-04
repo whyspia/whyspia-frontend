@@ -1,10 +1,12 @@
 import client from 'lib/axios'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 export type PingpplFollowResponse = {
   id: string
   eventNameFollowed: string
   eventSender: string
   followSender: string
+  followSenderUser: UserV2PublicProfile
   createdAt: Date
 }
 
@@ -19,6 +21,7 @@ export default async function apiGetAllPingpplFollows({
   eventNameFollowed = null,
   eventSender = null,
   followSender = null,
+  jwt,
 }: any): Promise<PingpplFollowResponse[]> {
 
   try {
@@ -32,11 +35,14 @@ export default async function apiGetAllPingpplFollows({
         eventSender,
         followSender,
       },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
     })
 
     return response?.data?.data?.pingpplFollows
   } catch (error) {
-    console.error('Could not get all pingpplFollows', error)
+    console.error('could not get all pingpplFollows', error)
     return []
   }
 }

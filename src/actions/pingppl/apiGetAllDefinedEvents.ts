@@ -11,6 +11,7 @@ export default async function apiGetAllDefinedEvents({
   eventCreator = null,
   eventName = null,
   search = null,
+  jwt,
 }: any) {
 
   try {
@@ -24,11 +25,14 @@ export default async function apiGetAllDefinedEvents({
         eventName,
         search,
       },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
     })
 
     return response?.data?.data?.definedEvents
   } catch (error) {
-    console.error('Could not get all defined-events', error)
+    console.error('could not get all defined-events', error)
     return []
   }
 }

@@ -1,3 +1,5 @@
+"use client"
+
 import { EmoteResponse } from "actions/notifs/apiGetAllEmoteNotifs"
 import A from "components/A"
 import { useEffect, useRef, useState } from "react"
@@ -547,7 +549,7 @@ export const NouEmoteBlock = ({
           onClick={(event) => event.stopPropagation()}
           className="absolute right-0 top-0 z-[600] w-10 h-10 ml-2 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer"
         >
-          <DotsHorizontalIcon className="w-5 h-5 inline text-white" />
+          <EllipsisHorizontalIcon className="w-5 h-5 inline text-white" />
 
           {optionsTooltipVisibility && (
             <div

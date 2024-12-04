@@ -1,10 +1,8 @@
-import DefaultLayout from 'components/layouts/DefaultLayout'
+"use client"
+
 import { useInfiniteQuery, useQuery } from 'react-query'
-import { useRouter } from 'next/router'
 import CircleSpinner from 'components/animations/CircleSpinner'
 import { flatten } from 'lodash'
-import toast from 'react-hot-toast'
-import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import apiGetDefinedEventSingle from 'actions/pingppl/apiGetDefinedEventSingle'
 import ModalService from 'components/modals/ModalService'
 import PingpplFollowConfirmModal from 'modules/contexts/pingppl/components/PingpplFollowConfirmModal'
@@ -16,12 +14,12 @@ import { useContext, useState } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import YouGottaLoginModal from 'modules/users/components/YouGottaLoginModal'
 import A from 'components/A'
-import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
+import PersonClickModal from 'modules/users/components/PersonClickModal'
+import { useParams } from 'next/navigation'
 
 const PlannedPing = () => {
-  const { user: loggedInUser, jwtToken } = useContext(GlobalContext)
-  const router = useRouter()
-  const { ppID } = router.query
+  const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
+  const { ppID } = useParams() as any
 
 
   const { data: ppData, isLoading: isPPDataLoading } = useQuery<any>(
@@ -29,17 +27,17 @@ const PlannedPing = () => {
     () =>
       apiGetDefinedEventSingle({ definedEventId: ppID as string, jwt: jwtToken }),
     {
-      enabled: Boolean(ppID),
+      enabled: Boolean(ppID) && Boolean(jwtToken),
     }
   )
 
   const fetchLoggedInUsersPingpplFollows = async ({ pageParam = 0 }) => {
-    const follows = await apiGetAllPingpplFollows({ eventSender: ppData?.eventCreator, eventNameFollowed: ppData?.eventName, followSender: loggedInUser?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
+    const follows = await apiGetAllPingpplFollows({ eventSender: ppData?.eventCreator, eventNameFollowed: ppData?.eventName, followSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return follows
   }
 
   const { data: infinitePingpplFollows, fetchNextPage: fetchPingpplFollowsNextPage, hasNextPage: hasPingpplFollowsNextPage, isFetchingNextPage: isPingpplFollowsFetchingNextPage } = useInfiniteQuery(
-    [`pingpplFollows-${loggedInUser?.twitterUsername}`, loggedInUser?.twitterUsername, ppData],
+    [`pingpplFollows-${loggedInUser?.primaryWallet}`, loggedInUser?.primaryWallet, ppData],
     ({ pageParam = 0 }) =>
       fetchLoggedInUsersPingpplFollows({
         pageParam
@@ -57,7 +55,7 @@ const PlannedPing = () => {
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: (Boolean(loggedInUser?.twitterUsername) && Boolean(ppData)),
+      enabled: (Boolean(loggedInUser?.primaryWallet) && Boolean(ppData)),
       keepPreviousData: true,
     }
   )
@@ -90,10 +88,11 @@ const PlannedPing = () => {
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: ppData?.eventCreator })
+                // ModalService.open(SymbolSelectModal, { symbol: ppData?.eventCreator })
+                ModalService.open(PersonClickModal, { userToken: ppData?.eventCreatorUser })
               }}
             >
-              <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{ppData?.eventCreator}</span>
+              <span className="text-blue-500 hover:text-blue-700 cursor-pointer">{ppData?.eventCreatorUser?.calculatedDisplayName}</span>
             </A>
           </div>
 
@@ -143,10 +142,6 @@ const PlannedPing = () => {
       )}
     </div>
   )
-}
-
-(PlannedPing as any).layoutProps = {
-  Layout: DefaultLayout,
 }
 
 export default PlannedPing

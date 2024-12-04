@@ -1,10 +1,10 @@
-import DefaultLayout from 'components/layouts/DefaultLayout'
+"use client"
+
 import toast from 'react-hot-toast'
 import { flatten } from 'lodash'
 import { useContext, useState } from 'react'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { GlobalContext } from 'lib/GlobalContext'
-import { twitterLogin } from 'modules/users/services/UserService'
 import classNames from 'classnames'
 import apiGetAllDefinedEvents from 'actions/pingppl/apiGetAllDefinedEvents'
 import { apiCreateSentEvent } from 'actions/pingppl/apiCreateSentEvent'
@@ -16,11 +16,13 @@ import { formatTimeAgo } from 'utils/randomUtils'
 import A from 'components/A'
 import apiGetAllEmoteNotifs, { NOTIF_TYPE } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { PersonalPlannedEventBlock } from 'modules/contexts/pingppl/components/PersonalPlannedEventBlock'
+import useAuth from 'modules/users/hooks/useAuth'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 const PingPplPage = () => {
   const queryClient = useQueryClient()
 
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser, } = useContext(GlobalContext)
   const [selectedTab, setSelectedTab] = useState('pingppl')
   const [eventName, setEventName] = useState('')
   const [eventDate, setEventDate] = useState('')
@@ -31,15 +33,17 @@ const PingPplPage = () => {
 
   const [plannedPingSearchBarQuery, setPlannedPingSearchBarQuery] = useState('')
 
+  const { handleParticleAndWhyspiaLogin } = useAuth()
+
   // const isValid = selectedSymbol?.length > 0
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
-    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: user?.twitterUsername, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
+    const definedEvents = await apiGetAllDefinedEvents({ eventCreator: loggedInUser?.primaryWallet, search: plannedPingSearchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return definedEvents
   }
 
   const { data: infiniteDefinedEvents, fetchNextPage: fetchDENextPage, hasNextPage: hasDENextPage, isFetchingNextPage: isFetchingDENextPage } = useInfiniteQuery(
-    [`infiniteDefinedEvents-${user?.twitterUsername}`, plannedPingSearchBarQuery],
+    [`infiniteDefinedEvents-${loggedInUser?.primaryWallet}`, plannedPingSearchBarQuery],
     ({ pageParam = 0 }) =>
       fetchDefinedEvents({
         pageParam
@@ -62,12 +66,12 @@ const PingPplPage = () => {
   )
 
   const fetchSentEvents = async ({ pageParam = 0 }) => {
-    const sentEvents = await apiGetAllSentEvents({ eventSender: user?.twitterUsername, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
+    const sentEvents = await apiGetAllSentEvents({ eventSender: loggedInUser?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return sentEvents
   }
 
   const { data: infiniteSentEvents, fetchNextPage: fetchSENextPage, hasNextPage: hasSENextPage, isFetchingNextPage: isFetchingSENextPage } = useInfiniteQuery(
-    [`infiniteSentEvents-${user?.twitterUsername}`],
+    [`infiniteSentEvents-${loggedInUser?.primaryWallet}`],
     ({ pageParam = 0 }) =>
       fetchSentEvents({
         pageParam
@@ -136,8 +140,11 @@ const PingPplPage = () => {
 
     setIsPingOrPlanSending(false)
 
-    // queryClient.invalidateQueries([`infiniteDefinedEvents-${user?.twitterUsername}`])
-    queryClient.invalidateQueries([`infiniteSentEvents-${user?.twitterUsername}`])
+    // invalidate any key starting with infiniteSentEvents-${loggedInUser?.primaryWallet}
+    queryClient.invalidateQueries({
+      predicate: (query) => 
+        query.queryKey[0].toString().startsWith(`infiniteSentEvents-${loggedInUser?.primaryWallet}`)
+    })
     
   }
 
@@ -180,8 +187,16 @@ const PingPplPage = () => {
     setEventDescription('')
     setPingNow(false)
 
-    queryClient.invalidateQueries([`infiniteDefinedEvents-${user?.twitterUsername}`])
-    queryClient.invalidateQueries([`infiniteSentEvents-${user?.twitterUsername}`])
+    // invalidate any key starting with infiniteDefinedEvents-${loggedInUser?.primaryWallet}
+    queryClient.invalidateQueries({
+      predicate: (query) => 
+        query.queryKey[0].toString().startsWith(`infiniteDefinedEvents-${loggedInUser?.primaryWallet}`)
+    })
+    // invalidate any key starting with infiniteSentEvents-${loggedInUser?.primaryWallet}
+    queryClient.invalidateQueries({
+      predicate: (query) => 
+        query.queryKey[0].toString().startsWith(`infiniteSentEvents-${loggedInUser?.primaryWallet}`)
+    })
   }
 
   const definedEventsData = flatten(infiniteDefinedEvents?.pages || [])
@@ -195,13 +210,13 @@ const PingPplPage = () => {
 
       <>
       
-        {!user?.twitterUsername ? (
+        {!jwtToken ? (
           <>
             <div
-              onClick={() => twitterLogin(null)}
+              onClick={handleParticleAndWhyspiaLogin}
               className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
             >
-              connect X
+              login
             </div>
           </>
         ): (
@@ -375,7 +390,7 @@ const PingPplPage = () => {
                   />
 
                   {definedEventsData.map((plannedEvent) => (
-                    <PersonalPlannedEventBlock plannedEvent={plannedEvent} key={plannedEvent.id} jwt={jwtToken} user={user} />
+                    <PersonalPlannedEventBlock plannedEvent={plannedEvent} key={plannedEvent.id} jwt={jwtToken} user={loggedInUser as UserV2PublicProfile} />
                   ))}
 
                   {hasDENextPage && <button onClick={() => fetchDENextPage()} disabled={!hasDENextPage || isFetchingDENextPage}>
@@ -463,10 +478,6 @@ const PingPplPage = () => {
 
     </div>
   )
-}
-
-(PingPplPage as any).layoutProps = {
-  Layout: DefaultLayout,
 }
 
 export default PingPplPage
