@@ -5,7 +5,6 @@ import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
 import DropdownSelectMenu from 'modules/forms/components/DropdownSelectMenu'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
-import { twitterLogin } from 'modules/users/services/UserService'
 import ModalService from 'components/modals/ModalService'
 import ParallelGoOnlineModal from 'modules/contexts/parallel/components/ParallelGoOnlineModal'
 import useSocketio from 'modules/no-category/hooks/useSocketio'
@@ -140,10 +139,10 @@ const ParallelPage = () => {
           parallel
         </h1>
 
-        {!user?.twitterUsername ? (
+        {!jwtToken ? (
           <>
             <div
-              onClick={() => twitterLogin(null)}
+              onClick={() => (null)}
               className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
             >
               connect X

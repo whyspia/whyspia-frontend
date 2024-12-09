@@ -31,7 +31,7 @@ const useAuth = () => {
   // TODO: prob move these state values out to other places like GlobalContext or useAuth- formerly did stuff like setUserFromJwt in ClientWrapper
   const [userInfo, setUserInfo] = useState<any>(null); // Store user's information
   const [isLoadingUserInfo, setIsLoadingUserInfo] = useState<boolean>(false); // Loading state for fetching user info
-  const { setJwtToken, setUser, setUserNotifData, setUserV2, jwtToken, isJwtLoadingFinished, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
+  const { setJwtToken, setUserNotifData, setUserV2, jwtToken, isJwtLoadingFinished, setIsWhyspiaLoginHappening } = useContext(GlobalContext)
   // used to call method to init whyspia login...but only once all values are ready
   const [bInitWhyspiaLoginFlag, setInitWhyspiaLoginFlag] = useState<boolean>(false)
 
@@ -63,7 +63,7 @@ const useAuth = () => {
 
   const whyspiaLogout = (): void => {
     deleteCookie('tt')
-    setUser(null)
+    setUserV2(null)
     setJwtToken(null)
     toast.error(`logout success!`)
   }
@@ -95,10 +95,10 @@ const useAuth = () => {
 
   // the reusable main method for logging out in general
   const handleParticleAndWhyspiaDisconnect = async () => {
-    if (isConnected) {
+    // if (isConnected) {
       await handleParticleDisconnect()
       whyspiaLogout()
-    }
+    // }
   }
 
   const initiateWhyspiaLogin = async () => {

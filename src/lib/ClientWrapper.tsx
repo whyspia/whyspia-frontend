@@ -29,10 +29,16 @@ export const ClientWrapper = ({ children }: any) => {
         handleParticleAndWhyspiaDisconnect()
       }
 
+      console.log("setIsJwtLoadingFinished(true)")
+
       setIsJwtLoadingFinished(true)  // no longer loading
     }
 
-    initUserData()
+    // TODO: this condition may screw things up i have no idea tho. But without it, setIsJwtLoadingFinished basically doesnt work bc it gets called twice and first time is wrong
+    if (isConnected) {
+      initUserData()
+    }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected])
 

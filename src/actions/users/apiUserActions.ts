@@ -1,58 +1,5 @@
 import client from 'lib/axios'
 
-export const uploadAccountPhoto = ({ formData, token }: any) =>
-  client.post(`/user-token/profilePhoto`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'content-Type': 'multipart/form-data',
-    },
-  })
-
-export const sendVerificationCodeToAccountEmail = ({ token, email }: any) =>
-  client.get(`/user-token/emailVerification`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    params: {
-      email,
-    },
-  })
-
-export const checkAccountEmailVerificationCode = ({ token, code, email }: any) =>
-  client.post(
-    `/user-token/emailVerification`,
-    { code, email },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
-
-/**
- *
- */
-export const initiateTwitterLoginAPI = async (jwt: string | null): Promise<any> => {
-  try {
-    const response = await client.post(
-      `/user-token/initiateTwitterLogin`,
-      {
-        returnHere: window.location.href
-      },
-      {
-        headers: {
-          Authorization: jwt ? `Bearer ${jwt}` : null,
-        },
-      }
-    )
-    return response?.data?.data?.twitterVerification
-  } catch (error) {
-    console.error(
-      `Could not generate access token for twitter authentication`,
-      error
-    )
-  }
-}
 
 type ParticleWallet = {
   chain_name: string
@@ -82,24 +29,6 @@ export const initiateUserV2LoginAPI = async (particleUUID: string, wallets: Part
       error
     )
     throw error // rethrow the error to be caught
-  }
-}
-
-/**
- *
- */
-export const completeTwitterLogin = async (
-  requestToken: string,
-  oAuthVerifier: string,
-) => {
-  try {
-    const response = await client.post(
-      `/user-token/completeTwitterLogin`,
-      { requestToken, oAuthVerifier },
-    )
-    return response?.data?.data?.twitterVerification
-  } catch (error) {
-    console.error(`Could not complete twitter login`, error)
   }
 }
 
@@ -138,7 +67,6 @@ export const getUserTokenPrivate = async ({
   try {
     const response = await client.get(`/user-v2/single-private`, {
       params: {
-        // twitterUsername: username,
         // walletAddress,
       },
       headers: {
@@ -173,7 +101,7 @@ export const getUserTokenPublic = async ({
         primaryWallet,
       },
       headers: {
-        Authorization: `Bearer ${jwt}`,
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 
@@ -185,7 +113,7 @@ export const getUserTokenPublic = async ({
 }
 
 /**
- * Get all user tokens
+ * get all user tokens
  */
 export const getAllUserTokens = async ({
   skip,
@@ -193,10 +121,11 @@ export const getAllUserTokens = async ({
   orderBy,
   orderDirection,
   search = null,
+  jwt = null,
 }: any) => {
 
   try {
-    const response = await client.get(`/user-token`, {
+    const response = await client.get(`/user-v2`, {
       params: {
         skip,
         limit,
@@ -204,35 +133,15 @@ export const getAllUserTokens = async ({
         orderDirection,
         search,
       },
-      // headers: {
-      //   Authorization: `Bearer ${jwt}`,
-      // },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
     })
 
     return response?.data?.data?.userTokens
   } catch (error) {
     console.error(`getAllUserTokens failed`)
     return null
-  }
-}
-
-/**
- * 
- * @param username 
- * @returns { isExisting: false, userToken: null }
- */
-export async function checkExistingTwitterProfile(username: string) {
-  try {
-    const response = await client.get('/user-token/checkExistingTwitterProfile', {
-      params: {
-        username,
-      },
-    })
-
-    return response?.data?.data
-  } catch (error) {
-    console.error('Could not check if twitter profile is existing', error)
-    return { isExisting: false, userToken: null }
   }
 }
 

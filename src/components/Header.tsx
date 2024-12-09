@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Bars3Icon, XCircleIcon } from '@heroicons/react/24/solid'
 import A from './A'
 import classNames from 'classnames'
@@ -13,6 +13,7 @@ import { SearchbarTooltipContent } from 'modules/no-category/components/Searchba
 import { getAllUserTokens } from 'actions/users/apiUserActions'
 import { useInfiniteQuery } from 'react-query'
 import DoStuffModal from 'modules/no-category/components/DoStuffModal'
+import { GlobalContext } from 'lib/GlobalContext'
 
 type MenuItemType = {
   name: string,
@@ -22,6 +23,8 @@ type MenuItemType = {
 }
 
 export default function Header() {
+  const { jwtToken, isJwtLoadingFinished } = useContext(GlobalContext)
+
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
@@ -34,18 +37,18 @@ export default function Header() {
   const mobileSearchBarRef = useRef(null)
 
   const fetchUserTokens = async ({ pageParam = 0 }) => {
-    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc' })
+    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 3, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return userTokens
   }
 
   const { data: infiniteUserTokens, fetchNextPage: fetchSearchNextPage, hasNextPage: hasSearchNextPage, isFetchingNextPage: isSearchFetchingNextPage } = useInfiniteQuery(
-    ['search', 10, searchBarQuery],
+    ['search', searchBarQuery],
     ({ pageParam = 0 }) =>
       fetchUserTokens({
         pageParam
       }),
     {
-      enabled: Boolean(searchBarQuery && searchBarQuery?.length > 0), // disables query if this is not true
+      enabled: (Boolean(searchBarQuery && searchBarQuery?.length > 0) && isJwtLoadingFinished), // disables query if this is not true
       getNextPageParam: (lastGroup, allGroups) => {
         const morePagesExist = lastGroup?.length === 10
 

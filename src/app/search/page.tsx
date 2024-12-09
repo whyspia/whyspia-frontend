@@ -1,31 +1,35 @@
-import DefaultLayout from 'components/layouts/DefaultLayout'
+"use client"
+
 import type { NextPage } from 'next'
 import { flatten } from 'lodash'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import A from 'components/A'
 import { getAllUserTokens } from 'actions/users/apiUserActions'
 import { useInfiniteQuery } from 'react-query'
 import classNames from 'classnames'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
+import { GlobalContext } from 'lib/GlobalContext'
 
 const SearchPage: NextPage = () => {
-  const router = useRouter()
-  const { searchQuery: searchParam } = router.query as any
+  const searchParams = useSearchParams()
+  const searchParam = searchParams.get('searchQuery')
   const [searchBarQuery, setSearchBarQuery] = useState('')
 
+  const { jwtToken, isJwtLoadingFinished } = useContext(GlobalContext)
+
   const fetchUserTokens = async ({ pageParam = 0 }) => {
-    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const userTokens = await getAllUserTokens({ search: searchBarQuery, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc', jwt: jwtToken })
     return userTokens
   }
 
   const { data: infiniteUserTokens, fetchNextPage: fetchSearchNextPage, hasNextPage: hasSearchNextPage, isFetchingNextPage: isSearchFetchingNextPage } = useInfiniteQuery(
-    ['search', 10, searchBarQuery],
+    ['search', searchBarQuery],
     ({ pageParam = 0 }) =>
       fetchUserTokens({
         pageParam
       }),
     {
-      enabled: Boolean(searchBarQuery && searchBarQuery?.length > 0), // disables query if this is not true
+      enabled: (Boolean(searchBarQuery && searchBarQuery?.length > 0) && isJwtLoadingFinished), // disables query if this is not true
       getNextPageParam: (lastGroup, allGroups) => {
         const morePagesExist = lastGroup?.length === 10
 
@@ -80,11 +84,21 @@ const SearchPage: NextPage = () => {
         {userTokens && userTokens?.length > 0 && userTokens.map((userToken) => {
           return (
             <A
-              key={userToken.id}
+              key={userToken.primaryWallet}
               href={`/u/${userToken.primaryWallet}`}
-              className="w-full flex justify-center cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
+              className="w-full cursor-pointer py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
             >
-              <span className="ml-2 font-medium">USER: {userToken.primaryWallet}</span>
+              <div className="relative text-white p-3 rounded-lg border-4 bg-[#3a3a3a] border-[#1d8f89]">
+                <strong>{userToken?.calculatedDisplayName ?? userToken.chosenPublicName}</strong>
+                <div>{userToken.primaryWallet}</div>
+                {/* <small>last interaction: meep</small> */}
+
+                {userToken?.isRequestedUserSavedByRequestingUser && (
+                  <div className="text-red-500 absolute top-0 right-0 bg-[#1d8f89]/[0.5] border-b-2 border-l-2 border-[#1d8f89] rounded-bl-lg text-white p-2 text-xs">
+                    you saved this person
+                  </div>
+                )}
+              </div>
             </A>
           )
         })}
@@ -112,10 +126,6 @@ const SearchPage: NextPage = () => {
 
     </div>
   )
-}
-
-(SearchPage as any).layoutProps = {
-  Layout: DefaultLayout,
 }
 
 export default SearchPage

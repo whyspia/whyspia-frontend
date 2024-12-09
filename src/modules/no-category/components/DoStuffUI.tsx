@@ -17,7 +17,7 @@ export default function DoStuffUI({
 }: {
   close?: () => void
 }) {
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken } = useContext(GlobalContext)
   const { handleParticleAndWhyspiaLogin, handleParticleAndWhyspiaDisconnect } = useAuth()
 
   const doStuffItems = [
@@ -108,7 +108,7 @@ export default function DoStuffUI({
         },
         {
           label: 'search symbols or users',
-          href: '/desire/search',
+          href: '/search',
           onClick: () => close ? close() : null,
         },
         {
@@ -159,7 +159,7 @@ export default function DoStuffUI({
             },
             {
               label: 'search page',
-              href: '/desire/search',
+              href: '/search',
               onClick: () => close ? close() : null,
             },
             {

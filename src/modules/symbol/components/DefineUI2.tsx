@@ -11,7 +11,7 @@ import A from "components/A"
 import { formatTimeAgo } from "utils/randomUtils"
 import useAuth from "modules/users/hooks/useAuth"
 
-const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
+const DefineUI2 = ({ jwtToken, symbolData, symbolText }) => {
   const [definition, setDefinition] = useState('')
   const [currentDefinition, setCurrentDefinition] = useState(symbolData?.currentDefinition)
   const [isValid, setIsValid] = useState(false)

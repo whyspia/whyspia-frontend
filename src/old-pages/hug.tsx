@@ -10,7 +10,6 @@ import Emoji from 'react-emoji-render'
 import toast from 'react-hot-toast'
 import { useInfiniteQuery } from 'react-query'
 import { formatTimeAgo } from 'utils/randomUtils'
-import { checkExistingTwitterProfile } from 'actions/users/apiUserActions'
 import classNames from 'classnames'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -49,17 +48,18 @@ const Hug: NextPage = () => {
     }
   )
 
-  const onSetReceiverChanged = debounce(async (username: string) => {
-    const { isExisting, userToken } = await checkExistingTwitterProfile(username)
+  // const onSetReceiverChanged = debounce(async (username: string) => {
 
-    setreceiverSymbol(userToken?.primaryWallet)
+  //   setreceiverSymbol(userToken?.primaryWallet)
 
-    console.log('username==', username)
-    console.log('isReceiverExisting==', isExisting)
+  //   console.log('username==', username)
+  //   console.log('isReceiverExisting==', isExisting)
 
-    // TODO: add other inputs being entered
-    setIsValid(isExisting)
-  }, 500)
+  //   // TODO: add other inputs being entered
+  //   setIsValid(isExisting)
+  // }, 500)
+
+  const onSetReceiverChanged = (username: string) => null
 
   async function handleSendHug() {
     setIsHugSending(true)
