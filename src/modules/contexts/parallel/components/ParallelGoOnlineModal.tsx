@@ -9,7 +9,7 @@ import { GlobalContext } from 'lib/GlobalContext'
 
 const goOnlineEmoteData = {
   id: "previewID",
-  senderTwitterUsername: 'you',
+  senderPrimaryWallet: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.PARALLEL],
   sentSymbols: ['im online'],
   createdAt: new Date(),
@@ -18,7 +18,7 @@ const goOnlineEmoteData = {
 
 const enterContextEmoteData = {
   id: "previewID",
-  senderTwitterUsername: 'you',
+  senderPrimaryWallet: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.VIBE_CAFE],
   sentSymbols: ['entered'],
   createdAt: new Date(),
@@ -27,7 +27,7 @@ const enterContextEmoteData = {
 
 const exitContextEmoteData = {
   id: "previewID",
-  senderTwitterUsername: 'you',
+  senderPrimaryWallet: 'you',
   receiverSymbols: [EMOTE_CONTEXTS.VIBE_CAFE],
   sentSymbols: ['exited'],
   createdAt: new Date(),

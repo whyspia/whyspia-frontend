@@ -10,10 +10,10 @@ import Emoji from 'react-emoji-render'
 import toast from 'react-hot-toast'
 import { useInfiniteQuery } from 'react-query'
 import { formatTimeAgo } from 'utils/randomUtils'
-import { GlobalContext } from './_app'
 import { checkExistingTwitterProfile } from 'actions/users/apiUserActions'
 import classNames from 'classnames'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
+import { GlobalContext } from 'lib/GlobalContext'
 
 const Hug: NextPage = () => {
   const { jwtToken } = useContext(GlobalContext)
@@ -52,7 +52,7 @@ const Hug: NextPage = () => {
   const onSetReceiverChanged = debounce(async (username: string) => {
     const { isExisting, userToken } = await checkExistingTwitterProfile(username)
 
-    setreceiverSymbol(userToken?.twitterUsername)
+    setreceiverSymbol(userToken?.primaryWallet)
 
     console.log('username==', username)
     console.log('isReceiverExisting==', isExisting)

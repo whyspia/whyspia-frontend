@@ -18,7 +18,7 @@ export default function ParallelHelpRequestModal({
   close: () => void
   chosenContext: string
 }) {
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
 
   const [isEmoteSending, setIsEmoteSending] = useState(false)
 
@@ -30,7 +30,7 @@ export default function ParallelHelpRequestModal({
 
     const parallelHelpRequestIdentifierEmoteData = {
       id: "previewID",
-      senderTwitterUsername: user.twitterUsername,
+      senderPrimaryWallet: loggedInUser.primaryWallet,
       receiverSymbols: [EMOTE_CONTEXTS.PARALLEL],
       sentSymbols: [selectedPostType],
       timestamp: new Date(),
@@ -40,7 +40,7 @@ export default function ParallelHelpRequestModal({
     
     const parallelHelpRequestContentEmoteData = {
       id: "previewID",
-      senderTwitterUsername: user.twitterUsername,
+      senderPrimaryWallet: loggedInUser.primaryWallet,
       receiverSymbols: [selectedPostType],
       sentSymbols: [helpOrDesireText],
       timestamp: new Date(),

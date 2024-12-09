@@ -8,13 +8,13 @@ import { GlobalContext } from 'lib/GlobalContext'
 import classNames from 'classnames'
 import A from 'components/A'
 import ModalService from 'components/modals/ModalService'
-import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import CircleSpinner from 'components/animations/CircleSpinner'
 import { apiCreateTAU } from 'actions/tau/apiCreateTAU'
 import apiGetAllTAU from 'actions/tau/apiGetAllTAU'
-import ChoosePersonModal from 'modules/users/components/ChoosePersonModal'
 import useAuth from 'modules/users/hooks/useAuth'
 import PersonClickModal from 'modules/users/components/PersonClickModal'
+import { SavedPerson, UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
+import ChoosePersonButton from 'modules/users/components/ChoosePersonButton'
 
 const ThinkingAboutUPage = () => {
   const queryClient = useQueryClient()
@@ -90,9 +90,9 @@ const ThinkingAboutUPage = () => {
     setSelectedButton(desire)
   }
 
-  const [selectedPerson, setSelectedPerson] = useState<{ calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string } | null>(null)
+  const [selectedPerson, setSelectedPerson] = useState<Partial<SavedPerson & UserV2PublicProfile> | null>(null)
 
-  const setNewSelectedPerson = (newSelectedPerson: { calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string }) => {
+  const setNewSelectedPerson = (newSelectedPerson: Partial<SavedPerson & UserV2PublicProfile>) => {
     if (newSelectedPerson) {
       setSelectedPerson(newSelectedPerson)
     }
@@ -134,10 +134,10 @@ const ThinkingAboutUPage = () => {
   return (
     <div className="h-screen flex flex-col items-center mt-4 px-4">
 
-      <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
+      <div className="md:w-[37rem] w-full flex flex-col justify-center items-center">
 
-        <div className="text-3xl font-bold mb-8">
-          tell someone ur thinking about them or see if anyone is thinking about u
+        <div className="text-lg md:text-3xl font-bold mb-8">
+          TAU: tell someone ur thinking about them or see if anyone is thinking about u
         </div>
 
         <>
@@ -166,6 +166,16 @@ const ThinkingAboutUPage = () => {
                 </button>
 
                 <button
+                  onClick={() => onDesireClicked('received')}
+                  className={classNames(
+                    'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                    selectedButton === 'received' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+                  )}
+                >
+                  received
+                </button>
+
+                <button
                   onClick={() => onDesireClicked('sent')}
                   className={classNames(
                     'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
@@ -175,41 +185,13 @@ const ThinkingAboutUPage = () => {
                   sent
                 </button>
 
-                <button
-                  onClick={() => onDesireClicked('received')}
-                  className={classNames(
-                    'relative p-3 mb-4 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-                    selectedButton === 'received' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
-                  )}
-                >
-                  received
-                </button>
               </div>
 
               {selectedButton === 'send' && (
                 <>
                 
                   <div className="w-full flex flex-col">
-                    <button
-                      onClick={() => ModalService.open(ChoosePersonModal, { setNewSelectedPerson }) }
-                      className={classNames(
-                        "p-4 text-xl text-left border-4",
-                        selectedPerson ? "border-[#1d8f89]" : "border-red-500",
-                        "shadow-lg rounded-lg mb-4 cursor-pointer"
-                      )}
-                    >
-                      {selectedPerson ? (
-                        <>
-                          <div className="opacity-[50%] mb-2">change person to interact with...</div>
-                          <div className="p-3 rounded-lg bg-[#3a3a3a]">
-                            {selectedPerson.calculatedDisplayName && (<strong>{selectedPerson.calculatedDisplayName}</strong>)}
-                            <div>{selectedPerson.primaryWalletSaved}</div>
-                          </div>
-                        </>
-                      ) : (
-                        <span className="opacity-[50%]">select person to interact with...</span>
-                      )}
-                    </button>
+                    <ChoosePersonButton selectedPerson={selectedPerson} setNewSelectedPerson={setNewSelectedPerson} />
 
                     <div className="flex items-center space-x-2 mb-2">
                       <input
@@ -286,53 +268,6 @@ const ThinkingAboutUPage = () => {
                 </>
               )}
 
-              {selectedButton === 'sent' && (
-                <div className="">
-                  
-                  {sentTAUsData?.map((sentTAU) => {
-                      
-                      return (
-                        <div key={sentTAU?.id} className="p-6 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
-
-                          <div className="mb-4 ">to:{' '}
-                            <A
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                ModalService.open(PersonClickModal, { userToken: sentTAU?.receiverUser })
-                              }}
-                              className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.receiverUser?.calculatedDisplayName}</A>
-                          </div>
-
-                          <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
-
-                          {sentTAU?.additionalMessage && sentTAU?.additionalMessage?.length > 0 && (
-                            <div className="mb-4 whitespace-pre-wrap break-words leading-5 italic">
-                              {sentTAU?.additionalMessage}
-                            </div>
-                          )}
-
-                          <div className="">~ from{' '}
-                            <A
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                ModalService.open(PersonClickModal, { userToken: sentTAU?.senderUser })
-                              }}
-                              className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            >{sentTAU?.senderUser?.calculatedDisplayName}</A>{' '}
-                            at {new Date(sentTAU?.createdAt).toLocaleString()}
-                          </div>
-
-                        </div>
-                      )
-                  })}
-
-                  {hasSentTAUsNextPage && <button onClick={() => fetchSentTAUsNextPage()} disabled={!hasSentTAUsNextPage || isSentTAUsFetchingNextPage}>
-                    {isSentTAUsFetchingNextPage ? 'Loading...' : 'Load More'}
-                  </button>}
-                </div>
-              )}
-
               {selectedButton === 'received' && (
                 <div className="">
 
@@ -376,6 +311,53 @@ const ThinkingAboutUPage = () => {
 
                   {hasReceivedTAUsNextPage && <button onClick={() => fetchReceivedTAUsNextPage()} disabled={!hasReceivedTAUsNextPage || isReceivedTAUsFetchingNextPage}>
                     {isReceivedTAUsFetchingNextPage ? 'Loading...' : 'Load More'}
+                  </button>}
+                </div>
+              )}
+
+              {selectedButton === 'sent' && (
+                <div className="">
+                  
+                  {sentTAUsData?.map((sentTAU) => {
+                      
+                      return (
+                        <div key={sentTAU?.id} className="p-6 mb-4 border-2 border-white hover:bg-gray-100 hover:bg-opacity-[.1] rounded-2xl">
+
+                          <div className="mb-4 ">to:{' '}
+                            <A
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                ModalService.open(PersonClickModal, { userToken: sentTAU?.receiverUser })
+                              }}
+                              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                            >{sentTAU?.receiverUser?.calculatedDisplayName}</A>
+                          </div>
+
+                          <div className="mb-4 text-[#1d8f89] italic">im thinking about u and just wanted u to know.</div>
+
+                          {sentTAU?.additionalMessage && sentTAU?.additionalMessage?.length > 0 && (
+                            <div className="mb-4 whitespace-pre-wrap break-words leading-5 italic">
+                              {sentTAU?.additionalMessage}
+                            </div>
+                          )}
+
+                          <div className="">~ from{' '}
+                            <A
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                ModalService.open(PersonClickModal, { userToken: sentTAU?.senderUser })
+                              }}
+                              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                            >{sentTAU?.senderUser?.calculatedDisplayName}</A>{' '}
+                            at {new Date(sentTAU?.createdAt).toLocaleString()}
+                          </div>
+
+                        </div>
+                      )
+                  })}
+
+                  {hasSentTAUsNextPage && <button onClick={() => fetchSentTAUsNextPage()} disabled={!hasSentTAUsNextPage || isSentTAUsFetchingNextPage}>
+                    {isSentTAUsFetchingNextPage ? 'Loading...' : 'Load More'}
                   </button>}
                 </div>
               )}

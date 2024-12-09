@@ -87,7 +87,10 @@ export const ProfileTooltip = () => {
         onClick={() => ModalService.open(SavedPeopleModal)}
       >
         <UserIcon className={'w-5 h-5'} />
-        <span className="ml-2 font-medium">your saved people list</span>
+        <div className="ml-2">
+          <div className="font-medium">your saved people list</div>
+          <div className="text-xs">save new people here</div>
+        </div>
       </div>
 
       <div

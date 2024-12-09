@@ -2,6 +2,7 @@ import { PingpplFollowResponse } from 'actions/pingppl/apiGetAllPingpplFollows'
 import { PingpplSentEventResponse } from 'actions/pingppl/apiGetAllSentEvents'
 import { TAUResponse } from 'actions/tau/apiGetAllTAU'
 import client from 'lib/axios'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 export enum NOTIF_TYPE {
   EMOTE = 'EMOTE',
@@ -12,8 +13,10 @@ export enum NOTIF_TYPE {
 
 export type EmoteResponse = {
   id: string
-  senderTwitterUsername: string
+  senderPrimaryWallet: string
+  senderUser: UserV2PublicProfile
   receiverSymbols: string[]
+  receiverUsers: UserV2PublicProfile[]
   sentSymbols: string[]
   createdAt: Date
   chainPreview?: EmoteResponse[]

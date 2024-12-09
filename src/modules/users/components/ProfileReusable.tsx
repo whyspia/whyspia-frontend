@@ -128,7 +128,7 @@ const ProfileReusable = () => {
   )
 
   const fetchSentEmotes = async ({ pageParam = 0 }) => {
-    const emotes = await apiGetAllEmotes({ senderTwitterUsername: primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const emotes = await apiGetAllEmotes({ senderPrimaryWallet: primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return emotes
   }
 
@@ -184,7 +184,7 @@ const ProfileReusable = () => {
   )
 
   const fetchDefinitions = async ({ pageParam = 0 }) => {
-    const defintions = await apiGetAllDefinitions({ symbol: searchDefsQuery, senderTwitterUsername: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
+    const defintions = await apiGetAllDefinitions({ symbol: searchDefsQuery, senderPrimaryWallet: userData?.primaryWallet, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
     return defintions
   }
 
@@ -444,7 +444,7 @@ const ProfileReusable = () => {
         <div className="md:w-[30rem] w-full">
           {/* {definitionsData?.map((definition) => (
             <div className="text-lg" key={definition.id}>
-              <A href={`/u/${definition.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderTwitterUsername}</A> defined "<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>" - {formatTimeAgo(definition.timestamp)}
+              <A href={`/u/${definition.senderPrimaryWallet}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderPrimaryWallet}</A> defined "<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>" - {formatTimeAgo(definition.timestamp)}
             </div>
           ))}
 

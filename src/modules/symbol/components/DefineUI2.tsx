@@ -9,7 +9,7 @@ import { flatten } from "lodash"
 import CircleSpinner from "components/animations/CircleSpinner"
 import A from "components/A"
 import { formatTimeAgo } from "utils/randomUtils"
-import { twitterLogin } from "modules/users/services/UserService"
+import useAuth from "modules/users/hooks/useAuth"
 
 const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
   const [definition, setDefinition] = useState('')
@@ -17,6 +17,8 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
   const [isValid, setIsValid] = useState(false)
   const [isDefinitionSubmitting, setIsDefinitionSubmitting] = useState(false)
   const [isPreviousDefinitionVisible, setIsPreviousDefinitionVisible] = useState(true)
+
+  const { handleParticleAndWhyspiaLogin } = useAuth()
 
   const fetchDefinitions = async ({ pageParam = 0 }) => {
     const defintions = await apiGetAllDefinitions({ symbol: symbolText ? symbolText : null, skip: pageParam, limit: 10, orderBy: 'createdAt', orderDirection: 'desc' })
@@ -77,13 +79,13 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
   return (
     <div className="flex flex-col items-center">
 
-      {!user?.twitterUsername ? (
+      {!jwtToken ? (
         <>
           <div
-            onClick={() => twitterLogin(null)}
+            onClick={handleParticleAndWhyspiaLogin}
             className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
           >
-            connect X
+            login
           </div>
         </>
       ) : (
@@ -140,7 +142,7 @@ const DefineUI2 = ({ jwtToken, user, symbolData, symbolText }) => {
 
       {definitionsData?.map((definition) => (
         <div className="text-lg" key={definition.id}>
-          <A href={`/u/${definition.senderTwitterUsername}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderTwitterUsername}</A> defined &quot;<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>&quot; - {formatTimeAgo(definition.timestamp)}
+          <A href={`/u/${definition.senderPrimaryWallet}`} className="text-blue-500 hover:text-blue-700 cursor-pointer">{definition.senderPrimaryWallet}</A> defined &quot;<A href={`/symbol/${definition.symbol}`} className="text-red-500 hover:text-red-700 cursor-pointer">{definition.symbol}</A>&quot; - {formatTimeAgo(definition.timestamp)}
         </div>
       ))}
 

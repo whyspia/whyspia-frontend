@@ -5,8 +5,10 @@ import client from 'lib/axios'
  */
 export default async function apiGetEmoteSingle({
   emoteID,
+  jwt,
 }: {
   emoteID: string
+  jwt?: string
 }) {
 
   try {
@@ -14,6 +16,9 @@ export default async function apiGetEmoteSingle({
     const response = await client.get(`/emote/single`, {
       params: {
         emoteID
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 

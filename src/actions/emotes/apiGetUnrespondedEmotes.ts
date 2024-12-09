@@ -9,7 +9,7 @@ export default async function apiGetUnrespondedEmotes({
   limit,
   orderBy,
   orderDirection,
-  senderTwitterUsername = null,
+  senderPrimaryWallet = null,
   receiverSymbols = null,
   sentSymbols = null,
   fetchSentOrReceived = 'received',
@@ -19,7 +19,7 @@ export default async function apiGetUnrespondedEmotes({
   limit: number
   orderBy: string
   orderDirection: string
-  senderTwitterUsername?: string
+  senderPrimaryWallet?: string
   receiverSymbols?: string[]
   sentSymbols?: string[]
   fetchSentOrReceived: string
@@ -32,7 +32,7 @@ export default async function apiGetUnrespondedEmotes({
         limit,
         orderBy,
         orderDirection,
-        senderTwitterUsername,
+        senderPrimaryWallet,
         receiverSymbols,
         sentSymbols,
         fetchSentOrReceived,

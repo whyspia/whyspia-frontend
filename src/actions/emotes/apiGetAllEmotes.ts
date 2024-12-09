@@ -8,19 +8,21 @@ export default async function apiGetAllEmotes({
   limit,
   orderBy,
   orderDirection,
-  senderTwitterUsername = null,
+  senderPrimaryWallet = null,
   receiverSymbols = null,
   sentSymbols = null,
   context = null,
+  jwt,
 }: {
   skip: number
   limit: number
   orderBy: string
   orderDirection: string
-  senderTwitterUsername?: string
+  senderPrimaryWallet?: string
   receiverSymbols?: string[]
   sentSymbols?: string[]
   context?: string
+  jwt?: string,
 }) {
   const commaSeperatedReceiverSymbols = receiverSymbols?.join(",") || null
   const commaSeperatedSentSymbols = sentSymbols?.join(",") || null
@@ -33,10 +35,13 @@ export default async function apiGetAllEmotes({
         limit,
         orderBy,
         orderDirection,
-        senderTwitterUsername,
+        senderPrimaryWallet,
         receiverSymbols: commaSeperatedReceiverSymbols,
         sentSymbols: commaSeperatedSentSymbols,
         context
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 

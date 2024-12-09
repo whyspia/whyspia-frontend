@@ -198,11 +198,11 @@ export const NotifBlock = ({
               <A
                 onClick={(event) => {
                   event.stopPropagation()
-                  ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
+                  ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderPrimaryWallet })
                 }}
                 className="text-blue-500 hover:text-blue-700 cursor-pointer"
               >
-                {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
               </A> sent{' '}
   
               {isMultipleSentSymbols ? (
@@ -360,11 +360,11 @@ export const NotifBlock = ({
                   <A
                     onClick={(event) => {
                       event.stopPropagation()
-                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
+                      ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderPrimaryWallet })
                     }}
                     className="text-blue-500 hover:text-blue-700 cursor-pointer"
                   >
-                    {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                    {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
                   </A> sent{' '}
     
                   {isMultipleSentSymbols ? (
@@ -481,8 +481,8 @@ export const NotifBlock = ({
     
                 {isFromDropdownOpen && (
                   <ul className="ml-10 list-disc">
-                    <li><A href={`/u/${(notif?.notifData as EmoteResponse)?.senderTwitterUsername}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                      {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                    <li><A href={`/u/${(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+                      {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
                     </A></li>
                   </ul>
                 )}
@@ -606,11 +606,11 @@ export const NotifBlock = ({
                 <A
                   onClick={(event) => {
                     event.stopPropagation()
-                    ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderTwitterUsername })
+                    ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderPrimaryWallet })
                   }}
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {(notif?.notifData as EmoteResponse)?.senderTwitterUsername}
+                  {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
                 </A> sent{' '}
     
                 {isMultipleSentSymbols ? (

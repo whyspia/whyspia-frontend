@@ -1,11 +1,12 @@
 import A from "components/A"
+import { UserV2PublicProfile } from "modules/users/types/UserNameTypes"
 
 
 export const SearchbarTooltipContent = ({
   userTokens,
   searchText,
 }: {
-  userTokens: any
+  userTokens: UserV2PublicProfile[]
   searchText: string
 }) => {
 
@@ -16,7 +17,6 @@ export const SearchbarTooltipContent = ({
         <A
           href={`/symbol/${searchText?.toLowerCase()}`}
           className="cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
-          //onClick={onClickDisconnectTwitter}
         >
           <span className="ml-2 font-medium">SYMBOL: {searchText}</span>
         </A>
@@ -26,11 +26,10 @@ export const SearchbarTooltipContent = ({
         return (
           <A
             key={userToken.id}
-            href={`/u/${userToken.twitterUsername}`}
+            href={`/u/${userToken.primaryWallet}`}
             className="cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
-            //onClick={onClickDisconnectTwitter}
           >
-            <span className="ml-2 font-medium">USER: {userToken.twitterUsername}</span>
+            <span className="ml-2 font-medium">USER: {userToken.primaryWallet}</span>
           </A>
         )
       })}
@@ -39,7 +38,6 @@ export const SearchbarTooltipContent = ({
         <A
           href={`/desire/search?searchQuery=${searchText}`} 
           className="cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
-          //onClick={onClickDisconnectTwitter}
         >
           <span className="ml-2 font-medium">full search page</span>
         </A>

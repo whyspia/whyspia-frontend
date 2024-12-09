@@ -4,7 +4,6 @@ import { useContext } from 'react'
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
 import A from 'components/A'
-import { twitterLogin } from 'modules/users/services/UserService'
 import useAuth from 'modules/users/hooks/useAuth'
 import DefineUI from 'modules/symbol/components/DefineUI'
 import BreadcrumbAccordion from './BreadcrumbAccordion'
@@ -40,7 +39,7 @@ export default function DoStuffUI({
             href="/context/nou"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
-            <span className="block w-[20rem]"><span className="font-bold">No U</span>: send symbol (like &quot;hug&quot;) back and forth with someone</span>
+            <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone</span>
           </A>
 
           <A
@@ -65,7 +64,12 @@ export default function DoStuffUI({
           )
         },
         {
-          label: 'your saved people list',
+          label: (
+            <div className="">
+              <div className="font-medium">your saved people list</div>
+              <div className="text-xs">save new people here</div>
+            </div>
+          ),
           content: (
             <>
               {!jwtToken ? (

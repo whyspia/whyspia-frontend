@@ -12,13 +12,14 @@ import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
 import { useRouter } from "next/router"
 import NouEmoteModal from "./NouEmoteModal"
-import SendEmoteModal from "./SendEmoteModal"
+// import SendEmoteModal from "./SendEmoteModal"
 import classNames from "classnames"
 import NouChainModal from "./NouChainModal"
 import { UserProfile } from "types/customTypes"
 import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
 import ContextSelectModal from "modules/context/components/ContextSelectModal"
 import EmoteSelectModal from "modules/emote/components/EmoteSelectModal"
+import { UserV2PublicProfile } from "modules/users/types/UserNameTypes"
 
 
 export const SentEmoteBlock = ({
@@ -31,7 +32,7 @@ export const SentEmoteBlock = ({
 }: {
   emote: EmoteResponse
   jwt?: string
-  user?: UserProfile
+  user?: UserV2PublicProfile
   isPersonal?: boolean
   isPreview?: boolean
   context?: string
@@ -42,8 +43,8 @@ export const SentEmoteBlock = ({
   const isMultipleReceivers = receiverSymbolsCount > 1
   const isMultipleSentSymbols = sentSymbolsCount > 1
 
-  const isAuthedUserSender = emote?.senderTwitterUsername === user?.twitterUsername
-  const isAuthedUserReceiver = emote?.receiverSymbols?.includes(user?.twitterUsername)
+  const isAuthedUserSender = emote?.senderPrimaryWallet === user?.primaryWallet
+  const isAuthedUserReceiver = emote?.receiverSymbols?.includes(user?.primaryWallet)
 
   const [showDetails, setShowDetails] = useState(false)
 
@@ -141,7 +142,7 @@ export const SentEmoteBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
+                ModalService.open(SymbolSelectModal, { symbol: emote?.senderPrimaryWallet })
               }}
             >
               {isPersonal && isAuthedUserSender ? (
@@ -150,7 +151,7 @@ export const SentEmoteBlock = ({
                 <span
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {emote?.senderTwitterUsername}
+                  {emote?.senderPrimaryWallet}
                 </span>
               )}
             </A> sent{' '}
@@ -287,8 +288,8 @@ export const SentEmoteBlock = ({
 
             {isFromDropdownOpen && (
               <ul className="ml-10 list-disc">
-                <li><A href={`/u/${emote?.senderTwitterUsername}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                  {emote?.senderTwitterUsername}
+                <li><A href={`/u/${emote?.senderPrimaryWallet}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+                  {emote?.senderPrimaryWallet}
                 </A></li>
               </ul>
             )}
@@ -428,7 +429,7 @@ export const SentEmoteBlock = ({
           <A
             onClick={(event) => {
               event.stopPropagation()
-              ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
+              ModalService.open(SymbolSelectModal, { symbol: emote?.senderPrimaryWallet })
             }}
           >
             {isPersonal && isAuthedUserSender ? (
@@ -437,7 +438,7 @@ export const SentEmoteBlock = ({
               <span
                 className="text-blue-500 hover:text-blue-700 cursor-pointer"
               >
-                {emote?.senderTwitterUsername}
+                {emote?.senderPrimaryWallet}
               </span>
             )}
           </A> sent{' '}
@@ -562,12 +563,12 @@ export const SentEmoteBlock = ({
             event.stopPropagation()
 
             if (context === EMOTE_CONTEXTS.NOU) {
-              ModalService.open(NouEmoteModal, { initialEmote: emote, initialSymbol: emote?.sentSymbols[0], receiverSymbol: emote?.senderTwitterUsername })
+              ModalService.open(NouEmoteModal, { initialEmote: emote, initialSymbol: emote?.sentSymbols[0], receiverSymbol: emote?.senderPrimaryWallet })
 
             } else {
               const previousPathname = window.location.pathname
               window.history.pushState(null, null, '/desire')
-              ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
+              // ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
             }
             
           }}

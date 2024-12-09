@@ -44,6 +44,7 @@ const useAuth = () => {
           id: userToken?.id,
           primaryWallet: userToken?.primaryWallet,
           chosenPublicName: userToken?.chosenPublicName,
+          // TODO: we dont need userInfo anymore do we?
           userInfo, // should this be from userToken instead??
         })
       }

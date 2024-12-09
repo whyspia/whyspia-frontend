@@ -10,11 +10,12 @@ import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
 import classNames from "classnames"
-import { UserProfile } from "types/customTypes"
 import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
 import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
 import NouChainModal from "modules/symbol/components/NouChainModal"
 import NouEmoteModal from "modules/symbol/components/NouEmoteModal"
+import { UserV2PublicProfile } from "modules/users/types/UserNameTypes"
+import PersonClickModal from "modules/users/components/PersonClickModal"
 
 
 export const NouEmoteBlock = ({
@@ -27,7 +28,7 @@ export const NouEmoteBlock = ({
 }: {
   emote: EmoteResponse
   jwt?: string
-  user?: UserProfile
+  user?: UserV2PublicProfile
   isPersonal?: boolean
   isPreview?: boolean
   context?: string
@@ -37,8 +38,8 @@ export const NouEmoteBlock = ({
   const isMultipleReceivers = receiverSymbolsCount > 1
   const isMultipleSentSymbols = sentSymbolsCount > 1
 
-  const isAuthedUserSender = emote?.senderTwitterUsername === user?.twitterUsername
-  const isAuthedUserReceiver = emote?.receiverSymbols?.includes(user?.twitterUsername)
+  const isAuthedUserSender = emote?.senderPrimaryWallet === user?.primaryWallet
+  const isAuthedUserReceiver = emote?.receiverSymbols?.includes(user?.primaryWallet)
 
   const [showDetails, setShowDetails] = useState(false)
 
@@ -118,9 +119,9 @@ export const NouEmoteBlock = ({
   return (
     <div
       onClick={(event) => {
-        if (!isPreview) {
+        event.stopPropagation()
+        if (!isPreview && context !== 'nou_chain_preview') {
           // ModalService.open(NouEmoteBlockReactModal, { emote })
-          event.stopPropagation()
           onShowDetailsChanged(!showDetails)
         }
       }}
@@ -138,7 +139,7 @@ export const NouEmoteBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
+                ModalService.open(PersonClickModal, { userToken: emote?.senderUser })
               }}
             >
               {isPersonal && isAuthedUserSender ? (
@@ -147,7 +148,7 @@ export const NouEmoteBlock = ({
                 <span
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {emote?.senderTwitterUsername}
+                  {emote?.senderPrimaryWallet}
                 </span>
               )}
             </A> sent{' '}
@@ -236,7 +237,7 @@ export const NouEmoteBlock = ({
               <A
                 onClick={(event) => {
                   event.stopPropagation()
-                  ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
+                  ModalService.open(PersonClickModal, { userToken: emote?.receiverUsers[0] })
                 }}
                 className="text-blue-500 hover:text-blue-700 cursor-pointer"
               >
@@ -246,7 +247,7 @@ export const NouEmoteBlock = ({
                   <span
                     className="text-blue-500 hover:text-blue-700 cursor-pointer"
                   >
-                    {emote?.receiverSymbols[0]}
+                    {emote?.receiverUsers[0]?.calculatedDisplayName}
                   </span>
                 )}
               </A>
@@ -273,8 +274,8 @@ export const NouEmoteBlock = ({
 
             {isFromDropdownOpen && (
               <ul className="ml-10 list-disc">
-                <li><A href={`/u/${emote?.senderTwitterUsername}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                  {emote?.senderTwitterUsername}
+                <li><A href={`/u/${emote?.senderPrimaryWallet}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+                  {emote?.senderPrimaryWallet}
                 </A></li>
               </ul>
             )}
@@ -300,18 +301,18 @@ export const NouEmoteBlock = ({
 
             {isToDropdownOpen && (
               <ul className="ml-10 list-disc">
-                {emote?.receiverSymbols && emote?.receiverSymbols.map((receiverSymbol) => {
+                {emote?.receiverUsers && emote?.receiverUsers.map((receiverUser) => {
 
                   return (
-                    <li key={receiverSymbol}>
+                    <li key={receiverUser?.primaryWallet}>
                       <A
                         onClick={(event) => {
                           event.stopPropagation()
-                          ModalService.open(SymbolSelectModal, { symbol: receiverSymbol })
+                          ModalService.open(PersonClickModal, { userToken: receiverUser })
                         }}
                         className="text-blue-500 hover:text-blue-700 cursor-pointer"
                       >
-                        {receiverSymbol}
+                        {receiverUser?.calculatedDisplayName}
                       </A>
                     </li>
                   )
@@ -414,7 +415,7 @@ export const NouEmoteBlock = ({
           <A
             onClick={(event) => {
               event.stopPropagation()
-              ModalService.open(SymbolSelectModal, { symbol: emote?.senderTwitterUsername })
+              ModalService.open(PersonClickModal, { userToken: emote?.senderUser })
             }}
           >
             {isPersonal && isAuthedUserSender ? (
@@ -423,7 +424,7 @@ export const NouEmoteBlock = ({
               <span
                 className="text-blue-500 hover:text-blue-700 cursor-pointer"
               >
-                {emote?.senderTwitterUsername}
+                {emote?.senderUser?.calculatedDisplayName ?? emote?.senderUser?.chosenPublicName}
               </span>
             )}
           </A> sent{' '}
@@ -512,7 +513,7 @@ export const NouEmoteBlock = ({
             <A
               onClick={(event) => {
                 event.stopPropagation()
-                ModalService.open(SymbolSelectModal, { symbol: emote?.receiverSymbols[0] })
+                ModalService.open(PersonClickModal, { userToken: emote?.receiverUsers[0] })
               }}
             >
               {isPersonal && isAuthedUserReceiver ? (
@@ -521,7 +522,7 @@ export const NouEmoteBlock = ({
                 <span
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {emote?.receiverSymbols[0]}
+                  {emote?.receiverUsers[0]?.calculatedDisplayName}
                 </span>
               )}
             </A>
@@ -535,7 +536,7 @@ export const NouEmoteBlock = ({
         <div
           onClick={(event) => {
             event.stopPropagation()
-            ModalService.open(NouEmoteModal, { initialEmote: emote, initialSymbol: emote?.sentSymbols[0], receiverSymbol: emote?.senderTwitterUsername })
+            ModalService.open(NouEmoteModal, { initialEmote: emote, initialSymbol: emote?.sentSymbols[0], receiverUser: emote?.senderUser })
           }}
           className="bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
         >

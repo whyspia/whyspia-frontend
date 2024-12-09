@@ -72,7 +72,6 @@ const SearchPage: NextPage = () => {
           <A
             href={`/symbol/${searchBarQuery?.toLowerCase()}`}
             className="w-full flex justify-center cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
-            //onClick={onClickDisconnectTwitter}
           >
             <span className="ml-2 font-medium">SYMBOL: {searchBarQuery}</span>
           </A>
@@ -82,11 +81,10 @@ const SearchPage: NextPage = () => {
           return (
             <A
               key={userToken.id}
-              href={`/u/${userToken.twitterUsername}`}
+              href={`/u/${userToken.primaryWallet}`}
               className="w-full flex justify-center cursor-pointer flex items-center py-3 px-4 border-b border-gray-300 hover:bg-gray-300"
-              //onClick={onClickDisconnectTwitter}
             >
-              <span className="ml-2 font-medium">USER: {userToken.twitterUsername}</span>
+              <span className="ml-2 font-medium">USER: {userToken.primaryWallet}</span>
             </A>
           )
         })}

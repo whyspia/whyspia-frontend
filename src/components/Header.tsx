@@ -125,9 +125,6 @@ export default function Header() {
             {/* Send button */}
             <div
               onClick={() => {
-                // const previousPathname = window.location.pathname
-                // window.history.pushState(null, null, '/desire')
-                // ModalService.open(SendEmoteModal, {}, () => window.history.pushState(null, null, previousPathname))
                 ModalService.open(DoStuffModal)
               }}
               className="bg-[#1d8f89] rounded-lg text-white px-4 py-2 font-bold cursor-pointer"

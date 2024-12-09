@@ -8,7 +8,7 @@ export default async function apiGetAllDefinitions({
   limit,
   orderBy,
   orderDirection,
-  senderTwitterUsername = null,
+  senderPrimaryWallet = null,
   symbol = null,
 }: any) {
 
@@ -19,7 +19,7 @@ export default async function apiGetAllDefinitions({
         limit,
         orderBy,
         orderDirection,
-        senderTwitterUsername,
+        senderPrimaryWallet,
         symbol,
       },
     })

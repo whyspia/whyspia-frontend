@@ -9,12 +9,14 @@ export default async function apiGetEmoteReplyChain({
   limit,
   orderBy,
   orderDirection,
+  jwt,
 }: {
   emoteID: string
   skip: number
   limit: number
   orderBy: string
   orderDirection: string
+  jwt?: string
 }) {
 
   try {
@@ -25,6 +27,9 @@ export default async function apiGetEmoteReplyChain({
         limit,
         orderBy,
         orderDirection,
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
       },
     })
 

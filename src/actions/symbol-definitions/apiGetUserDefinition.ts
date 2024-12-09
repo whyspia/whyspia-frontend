@@ -5,14 +5,14 @@ import client from 'lib/axios'
  */
 export default async function apiGetUserDefinition({
   jwt = null,
-  twitterUsername = null,
+  primaryWallet = null,
   symbol = null,
 }) {
 
   try {
     const response = await client.get(`/symbol-definition/single`, {
       params: {
-        twitterUsername,
+        primaryWallet,
         symbol,
       },
       headers: {

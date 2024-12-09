@@ -9,6 +9,7 @@ import { GlobalContext } from 'lib/GlobalContext';
 import { useContext, useState } from 'react';
 import { formatWalletAddress, isValidWalletAddress } from '../utils/WalletUtils';
 import { apiCreateSavedPerson } from 'actions/saved-person/apiCreateSavedPerson';
+import { SavedPerson, UserV2PublicProfile } from '../types/UserNameTypes';
 
 
 export default function ChoosePersonModal({
@@ -16,12 +17,12 @@ export default function ChoosePersonModal({
   setNewSelectedPerson,
 }: {
   close: () => void
-  setNewSelectedPerson: (newSelectedPerson: { calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string }) => void
+  setNewSelectedPerson: (newSelectedPerson: Partial<SavedPerson & UserV2PublicProfile>) => void
 }) {
   const queryClient = useQueryClient()
 
   const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
-  const [selectedPerson, setSelectedPerson] = useState<{ calculatedDisplayName: string, chosenName: string, primaryWalletSaved: string } | null>(null)
+  const [selectedPerson, setSelectedPerson] = useState<Partial<SavedPerson & UserV2PublicProfile> | null>(null)
   const [personInput, setPersonInput] = useState('')
   const [showCreateSavedPersonPrompt, setShowCreateSavedPersonPrompt] = useState(false)
 
@@ -70,7 +71,11 @@ export default function ChoosePersonModal({
       // currently you can indeed save wallets that have no userToken in our system...soooo yea
       calculatedDisplayName: selectedPerson.primaryWalletSavedUser?.calculatedDisplayName ?? selectedPerson.chosenName,
       chosenName: selectedPerson.chosenName,
-      primaryWalletSaved: selectedPerson.primaryWalletSaved
+      primaryWalletSaved: selectedPerson.primaryWalletSaved,
+      // selectedPerson is basically a SavedPerson, but some components are displaying a usertoken, not a SavedPerson - AND typically using primaryWallet as main field for sending through on API calls
+      primaryWallet: selectedPerson.primaryWalletSaved,
+      isRequestedUserSavedByRequestingUser: selectedPerson.primaryWalletSavedUser?.isRequestedUserSavedByRequestingUser ?? false,
+      requestingPrimaryWallet: selectedPerson.primaryWalletSavedUser?.requestingPrimaryWallet,
     })
     setShowCreateSavedPersonPrompt(false)
   }
@@ -100,7 +105,12 @@ export default function ChoosePersonModal({
   const handleSkipSaving = () => {
     setShowCreateSavedPersonPrompt(false)
     // NOTE how despite no chosenName there is still a calculatedDisplayName
-    setSelectedPerson({ calculatedDisplayName: formatWalletAddress(personInput), chosenName: null, primaryWalletSaved: personInput })
+    setSelectedPerson({
+      calculatedDisplayName: formatWalletAddress(personInput),
+      chosenName: null,
+      primaryWalletSaved: personInput,
+      primaryWallet: personInput,
+    })
   }
 
   const handleConfirmSelectedPerson = () => {

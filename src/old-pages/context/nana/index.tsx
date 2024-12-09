@@ -5,17 +5,19 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { useContext, useState } from 'react'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { GlobalContext } from 'lib/GlobalContext'
-import { twitterLogin } from 'modules/users/services/UserService'
 import classNames from 'classnames'
 import apiGetAllEmotes from 'actions/emotes/apiGetAllEmotes'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
 import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
+import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
+import useAuth from 'modules/users/hooks/useAuth'
 
 const NanaPage = () => {
   const queryClient = useQueryClient()
 
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
+  const { handleParticleAndWhyspiaLogin } = useAuth()
   const [selectedSymbol, setSelectedSymbol] = useState('hey')
   const [isMesageSending, setIsMessageSending] = useState(false)
 
@@ -53,7 +55,7 @@ const NanaPage = () => {
 
   const mainEmoteData = {
     id: "previewID",
-    senderTwitterUsername: user.twitterUsername,
+    senderPrimaryWallet: loggedInUser.primaryWallet,
     receiverSymbols: ['nana'],
     sentSymbols: [selectedSymbol],
     timestamp: new Date(),
@@ -63,7 +65,7 @@ const NanaPage = () => {
   // this is preview emote data to identify nana context being used
   const nanaContextEmoteData = {
     id: "previewID",
-    senderTwitterUsername: user.twitterUsername,
+    senderPrimaryWallet: loggedInUser.primaryWallet,
     receiverSymbols: [EMOTE_CONTEXTS.NANA],
     sentSymbols: ['symbol'],
     timestamp: new Date(),
@@ -105,13 +107,13 @@ const NanaPage = () => {
 
         <>
         
-          {!user?.twitterUsername ? (
+          {!jwtToken ? (
             <>
               <div
-                onClick={() => twitterLogin(null)}
+                onClick={handleParticleAndWhyspiaLogin}
                 className="relative h-20 flex justify-center items-center px-4 py-2 ml-2 mb-8 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl cursor-pointer"
               >
-                connect X
+                login
               </div>
             </>
           ): (
@@ -165,7 +167,7 @@ const NanaPage = () => {
             {nanaEmotesData?.map((emote) => {
             
               return (
-                <SentEmoteBlock context={EMOTE_CONTEXTS.NANA} emote={emote} jwt={jwtToken} user={user} key={emote.id} />
+                <SentEmoteBlock context={EMOTE_CONTEXTS.NANA} emote={emote} jwt={jwtToken} user={loggedInUser as UserV2PublicProfile} key={emote.id} />
               )
             })}
 
