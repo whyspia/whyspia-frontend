@@ -83,7 +83,7 @@ const SavePersonForm = () => {
 
       {isValidWhyspiaID && (
         <div className="bg-[#e5fff3] p-4 rounded-lg border-2 border-[#1d8f89] mb-4">
-          <p className="text-black text-sm font-bold">would you like to save a person for this new whyspiaID "{whyspiaIDInput}"?</p>
+          <p className="text-black text-sm font-bold">would you like to save a person for this new whyspiaID &quot;{whyspiaIDInput}&quot;?</p>
           
           <div className="flex gap-2 mt-2">
             <button

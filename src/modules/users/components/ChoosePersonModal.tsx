@@ -146,7 +146,7 @@ export default function ChoosePersonModal({
 
         {showCreateSavedPersonPrompt && (
           <div className="bg-[#e5fff3] p-4 rounded-lg border-2 border-[#1d8f89] mb-4">
-            <p className="text-black text-sm font-bold">would you like to save a person for this new whyspiaID "{personInput}"?</p>
+            <p className="text-black text-sm font-bold">would you like to save a person for this new whyspiaID &quot;{personInput}&quot;?</p>
             <div className="text-black text-xs">NOTE: this is good idea for people you plan to interact with more than once</div>
             
             <div className="flex gap-2 mt-2">

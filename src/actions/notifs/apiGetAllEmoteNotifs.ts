@@ -14,9 +14,9 @@ export enum NOTIF_TYPE {
 export type EmoteResponse = {
   id: string
   senderPrimaryWallet: string
-  senderUser: UserV2PublicProfile
+  senderUser?: UserV2PublicProfile
   receiverSymbols: string[]
-  receiverUsers: UserV2PublicProfile[]
+  receiverUsers?: UserV2PublicProfile[]
   sentSymbols: string[]
   createdAt: Date
   chainPreview?: EmoteResponse[]
