@@ -36,7 +36,7 @@ const ParallelUserPaths = [
 ]
 
 const ParallelPage = () => {
-  const { jwtToken, user } = useContext(GlobalContext)
+  const { jwtToken } = useContext(GlobalContext)
 
   const [selectedContext, setSelectedContext] = useState(EMOTE_CONTEXTS.NO_CONTEXT as string)
   const [selectedPath, setSelectedPath] = useState(PARALLEL_USER_PATHS.HELP_BOARD as string)

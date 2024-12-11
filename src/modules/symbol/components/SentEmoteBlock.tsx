@@ -10,7 +10,6 @@ import SymbolSelectModal from "./SymbolSelectModal"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
-import { useRouter } from "next/router"
 import NouEmoteModal from "./NouEmoteModal"
 // import SendEmoteModal from "./SendEmoteModal"
 import classNames from "classnames"
@@ -36,7 +35,6 @@ export const SentEmoteBlock = ({
   isPreview?: boolean
   context?: string
 }) => {
-  const router = useRouter()
   const receiverSymbolsCount = emote?.receiverSymbols?.length || 0
   const sentSymbolsCount = emote?.sentSymbols?.length || 0
   const isMultipleReceivers = receiverSymbolsCount > 1
