@@ -58,7 +58,7 @@ export default function DoStuffUI({
       label: 'all options',
       children: [
         {
-          label: 'go to context',
+          label: 'travel to a place',
           content: (
             <GoToContext />
           )
@@ -133,7 +133,7 @@ export default function DoStuffUI({
               onClick: () => close ? close() : null,
             },
             {
-              label: 'all context pages',
+              label: 'all place pages',
               children: [
                 {
                   label: EMOTE_CONTEXTS.TAU,

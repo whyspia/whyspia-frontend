@@ -32,7 +32,7 @@ export default function ContextSelectModal({
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            go to home page of context
+            go to home page of place
           </A>
 
           <A
@@ -42,7 +42,7 @@ export default function ContextSelectModal({
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            go to about page of context
+            go to about page of place
           </A>
         </div>
 

@@ -10,7 +10,7 @@ const GoToContext = () => {
 
   return (
     <>
-      <div className="text-2xl font-bold mb-6">choose context to go to</div>
+      <div className="text-2xl font-bold mb-6">choose place to go to</div>
 
       <div className="mb-4 flex flex-wrap">
         {Object.values(EMOTE_CONTEXTS_ACTIVE).map((c) => (
@@ -39,7 +39,7 @@ const GoToContext = () => {
             "flex items-center py-4 px-4 bg-[#1d8f89] w-full font-bold"
           )}
         >
-          <div>context summaries:</div>
+          <div>place summaries:</div>
           {isContextSummsDropdownOpen ? (
             <ChevronUpIcon className="w-5 h-5 ml-2" />
           ) : (

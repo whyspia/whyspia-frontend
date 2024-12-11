@@ -4,7 +4,6 @@ import React from 'react'
 import Header from '../components/Header'
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
-import { ThemeProvider } from 'next-themes'
 import { GlobalContextComponent } from 'lib/GlobalContext'
 export { GlobalContext } from 'lib/GlobalContext'
 import { ClientWrapper } from 'lib/ClientWrapper'
@@ -14,6 +13,7 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ParticleConnectkit } from "modules/particle-network/components/ParticleConnectkit"
+import { ThemeProvider } from 'modules/styles/components/ThemeProvider'
 
 const queryClient = new QueryClient()
 
@@ -36,7 +36,7 @@ export default function ClientLayout({
           <ParticleConnectkit>
             <GlobalContextComponent>
               <ClientWrapper>
-                <ThemeProvider attribute="class" defaultTheme="dark">
+                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
                   <div className="min-h-screen py-20 dark:text-white">
                     <Header />
 
