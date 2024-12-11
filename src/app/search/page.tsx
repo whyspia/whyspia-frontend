@@ -2,7 +2,7 @@
 
 import type { NextPage } from 'next'
 import { flatten } from 'lodash'
-import { useContext, useEffect, useState } from 'react'
+import { Suspense, useContext, useEffect, useState } from 'react'
 import A from 'components/A'
 import { getAllUserTokens } from 'actions/users/apiUserActions'
 import { useInfiniteQuery } from 'react-query'
@@ -128,4 +128,14 @@ const SearchPage: NextPage = () => {
   )
 }
 
-export default SearchPage
+// if dont use wrapper you get stupid error due to useSearchParams: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+function WrappedSearchPage() {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <SearchPage />
+    </Suspense>
+  )
+}
+
+export default WrappedSearchPage
