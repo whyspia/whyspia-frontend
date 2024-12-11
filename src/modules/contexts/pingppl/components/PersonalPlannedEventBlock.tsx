@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import { apiDeleteDefinedEvent } from "actions/pingppl/apiDeleteDefinedEvent"
 import { useQueryClient } from "react-query"
-import { UserProfile } from "types/customTypes"
 import { UserV2PublicProfile } from "modules/users/types/UserNameTypes"
 
 
