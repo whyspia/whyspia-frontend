@@ -10,7 +10,7 @@ const NanaAbout: NextPage = () => {
 
       <div className="my-6 ">
         <A
-          href={`/context/nana`}
+          href={`/place/nana`}
           className={classNames(
             'p-3 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
           )}

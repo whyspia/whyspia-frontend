@@ -9,8 +9,8 @@ import { getFrontendURL } from 'utils/seo-constants'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
 import { useQueryClient } from 'react-query'
-import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
-import { NouEmoteBlock } from 'modules/contexts/nou/components/NouEmoteBlock'
+import { EMOTE_CONTEXTS } from 'modules/place/utils/ContextUtils'
+import { NouEmoteBlock } from 'modules/places/nou/components/NouEmoteBlock'
 import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
 

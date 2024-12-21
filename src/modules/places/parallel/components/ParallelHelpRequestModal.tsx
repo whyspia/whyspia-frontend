@@ -1,7 +1,7 @@
 import Modal from 'components/modals/Modal'
 import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
-import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS } from 'modules/place/utils/ContextUtils'
 import { GlobalContext } from 'lib/GlobalContext'
 import DropdownSelectMenu from 'modules/forms/components/DropdownSelectMenu'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'

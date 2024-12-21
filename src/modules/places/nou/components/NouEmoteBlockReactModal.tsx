@@ -2,7 +2,7 @@ import Modal from 'components/modals/Modal'
 import classNames from 'classnames'
 import A from 'components/A'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
-import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/place/utils/ContextUtils'
 import { NouEmoteBlock } from './NouEmoteBlock'
 
 

@@ -7,8 +7,8 @@ import A from 'components/A'
 import useAuth from 'modules/users/hooks/useAuth'
 import DefineUI from 'modules/symbol/components/DefineUI'
 import BreadcrumbAccordion from './BreadcrumbAccordion'
-import GoToContext from 'modules/context/components/GoToContext'
-import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import GoToContext from 'modules/place/components/GoToContext'
+import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/place/utils/ContextUtils'
 import SavedPeopleUI from 'modules/users/components/SavedPeopleUI'
 
 
@@ -28,7 +28,15 @@ export default function DoStuffUI({
 
           <A
             onClick={close ? () => close() : () => {}}
-            href="/context/thinking-about-u"
+            href="/place/currently"
+            className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
+          >
+            <span className="block w-[20rem]"><span className="font-bold">CURRENTLY</span>: share with others what is current for you</span>
+          </A>
+
+          <A
+            onClick={close ? () => close() : () => {}}
+            href="/place/thinking-about-u"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
             <span className="block w-[20rem]"><span className="font-bold">TAU</span>: tell someone ur thinking about them or see if anyone is thinking about u</span>
@@ -36,7 +44,7 @@ export default function DoStuffUI({
 
           <A
             onClick={close ? () => close() : () => {}}
-            href="/context/nou"
+            href="/place/nou"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
             <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone</span>
@@ -44,7 +52,7 @@ export default function DoStuffUI({
 
           <A
             onClick={close ? () => close() : () => {}}
-            href={`/context/pingppl`}
+            href={`/place/pingppl`}
             className="w-full p-3 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
             <span className="block w-[20rem]"><span className="font-bold">pingppl</span>: plan and send events to people or subscribe to specific events from other people</span>

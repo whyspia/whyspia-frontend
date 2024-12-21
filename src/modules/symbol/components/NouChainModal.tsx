@@ -2,7 +2,7 @@ import Modal from 'components/modals/Modal'
 import { flatten } from 'lodash'
 import apiGetEmoteReplyChain from 'actions/emotes/apiGetEmoteReplyChain'
 import { useInfiniteQuery } from 'react-query'
-import { NouEmoteBlock } from 'modules/contexts/nou/components/NouEmoteBlock'
+import { NouEmoteBlock } from 'modules/places/nou/components/NouEmoteBlock'
 
 // take in emoteID and display from that emote and down - all replies in chain (no u context will not have branches)
 export default function NouChainModal({

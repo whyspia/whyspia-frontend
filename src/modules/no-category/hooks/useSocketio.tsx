@@ -1,6 +1,6 @@
 import { apiNewEmote } from "actions/emotes/apiCreateEmote"
 import { GlobalContext } from "lib/GlobalContext"
-import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
+import { EMOTE_CONTEXTS } from "modules/place/utils/ContextUtils"
 import { initializeSocket } from "modules/no-category/services/SocketIOService"
 import { useContext, useEffect, useState } from "react"
 import { Socket } from "socket.io-client"

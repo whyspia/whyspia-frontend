@@ -24,6 +24,6 @@ export default async function apiGetSavedPersonSingle({
     return response?.data?.data?.savedPerson
   } catch (error) {
     console.error(`Could not get SavedPerson single for savedPersonID==${savedPersonID}`, error)
-    return []
+    return null
   }
 }

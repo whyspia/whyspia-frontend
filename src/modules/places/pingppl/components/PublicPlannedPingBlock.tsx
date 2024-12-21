@@ -7,8 +7,8 @@ import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import ModalService from "components/modals/ModalService"
-import ContextSelectModal from "modules/context/components/ContextSelectModal"
-import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
+import ContextSelectModal from "modules/place/components/ContextSelectModal"
+import { EMOTE_CONTEXTS } from "modules/place/utils/ContextUtils"
 import YouGottaLoginModal from "modules/users/components/YouGottaLoginModal"
 import PingpplUnfollowConfirmModal from "./PingpplUnfollowConfirmModal"
 import PingpplFollowConfirmModal from "./PingpplFollowConfirmModal"

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import A from 'components/A'
 import { EmoteResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
-import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/place/utils/ContextUtils'
 
 
 export default function EmoteSelectModal({

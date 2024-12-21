@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
-import { EMOTE_CONTEXTS_ACTIVE, getContextSummary } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS_ACTIVE, getContextSummary } from 'modules/place/utils/ContextUtils'
 import type { NextPage } from 'next'
 import { useState } from 'react'
 import NonFixedFooter from 'components/NonFixedFooter'

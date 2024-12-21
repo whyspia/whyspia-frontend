@@ -2,12 +2,13 @@ import Modal from 'components/modals/Modal'
 import classNames from 'classnames'
 import A from 'components/A'
 import { EmoteNotifSingleResponse } from 'actions/notifs/apiGetAllEmoteNotifs'
-import { getContextPagePath } from 'modules/context/utils/ContextUtils'
 import { NotifBlock } from 'modules/notifs/components/NotifBlock'
+import { PingpplSentEventResponse } from 'actions/pingppl/apiGetAllSentEvents'
+import { TAUResponse } from 'actions/tau/apiGetAllTAU'
 
 
 // just used for when clicking on notif rn, but maybe used other places eventually like some activity item
-export default function PingpplFollowReactModal({
+export default function TAUNotifReactModal({
   close,
   notif,
 }: {
@@ -30,12 +31,12 @@ export default function PingpplFollowReactModal({
         <div className="flex flex-wrap justify-center mt-6">
           <A
             onClick={() => onOptionSelected('home')}
-            href={getContextPagePath(notif?.context)}
+            href={`/place/thinking-about-u`}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            view ur planned pings
+            tell someone ur thinking about them or see if anyone is thinking about u
           </A>
 
         </div>

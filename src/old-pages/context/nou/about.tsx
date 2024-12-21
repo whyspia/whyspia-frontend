@@ -10,12 +10,12 @@ const NoUAbout: NextPage = () => {
 
       <div className="my-6 ">
         <A
-          href={`/context/nou`}
+          href={`/place/nou`}
           className={classNames(
             'p-3 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
           )}
         >
-          return to No U Context
+          return to No U
         </A>
       </div>
 

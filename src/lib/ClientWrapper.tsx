@@ -29,8 +29,6 @@ export const ClientWrapper = ({ children }: any) => {
         handleParticleAndWhyspiaDisconnect()
       }
 
-      console.log("setIsJwtLoadingFinished(true)")
-
       setIsJwtLoadingFinished(true)  // no longer loading
     }
 

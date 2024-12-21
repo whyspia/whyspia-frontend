@@ -4,13 +4,13 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import toast from 'react-hot-toast'
 import { GlobalContext } from 'lib/GlobalContext'
 import DropdownSelectMenu from 'modules/forms/components/DropdownSelectMenu'
-import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS } from 'modules/place/utils/ContextUtils'
 import ModalService from 'components/modals/ModalService'
-import ParallelGoOnlineModal from 'modules/contexts/parallel/components/ParallelGoOnlineModal'
+import ParallelGoOnlineModal from 'modules/places/parallel/components/ParallelGoOnlineModal'
 import useSocketio from 'modules/no-category/hooks/useSocketio'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
 import { apiNewEmotesMany } from 'actions/emotes/apiCreateEmotesMany'
-import ParallelHelpRequestModal from 'modules/contexts/parallel/components/ParallelHelpRequestModal'
+import ParallelHelpRequestModal from 'modules/places/parallel/components/ParallelHelpRequestModal'
 
 
 const ParallelContexts = [

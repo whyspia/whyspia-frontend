@@ -13,17 +13,17 @@ import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
-import ContextSelectModal from "modules/context/components/ContextSelectModal"
+import ContextSelectModal from "modules/place/components/ContextSelectModal"
 import EmoteSelectModal from "modules/emote/components/EmoteSelectModal"
 import { PingpplFollowResponse } from "actions/pingppl/apiGetAllPingpplFollows"
 import { PingpplSentEventResponse } from "actions/pingppl/apiGetAllSentEvents"
-import PingpplFollowReactModal from "modules/contexts/pingppl/components/PingpplFollowReactModal"
+import PingpplFollowReactModal from "modules/places/pingppl/components/PingpplFollowReactModal"
 import classNames from "classnames"
-import PingpplSentEventReactModal from "modules/contexts/pingppl/components/PingpplSentEventReactModal"
+import PingpplSentEventReactModal from "modules/places/pingppl/components/PingpplSentEventReactModal"
 import { TAUResponse } from "actions/tau/apiGetAllTAU"
-import TAUNotifReactModal from "modules/contexts/tau/components/TAUNotifReactModal"
-import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
-import NouEmoteBlockReactModal from "modules/contexts/nou/components/NouEmoteBlockReactModal"
+import TAUNotifReactModal from "modules/places/tau/components/TAUNotifReactModal"
+import { EMOTE_CONTEXTS } from "modules/place/utils/ContextUtils"
+import NouEmoteBlockReactModal from "modules/places/nou/components/NouEmoteBlockReactModal"
 import PersonClickModal from "modules/users/components/PersonClickModal"
 
 

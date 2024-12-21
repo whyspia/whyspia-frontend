@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { getFrontendURL } from "utils/seo-constants"
 import classNames from "classnames"
-import { EMOTE_CONTEXTS } from "modules/context/utils/ContextUtils"
+import { EMOTE_CONTEXTS } from "modules/place/utils/ContextUtils"
 import SymbolSelectModal from "modules/symbol/components/SymbolSelectModal"
 import NouChainModal from "modules/symbol/components/NouChainModal"
 import NouEmoteModal from "modules/symbol/components/NouEmoteModal"

@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SentEmoteBlock } from 'modules/symbol/components/SentEmoteBlock'
 import { apiNewEmote } from 'actions/emotes/apiCreateEmote'
-import { EMOTE_CONTEXTS } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS } from 'modules/place/utils/ContextUtils'
 import { GlobalContext } from 'lib/GlobalContext'
 
 const goOnlineEmoteData = {

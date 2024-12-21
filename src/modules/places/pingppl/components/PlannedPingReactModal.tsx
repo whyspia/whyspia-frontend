@@ -1,7 +1,7 @@
 import Modal from 'components/modals/Modal'
 import classNames from 'classnames'
 import A from 'components/A'
-import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/context/utils/ContextUtils'
+import { EMOTE_CONTEXTS, getContextPagePath } from 'modules/place/utils/ContextUtils'
 import { PublicPlannedPingBlock } from './PublicPlannedPingBlock'
 import { getFrontendURL } from 'utils/seo-constants'
 

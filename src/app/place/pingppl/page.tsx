@@ -15,7 +15,7 @@ import apiGetAllSentEvents, { PingpplSentEventResponse } from 'actions/pingppl/a
 import { formatTimeAgo } from 'utils/randomUtils'
 import A from 'components/A'
 import apiGetAllEmoteNotifs, { NOTIF_TYPE } from 'actions/notifs/apiGetAllEmoteNotifs'
-import { PersonalPlannedEventBlock } from 'modules/contexts/pingppl/components/PersonalPlannedEventBlock'
+import { PersonalPlannedEventBlock } from 'modules/places/pingppl/components/PersonalPlannedEventBlock'
 import useAuth from 'modules/users/hooks/useAuth'
 import { UserV2PublicProfile } from 'modules/users/types/UserNameTypes'
 
