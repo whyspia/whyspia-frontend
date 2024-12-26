@@ -215,7 +215,7 @@ export default function DoStuffUI({
   return (
     <div className="p-6 w-96 md:w-[31rem] text-white">
 
-      <div className="text-2xl font-bold mb-6">why are you here? what do you desire?</div>
+      <div className="text-2xl font-bold mb-6">home</div>
 
       <BreadcrumbAccordion items={doStuffItems} />
 

@@ -15,13 +15,18 @@ import ChoosePersonButton from 'modules/users/components/ChoosePersonButton'
 import CurrentlyEditPlaceModal from 'modules/places/currently/components/CurrentlyEditPlaceModal'
 import CurrentlyEditStatusModal from 'modules/places/currently/components/CurrentlyEditStatusModal'
 import CurrentlyEditTagsModal from 'modules/places/currently/components/CurrentlyEditTagsModal'
+import { 
+  TagWithDuration, 
+  getShortDuration 
+} from 'modules/places/currently/types/tagDurationTypes'
+
 
 const CurrentlyPage = () => {
   const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
   const { handleParticleAndWhyspiaLogin } = useAuth()
 
   const [inputPlace, setInputPlace] = useState('')
-  const [inputTags, setInputTags] = useState<string[]>([])
+  const [inputTags, setInputTags] = useState<TagWithDuration[]>([])
   const [inputStatus, setInputStatus] = useState('')
 
   const isThereAnyInput = inputPlace || (inputTags && inputTags?.length > 0) || inputStatus
@@ -80,7 +85,7 @@ const CurrentlyPage = () => {
               </div>
 
               <div className="w-full">
-                {/* <div className="font-bold text-lg mb-2">PREVIEW:</div> */}
+                <div className="font-bold text-lg mb-2">PUBLIC VIEW:</div>
                 
                 <div className="p-6 border-2 border-white rounded-2xl">
                   <A
@@ -105,7 +110,9 @@ const CurrentlyPage = () => {
                       <div className="mt-2">
                         {inputTags.map((tag, index) => (
                           <div key={index} className="inline-block bg-[#1d8f89] rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                            {tag}
+                            <span>{tag.text}</span>
+                            <span className="mx-1 opacity-60">·</span>
+                            <span className="opacity-60">{getShortDuration(tag.duration)}</span>
                           </div>
                         ))}
                       </div>
@@ -118,7 +125,7 @@ const CurrentlyPage = () => {
                     </div>
                   )}
 
-                  {!isThereAnyInput && (<div className="text-xs text-gray-500">nothing entered yet...</div>)}
+                  {!isThereAnyInput && (<div className="text-xs text-gray-500">nothing shared yet...</div>)}
                  
                 </div>
               </div>
