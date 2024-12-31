@@ -2,8 +2,8 @@
 
 import toast from 'react-hot-toast'
 import { flatten } from 'lodash'
-import { useContext, useState } from 'react'
-import { useInfiniteQuery, useQueryClient } from 'react-query'
+import { useContext, useState, useEffect } from 'react'
+import { useInfiniteQuery, useQueryClient, useQuery } from 'react-query'
 import { GlobalContext } from 'lib/GlobalContext'
 import classNames from 'classnames'
 import A from 'components/A'
@@ -17,17 +17,53 @@ import CurrentlyEditStatusModal from 'modules/places/currently/components/Curren
 import CurrentlyEditTagsModal from 'modules/places/currently/components/CurrentlyEditTagsModal'
 import { 
   TagWithDuration, 
-  getShortDuration 
-} from 'modules/places/currently/types/tagDurationTypes'
+  getShortDurationOptionName,
+  PlaceWithDuration,
+  StatusWithDuration,
+  getDurationOption
+} from 'modules/places/currently/types/durationTypes'
+import { apiGetCurrentlySingleWithAnyActiveField } from 'actions/currently/apiGetCurrentlySingle'
+import { CurrentlyResponse, CurrentlyPlace, CurrentlyTag, CurrentlyStatus } from 'modules/places/currently/types/apiCurrentlyTypes'
+import { DURATION_OPTIONS } from 'modules/places/currently/types/durationTypes'
 
 
 const CurrentlyPage = () => {
   const { jwtToken, userV2: loggedInUser } = useContext(GlobalContext)
   const { handleParticleAndWhyspiaLogin } = useAuth()
 
-  const [inputPlace, setInputPlace] = useState('')
-  const [inputTags, setInputTags] = useState<TagWithDuration[]>([])
-  const [inputStatus, setInputStatus] = useState('')
+  const [inputPlace, setInputPlace] = useState<CurrentlyPlace | null>(null)
+  const [inputTags, setInputTags] = useState<CurrentlyTag[]>([])
+  const [inputStatus, setInputStatus] = useState<CurrentlyStatus | null>(null)
+
+  // Fetch current data
+  const { data: currentlyData } = useQuery<CurrentlyResponse>(
+    ['currently', loggedInUser?.primaryWallet],
+    () => apiGetCurrentlySingleWithAnyActiveField({
+      jwt: jwtToken,
+      senderPrimaryWallet: loggedInUser?.primaryWallet
+    }),
+    {
+      enabled: !!loggedInUser?.primaryWallet && !!jwtToken,
+      refetchOnWindowFocus: true
+    }
+  )
+
+  // Update local state when data is fetched
+  useEffect(() => {
+    if (currentlyData) {
+      if (currentlyData.place) {
+        setInputPlace(currentlyData.place)
+      }
+
+      if (currentlyData.wantOthersToKnowTags?.length > 0) {
+        setInputTags(currentlyData.wantOthersToKnowTags)
+      }
+
+      if (currentlyData.status) {
+        setInputStatus(currentlyData.status)
+      }
+    }
+  }, [currentlyData])
 
   const isThereAnyInput = inputPlace || (inputTags && inputTags?.length > 0) || inputStatus
 
@@ -56,7 +92,11 @@ const CurrentlyPage = () => {
 
               <div className="w-full flex justify-between mb-8">
                 <button
-                  onClick={() => ModalService.open(CurrentlyEditPlaceModal, { onConfirm: setInputPlace, currentPlace: inputPlace })}
+                  onClick={() => ModalService.open(CurrentlyEditPlaceModal, { 
+                    onConfirm: setInputPlace, 
+                    currentPlace: inputPlace,
+                    jwt: jwtToken 
+                  })}
                   className={classNames(
                     "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
                   )}
@@ -66,7 +106,8 @@ const CurrentlyPage = () => {
                 <button
                   onClick={() => ModalService.open(CurrentlyEditTagsModal, { 
                     onConfirm: setInputTags, 
-                    currentTags: inputTags 
+                    currentTags: inputTags,
+                    jwt: jwtToken 
                   })}
                   className={classNames(
                     "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
@@ -75,7 +116,11 @@ const CurrentlyPage = () => {
                   {inputTags.length > 0 ? 'edit' : 'add'} WANT_YOU_TO_KNOW_TAGS
                 </button>
                 <button
-                  onClick={() => ModalService.open(CurrentlyEditStatusModal, { onConfirm: setInputStatus, currentStatus: inputStatus })}
+                  onClick={() => ModalService.open(CurrentlyEditStatusModal, { 
+                    onConfirm: setInputStatus, 
+                    currentStatus: inputStatus,
+                    jwt: jwtToken 
+                  })}
                   className={classNames(
                     "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
                   )}
@@ -99,8 +144,19 @@ const CurrentlyPage = () => {
                   </A>
 
                   {inputPlace && (
-                    <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg">
-                      <span className="text-gray-400 font-semibold font-mono">PLACE:</span> {inputPlace}
+                    <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg relative">
+                      <div className="absolute top-0 right-0 text-xs rounded-tr-lg rounded-bl-lg" style={{ background: 'rgb(29 143 137)' }}>
+                        <div className="bg-[#1d8f89] px-3 py-1 rounded-tr-lg rounded-bl-lg">
+                          {getShortDurationOptionName(getDurationOption(inputPlace.duration))}
+                        </div>
+                        <div className="absolute inset-0 bg-[#1d8f89]/50 rounded-tr-lg rounded-bl-lg" style={{ zIndex: -1 }}></div>
+                      </div>
+                      <span className="text-gray-400 font-semibold font-mono">PLACE:</span>
+                      <div className="mt-2">
+                        <div className="text-sm">
+                          {inputPlace.text}
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -110,9 +166,9 @@ const CurrentlyPage = () => {
                       <div className="mt-2">
                         {inputTags.map((tag, index) => (
                           <div key={index} className="inline-block bg-[#1d8f89] rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                            <span>{tag.text}</span>
+                            <span>{tag.tag}</span>
                             <span className="mx-1 opacity-60">·</span>
-                            <span className="opacity-60">{getShortDuration(tag.duration)}</span>
+                            <span className="opacity-60">{getShortDurationOptionName(getDurationOption(tag.duration))}</span>
                           </div>
                         ))}
                       </div>
@@ -120,8 +176,19 @@ const CurrentlyPage = () => {
                   )}
 
                   {inputStatus && (
-                    <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg">
-                      <span className="text-gray-400 font-semibold font-mono">STATUS:</span> {inputStatus}
+                    <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg relative">
+                      <div className="absolute top-0 right-0 text-xs rounded-tr-lg rounded-bl-lg" style={{ background: 'rgb(29 143 137)' }}>
+                        <div className="bg-[#1d8f89] px-3 py-1 rounded-tr-lg rounded-bl-lg">
+                          {getShortDurationOptionName(getDurationOption(inputStatus.duration))}
+                        </div>
+                        <div className="absolute inset-0 bg-[#1d8f89]/50 rounded-tr-lg rounded-bl-lg" style={{ zIndex: -1 }}></div>
+                      </div>
+                      <span className="text-gray-400 font-semibold font-mono">STATUS:</span>
+                      <div className="mt-2">
+                        <div className="text-sm">
+                          {inputStatus.text}
+                        </div>
+                      </div>
                     </div>
                   )}
 
