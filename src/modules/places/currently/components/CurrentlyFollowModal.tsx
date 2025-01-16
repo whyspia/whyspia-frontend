@@ -322,7 +322,7 @@ export default function CurrentlyFollowModal({
                   </div>
                 ) : (
                   <div className="text-gray-400">
-                    you don't follow anything from {userToken.calculatedDisplayName} yet
+                    you don&apos;t follow anything from {userToken.calculatedDisplayName} yet
                   </div>
                 )}
               </div>
