@@ -88,6 +88,7 @@ export async function apiGetAllCurrentlyWithAnyActiveField({
         senderPrimaryWallet,
         anyActiveField: true,
         placeName,
+        savedPeopleOfRequestingUser: filterBySavedPeopleOfRequestingUser,
       },
     })
 

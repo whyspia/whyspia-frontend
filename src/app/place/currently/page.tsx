@@ -33,7 +33,7 @@ const CurrentlyPage = () => {
   const [inputPlace, setInputPlace] = useState<CurrentlyPlace | null>(null)
   const [inputTags, setInputTags] = useState<CurrentlyTag[]>([])
   const [inputStatus, setInputStatus] = useState<CurrentlyStatus | null>(null)
-  const [activeTab, setActiveTab] = useState<'you' | 'saved'>('you')
+  const [activeTab, setActiveTab] = useState<'you' | 'saved' | 'everyone'>('you')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFollowModal, setShowFollowModal] = useState(false)
   const [showPingModal, setShowPingModal] = useState(false)
@@ -164,6 +164,47 @@ const CurrentlyPage = () => {
       refetchOnMount: false,
       refetchOnWindowFocus: true,
       enabled: !!loggedInUser?.primaryWallet && !!jwtToken && activeTab === 'saved',
+      keepPreviousData: true,
+    }
+  )
+
+  // Add a new fetch function for everyone's currently data
+  const fetchEveryonesCurrentlies = async ({ pageParam = 0 }) => {
+    const currentlyList = await apiGetAllCurrentlyWithAnyActiveField({
+      jwt: jwtToken,
+      skip: pageParam,
+      limit: 10,
+      orderBy: 'updatedAt',
+      orderDirection: 'desc',
+      filterBySavedPeopleOfRequestingUser: false,
+      search: searchQuery
+    })
+    
+    return currentlyList ? currentlyList : []
+  }
+
+  // Add query for everyone's currently data
+  const {
+    data: everyonesCurrently,
+    fetchNextPage: fetchNextPageEveryone,
+    hasNextPage: hasNextPageEveryone,
+    isFetchingNextPage: isFetchingNextPageEveryone
+  } = useInfiniteQuery(
+    [`currently-everyone-${loggedInUser?.primaryWallet}`, searchQuery],
+    ({ pageParam = 0 }) => fetchEveryonesCurrentlies({
+      pageParam
+    }),
+    {
+      getNextPageParam: (lastGroup, allGroups) => {
+        const morePagesExist = lastGroup?.length === 10
+        if (!morePagesExist) {
+          return false
+        }
+        return allGroups.length * 10
+      },
+      refetchOnMount: false,
+      refetchOnWindowFocus: true,
+      enabled: !!loggedInUser?.primaryWallet && !!jwtToken && activeTab === 'everyone',
       keepPreviousData: true,
     }
   )
@@ -322,6 +363,15 @@ const CurrentlyPage = () => {
                 )}
               >
                 your saved people
+              </button>
+              <button
+                onClick={() => setActiveTab('everyone')}
+                className={classNames(
+                  'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+                  activeTab === 'everyone' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+                )}
+              >
+                everyone
               </button>
             </div>
 
@@ -499,7 +549,7 @@ const CurrentlyPage = () => {
                   </div>
                 </div>
               </>
-            ) : (
+            ) : activeTab === 'saved' ? (
               <div className="w-full">
                 <input
                   type="text"
@@ -534,6 +584,44 @@ const CurrentlyPage = () => {
                 {!savedPeopleCurrently?.pages[0]?.length && (
                   <div className="text-center text-gray-500 mt-4">
                     currently, your saved people have nothing to share
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="w-full">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value)
+                  }}
+                  placeholder="search..."
+                  className="w-full px-3 py-2 mb-4 bg-dark3 text-white border border-[#1d8f89] rounded-md focus:outline-none focus:border-white"
+                />
+
+                {everyonesCurrently?.pages.map((page, i) => (
+                  <div key={i}>
+                    {page.map((currently, index) => (
+                      <div key={index}>
+                        {renderCurrentlyCard(currently)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                
+                {hasNextPageEveryone && (
+                  <button
+                    onClick={() => fetchNextPageEveryone()}
+                    disabled={isFetchingNextPageEveryone}
+                    className="w-full py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 mt-4"
+                  >
+                    {isFetchingNextPageEveryone ? 'Loading more...' : 'Load more'}
+                  </button>
+                )}
+                
+                {!everyonesCurrently?.pages[0]?.length && (
+                  <div className="text-center text-gray-500 mt-4">
+                    no one is sharing anything currently
                   </div>
                 )}
               </div>
