@@ -14,17 +14,21 @@ import { apiCreateCurrently, createStatusUpdate } from 'actions/currently/apiCre
 import { updateStatusText, updateStatusDuration, deleteStatus, apiUpdateCurrently } from 'actions/currently/apiUpdateCurrently'
 import { CurrentlyStatus } from '../types/apiCurrentlyTypes'
 
-export default function CurrentlyEditStatusModal({
-  close,
-  onConfirm,
-  currentStatus,
-  jwt
-}: {
+interface CurrentlyEditStatusModalProps {
   close: () => void
   onConfirm: (status: CurrentlyStatus | null) => void
   currentStatus: CurrentlyStatus | null
   jwt: string
-}) {
+  isAnyFieldActive: boolean
+}
+
+export default function CurrentlyEditStatusModal({
+  close,
+  onConfirm,
+  currentStatus,
+  jwt,
+  isAnyFieldActive
+}: CurrentlyEditStatusModalProps) {
   const [inputStatus, setInputStatus] = useState(currentStatus?.text || '')
   const [inputDuration, setInputDuration] = useState<DURATION_OPTIONS>(
     currentStatus 
@@ -34,14 +38,13 @@ export default function CurrentlyEditStatusModal({
 
   const handleConfirm = async () => {
     if (!inputStatus.trim()) {
-      // If they cleared the text, treat as delete
       if (currentStatus) {
         const result = await apiUpdateCurrently({
           jwt,
           updates: [deleteStatus()]
         })
         if (!result) {
-          toast.error('Failed to delete status')
+          toast.error('failed to remove status')
           return
         }
         onConfirm(null)
@@ -56,35 +59,44 @@ export default function CurrentlyEditStatusModal({
       updatedDurationAt: new Date() // only used for frontend
     }
 
-    if (!currentStatus) {
-      // Creating new status
+    if (isAnyFieldActive) {
+      if (currentStatus) {
+        const updates = []
+        if (currentStatus.text !== newStatus.text) {
+          updates.push(updateStatusText(newStatus.text))
+        }
+        if (currentStatus.duration !== newStatus.duration) {
+          updates.push(updateStatusDuration(newStatus.duration))
+        }
+        
+        if (updates.length > 0) {
+          const result = await apiUpdateCurrently({
+            jwt,
+            updates
+          })
+          if (!result) {
+            toast.error('failed to update status')
+            return
+          }
+        }
+      } else {
+        const result = await apiUpdateCurrently({
+          jwt,
+          updates: [createStatusUpdate(newStatus)]
+        })
+        if (!result) {
+          toast.error('failed to update status')
+          return
+        }
+      }
+    } else {
       const result = await apiCreateCurrently({
         jwt,
         updates: [createStatusUpdate(newStatus)]
       })
       if (!result) {
-        toast.error('Failed to create new status')
+        toast.error('failed to add status')
         return
-      }
-    } else {
-      // Updating existing status
-      const updates = []
-      if (currentStatus.text !== newStatus.text) {
-        updates.push(updateStatusText(newStatus.text))
-      }
-      if (currentStatus.duration !== newStatus.duration) {
-        updates.push(updateStatusDuration(newStatus.duration))
-      }
-      
-      if (updates.length > 0) {
-        const result = await apiUpdateCurrently({
-          jwt,
-          updates
-        })
-        if (!result) {
-          toast.error('Failed to update status')
-          return
-        }
       }
     }
 
@@ -124,7 +136,7 @@ export default function CurrentlyEditStatusModal({
           />
 
           <div>
-            <label className="block text-sm my-2">HOW LONG TO SHARE STATUS FOR (timer starts on save)</label>
+            <label className="block text-sm my-2">HOW LONG TO SHARE STATUS FOR (timer starts on share)</label>
             <DropdownSelectMenu 
               options={ACTIVE_DURATION_OPTIONS} 
               selectedOption={inputDuration} 
@@ -142,7 +154,7 @@ export default function CurrentlyEditStatusModal({
                   : 'bg-gray-500 border-gray-500 cursor-not-allowed opacity-50'
               }`}
             >
-              save status
+              share status
             </button>
 
             <button 
@@ -157,7 +169,7 @@ export default function CurrentlyEditStatusModal({
                 onClick={handleDelete}
                 className="px-4 py-2 bg-red-500 text-white rounded-md text-sm border border-red-500 hover:border-white"
               >
-                delete and save
+                remove current status
               </button>
             )}
           </div>

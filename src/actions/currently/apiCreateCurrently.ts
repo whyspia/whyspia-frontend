@@ -6,21 +6,16 @@ import {
   CurrentlyUpdate, 
   CurrentlyUpdateTypes,
 } from 'modules/places/currently/types/apiCurrentlyTypes'
-import { 
-  PlaceWithDuration,
-  StatusWithDuration,
-  TagWithDuration,
-  getDurationMs 
-} from 'modules/places/currently/types/durationTypes'
 
 // Helper methods for creating CurrentlyUpdates
-export const createPlaceUpdate = (place: CurrentlyPlace): CurrentlyUpdate => {
+export const createPlaceUpdate = (place: CurrentlyPlace, shouldSavePlaceOnShare = false): CurrentlyUpdate => {
   return {
     updateType: CurrentlyUpdateTypes.NEW_PLACE,
     newValue: {
       text: place.text,
-      duration: place.duration
-    }
+      duration: place.duration,
+    },
+    shouldSavePlaceOnShare,
   }
 }
 

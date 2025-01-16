@@ -3,26 +3,21 @@ import {
   CurrentlyUpdate, 
   CurrentlyUpdateTypes 
 } from 'modules/places/currently/types/apiCurrentlyTypes'
-import { 
-  PlaceWithDuration,
-  StatusWithDuration,
-  TagWithDuration,
-  getDurationMs,
-  DURATION_OPTIONS 
-} from 'modules/places/currently/types/durationTypes'
 
 // Helper methods for creating CurrentlyUpdates
-export const updatePlaceText = (newText: string): CurrentlyUpdate => {
+export const updatePlaceText = (newText: string, shouldSavePlaceOnShare = false): CurrentlyUpdate => {
   return {
     updateType: CurrentlyUpdateTypes.EDIT_PLACE_TEXT,
-    newValue: newText
+    newValue: newText,
+    shouldSavePlaceOnShare,
   }
 }
 
-export const updatePlaceDuration = (duration: number): CurrentlyUpdate => {
+export const updatePlaceDuration = (duration: number, shouldSavePlaceOnShare = false): CurrentlyUpdate => {
   return {
     updateType: CurrentlyUpdateTypes.EDIT_PLACE_DURATION,
-    newValue: duration
+    newValue: duration,
+    shouldSavePlaceOnShare,
   }
 }
 

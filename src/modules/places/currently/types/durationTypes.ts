@@ -88,4 +88,30 @@ export const getDurationOption = (duration: number): DURATION_OPTIONS => {
   // Everything else must be END_OF_DAY
   // (since getDurationMs uses getMsUntilEndOfDay() for this case)
   return DURATION_OPTIONS.END_OF_DAY
+}
+
+export const getDisplayTimeLeft = (duration: number, updatedDurationAt: Date): string => {
+  const now = new Date()
+  const updateTime = new Date(updatedDurationAt)
+  const remainingMs = duration - (now.getTime() - updateTime.getTime())
+
+  // If expired (remaining time is negative or zero), show EXPIRED
+  if (remainingMs <= 0) {
+    return 'EXPIRED'
+  }
+
+  // If more than 24 hours remaining, show infinity
+  if (remainingMs > 24 * 60 * 60 * 1000) {
+    return '∞'
+  }
+
+  // If more than 1 hour remaining, show hours
+  if (remainingMs > 60 * 60 * 1000) {
+    const hoursLeft = Math.ceil(remainingMs / (60 * 60 * 1000))
+    return `${hoursLeft}H`
+  }
+
+  // If less than 1 hour, show minutes
+  const minutesLeft = Math.max(1, Math.ceil(remainingMs / (60 * 1000)))
+  return `${minutesLeft}m`
 } 

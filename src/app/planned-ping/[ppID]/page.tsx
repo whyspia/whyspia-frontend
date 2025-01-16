@@ -97,7 +97,7 @@ const PlannedPing = () => {
           </div>
 
           <div
-            onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.PINGPPL })}
+            onClick={(event) => ModalService.open(ContextSelectModal, { context: EMOTE_CONTEXTS.NOTIF })}
             className="relative flex w-full text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] cursor-pointer"
           >
             <div>

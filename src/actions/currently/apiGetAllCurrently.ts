@@ -12,6 +12,7 @@ type GetAllCurrentlyInput = {
   anyActiveField?: boolean
   anyActivePlace?: boolean
   placeName?: null | string
+  filterBySavedPeopleOfRequestingUser?: boolean
 }
 
 /**
@@ -28,6 +29,7 @@ export default async function apiGetAllCurrently({
   anyActiveField = null,
   anyActivePlace = null,
   placeName = null,
+  filterBySavedPeopleOfRequestingUser,
 }: GetAllCurrentlyInput): Promise<CurrentlyResponse[]> {
 
   try {
@@ -69,6 +71,7 @@ export async function apiGetAllCurrentlyWithAnyActiveField({
   search = null,
   senderPrimaryWallet = null,
   placeName = null,
+  filterBySavedPeopleOfRequestingUser,
 }: GetAllCurrentlyInput): Promise<CurrentlyResponse[]> {
 
   try {
@@ -107,6 +110,7 @@ export async function apiGetAllCurrentlyWithAnyActivePlace({
   search = null,
   senderPrimaryWallet = null,
   placeName = null,
+  filterBySavedPeopleOfRequestingUser,
 }: GetAllCurrentlyInput): Promise<CurrentlyResponse[]> {
 
   try {

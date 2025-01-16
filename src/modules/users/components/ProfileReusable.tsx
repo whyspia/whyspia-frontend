@@ -18,19 +18,19 @@ import apiGetAllSentEvents from 'actions/pingppl/apiGetAllSentEvents'
 import apiGetAllDefinedEvents from 'actions/pingppl/apiGetAllDefinedEvents'
 import classNames from 'classnames'
 import ModalService from 'components/modals/ModalService'
-import PingpplFollowConfirmModal from 'modules/places/pingppl/components/PingpplFollowConfirmModal'
 import apiGetAllPingpplFollows from 'actions/pingppl/apiGetAllPingpplFollows'
 import { GlobalContext } from 'lib/GlobalContext'
-import PingpplUnfollowConfirmModal from 'modules/places/pingppl/components/PingpplUnfollowConfirmModal'
-import ContextSelectModal from 'modules/place/components/ContextSelectModal'
-import { EMOTE_CONTEXTS } from 'modules/place/utils/ContextUtils'
-import YouGottaLoginModal from './YouGottaLoginModal'
 import { PublicPlannedPingBlock } from 'modules/places/pingppl/components/PublicPlannedPingBlock'
 import PlannedPingReactModal from 'modules/places/pingppl/components/PlannedPingReactModal'
 import SymbolSelectModal from 'modules/symbol/components/SymbolSelectModal'
 import { formatWalletAddress } from '../utils/WalletUtils'
+import { CurrentlyResponse } from 'modules/places/currently/types/apiCurrentlyTypes'
+import { apiGetCurrentlySingleWithAnyActiveField } from 'actions/currently/apiGetCurrentlySingle'
+import { getDisplayTimeLeft } from 'modules/places/currently/types/durationTypes'
+import CurrentlyFollowModal from 'modules/places/currently/components/CurrentlyFollowModal'
+import PersonClickModal from './PersonClickModal'
 
-const availableTabs = ['planned-pings', 'sent-pings', 'sent-emotes', 'received-emotes', 'symbols']
+const availableTabs = ['currently', 'planned-notifs', 'sent-notifs', 'sent-emotes', 'received-emotes', 'symbols']
 
 const ProfileReusable = () => {
   const { userV2: loggedInUser, jwtToken } = useContext(GlobalContext)
@@ -57,11 +57,24 @@ const ProfileReusable = () => {
 
   const [searchDefsQuery, setSearchDefsQuery] = useState('')
 
+  const { data: currentlyData } = useQuery<CurrentlyResponse>(
+    ['currently', primaryWallet],
+    () => apiGetCurrentlySingleWithAnyActiveField({
+      jwt: jwtToken,
+      senderPrimaryWallet: primaryWallet
+    }),
+    {
+      enabled: Boolean(primaryWallet),
+      refetchOnMount: true,
+      refetchOnWindowFocus: true
+    }
+  )
+
   useEffect(() => {
     if (tabName && availableTabs.includes(tabName?.toLowerCase())) {
       setActiveTab(tabName)
     } else {
-      setActiveTab('planned-pings')
+      setActiveTab('currently')
     }
   }, [tabName])
 
@@ -306,23 +319,33 @@ const ProfileReusable = () => {
       <div className="flex flex-wrap mb-4">
 
         <button
-          onClick={() => onTabChanged('planned-pings')}
+          onClick={() => onTabChanged('currently')}
           className={classNames(
             'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'planned-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+            activeTab === 'currently' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
-          planned pings
+          currently
         </button>
 
         <button
-          onClick={() => onTabChanged('sent-pings')}
+          onClick={() => onTabChanged('planned-notifs')}
           className={classNames(
             'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
-            activeTab === 'sent-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+            activeTab === 'planned-notifs' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
           )}
         >
-          sent pings
+          planned notifs
+        </button>
+
+        <button
+          onClick={() => onTabChanged('sent-notifs')}
+          className={classNames(
+            'relative p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer',
+            activeTab === 'sent-notifs' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
+          )}
+        >
+          sent notifs
         </button>
 
         {/* <button
@@ -356,14 +379,136 @@ const ProfileReusable = () => {
         </button>
       </div>
 
-      {activeTab === 'planned-pings' && (
+      {activeTab === 'currently' && (
+        <div className="md:w-[37rem] w-full">
+          <div className="relative group">
+            <div className="absolute top-2 right-2 hidden md:block z-[600]">
+              <button 
+                className="px-3 py-2 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-md cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  ModalService.open(CurrentlyFollowModal, {
+                    userToken: userData
+                  })
+                }}
+              >
+                follow options
+              </button>
+            </div>
+
+            <div className="absolute top-2 right-2 md:hidden block z-[600]">
+              <button 
+                className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-md cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  ModalService.open(CurrentlyFollowModal, {
+                    userToken: userData
+                  })
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-6 border-2 border-white rounded-2xl group/main relative">
+              <A
+                onClick={(event) => {
+                  event.stopPropagation()
+                  ModalService.open(PersonClickModal, { userToken: userData })
+                }}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer text-lg"
+              >
+                {userData?.chosenPublicName}
+              </A>
+
+              {currentlyData?.place && (
+                <div 
+                  className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg relative cursor-pointer hover:bg-[#1d8f89]/60"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    ModalService.open(CurrentlyFollowModal, {
+                      userToken: userData,
+                      selectedPlace: currentlyData.place
+                    })
+                  }}
+                >
+                  <div className="absolute top-0 right-0 text-xs rounded-tr-lg rounded-bl-lg" style={{ background: 'rgb(29 143 137)' }}>
+                    <div className="bg-[#1d8f89] px-3 py-1 rounded-tr-lg rounded-bl-lg">
+                      {getDisplayTimeLeft(currentlyData.place.duration, currentlyData.place.updatedDurationAt)}
+                    </div>
+                    <div className="absolute inset-0 bg-[#1d8f89]/50 rounded-tr-lg rounded-bl-lg" style={{ zIndex: -1 }}></div>
+                  </div>
+                  <span className="text-gray-400 font-semibold font-mono">PLACE:</span>
+                  <div className="mt-2">
+                    <div className="text-sm">
+                      {currentlyData.place.text}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentlyData?.wantOthersToKnowTags?.length > 0 && (
+                <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg">
+                  <span className="text-gray-400 font-semibold font-mono">WANT_YOU_TO_KNOW_TAGS:</span>
+                  <div className="mt-2">
+                    {currentlyData.wantOthersToKnowTags.map((tag, index) => (
+                      <div 
+                        key={index} 
+                        className="inline-block bg-[#1d8f89] rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-[#1d8f89]/80"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          ModalService.open(CurrentlyFollowModal, {
+                            userToken: userData,
+                            selectedTag: tag
+                          })
+                        }}
+                      >
+                        <span>{tag.tag}</span>
+                        <span className="mx-1 opacity-60">·</span>
+                        <span className="opacity-60">
+                          {getDisplayTimeLeft(tag.duration, tag.updatedDurationAt)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentlyData?.status && (
+                <div className="mt-2 p-4 bg-[#1d8f89]/50 rounded-lg relative">
+                  <div className="absolute top-0 right-0 text-xs rounded-tr-lg rounded-bl-lg" style={{ background: 'rgb(29 143 137)' }}>
+                    <div className="bg-[#1d8f89] px-3 py-1 rounded-tr-lg rounded-bl-lg">
+                      {getDisplayTimeLeft(currentlyData.status.duration, currentlyData.status.updatedDurationAt)}
+                    </div>
+                    <div className="absolute inset-0 bg-[#1d8f89]/50 rounded-tr-lg rounded-bl-lg" style={{ zIndex: -1 }}></div>
+                  </div>
+                  <span className="text-gray-400 font-semibold font-mono">STATUS:</span>
+                  <div className="mt-2">
+                    <div className="text-sm">
+                      {currentlyData.status.text}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {!currentlyData?.place && !currentlyData?.status && (!currentlyData?.wantOthersToKnowTags || currentlyData.wantOthersToKnowTags.length === 0) && (
+                <div className="text-xs text-gray-500">nothing shared yet...</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'planned-notifs' && (
         <div className="md:w-1/2 w-full text-white">
 
           <input
             type="text"
             value={plannedPingSearchBarQuery}
             onChange={(e) => setPlannedPingSearchBarQuery(e.target.value)}
-            placeholder="search planned pings..."
+            placeholder="search planned notifs..."
             className="block md:w-[30rem] w-full mx-auto mb-4 border border-gray-300 rounded px-3 py-2"
           />
 
@@ -382,7 +527,7 @@ const ProfileReusable = () => {
         </div>
       )}
 
-      {activeTab === 'sent-pings' && (
+      {activeTab === 'sent-notifs' && (
         <div className="md:w-1/2 w-full text-white">
           {sentEventsData.map((sentEvent) => (
             <div

@@ -8,16 +8,17 @@ export enum EMOTE_CONTEXTS {
   VIBE_CAFE = 'Vibe Cafe',
   VIBE_CAMP = 'Vibe Camp',
   AKIYA_COLLECTIVE = 'Akiya Collective',
-  PINGPPL = 'pingppl',
+  NOTIF = 'notif',
   TAU = 'thinking about u',
   CURRENTLY = 'currently',
+  PLACE_CONTEXT = 'place-context',
 }
 
 // contexts that are ready and usable
 export const EMOTE_CONTEXTS_ACTIVE = [
   EMOTE_CONTEXTS.CURRENTLY,
   EMOTE_CONTEXTS.TAU,
-  EMOTE_CONTEXTS.PINGPPL,
+  EMOTE_CONTEXTS.NOTIF,
   EMOTE_CONTEXTS.NOU,
   EMOTE_CONTEXTS.NO_CONTEXT,
 ]
@@ -28,7 +29,7 @@ export const getContextPagePath = (place: string) => {
   if (place === EMOTE_CONTEXTS.WHYSPIA) return '/place/whyspia'
   if (place === EMOTE_CONTEXTS.NANA) return '/place/nana'
   if (place === EMOTE_CONTEXTS.PARALLEL) return '/place/parallel'
-  if (place === EMOTE_CONTEXTS.PINGPPL) return '/place/pingppl'
+  if (place === EMOTE_CONTEXTS.NOTIF) return '/place/notif'
   if (place === EMOTE_CONTEXTS.TAU) return '/place/thinking-about-u'
   if (place === EMOTE_CONTEXTS.CURRENTLY) return '/place/currently'
 }
@@ -39,7 +40,7 @@ export const getContextSummary = (place: string) => {
   if (place === EMOTE_CONTEXTS.WHYSPIA) return ''
   if (place === EMOTE_CONTEXTS.NANA) return 'context for shmoji\'s nana'
   if (place === EMOTE_CONTEXTS.PARALLEL) return 'be with others'
-  if (place === EMOTE_CONTEXTS.PINGPPL) return 'plan and send events that people can follow. stay up to date with people and help them stay up to date with you'
+  if (place === EMOTE_CONTEXTS.NOTIF) return 'notify others with specific symbols. follow specific symbols of others'
   if (place === EMOTE_CONTEXTS.TAU) return 'tell someone ur thinking about them or see if anyone is thinking about u'
   if (place === EMOTE_CONTEXTS.CURRENTLY) return 'share with others what is current for you'
 }

@@ -25,6 +25,8 @@ import TAUNotifReactModal from "modules/places/tau/components/TAUNotifReactModal
 import { EMOTE_CONTEXTS } from "modules/place/utils/ContextUtils"
 import NouEmoteBlockReactModal from "modules/places/nou/components/NouEmoteBlockReactModal"
 import PersonClickModal from "modules/users/components/PersonClickModal"
+import { CurrentlyResponse } from "modules/places/currently/types/apiCurrentlyTypes"
+import CurrentlyNotifReactModal from "modules/places/currently/components/CurrentlyNotifReactModal"
 
 
 export const NotifBlock = ({
@@ -1029,6 +1031,84 @@ export const NotifBlock = ({
           </div>
 
         </div>
+      </div>
+    )
+  }
+
+  if (notif?.notifType === NOTIF_TYPE.CURRENTLY_SHARED) {
+    return (
+      <div
+        onClick={(event) => ModalService.open(CurrentlyNotifReactModal, { notif })}
+        className={classNames(
+          isFullWidth ? 'w-full' : 'md:w-1/2 w-full ',
+          "relative text-lg p-4 border border-white hover:bg-gray-100 hover:bg-opacity-[.1] flex flex-col cursor-pointer",
+        )}
+      >
+        <div className="flex items-center mb-2">
+  
+          <div ref={notifRef} onClick={(event) => event.stopPropagation()} className="relative w-10 h-10 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-50 inline-flex justify-center items-center cursor-pointer">
+            {clientHasReadDirectly ? (
+              <EyeIcon className="w-6 h-6 inline text-green-500" />
+            ) : (
+              <EyeSlashIcon className="w-6 h-6 inline text-red-500" />
+            )}
+
+            {notifTooltipVisibility && (
+              <div
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setNotifTooltipVisibility(false)
+                }}
+                className="absolute z-[600] h-[6rem] w-[10rem] inset-y-0 left-0 top-full text-sm text-black rounded-xl shadow bg-white overflow-auto"
+              >
+                <div className="flex flex-col w-full text-black font-semibold">
+                  <div onClick={(event) => {
+                    event.stopPropagation()
+                    onMarkSeenChanged(true)
+                  }} className="px-2 py-2 border-b flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <EyeIcon className="w-4 h-4 mr-1 inline text-green-500" />
+                    <span>mark seen</span>
+                  </div>
+                  <div onClick={(event) => {
+                    event.stopPropagation()
+                    onMarkSeenChanged(false)
+                  }} className="px-2 py-2 flex items-center cursor-pointer hover:bg-gray-200 hover:bg-opacity-50">
+                    <EyeSlashIcon className="w-4 h-4 mr-1 inline text-red-500" />
+                    <span>mark unseen</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          <div>
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(PersonClickModal, { userToken: (notif?.notifData as TAUResponse)?.senderUser })
+              }}
+              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+            >{(notif?.notifData as CurrentlyResponse)?.senderUser?.calculatedDisplayName}</A>
+            {' '} shared what is current - {formatTimeAgo((notif as any)?.createdAt)}
+            {' '}with{' '}
+            <A
+              onClick={(event) => {
+                event.stopPropagation()
+                ModalService.open(ContextSelectModal, { context: (notif)?.context ?? 'no context' })
+              }}
+              className="text-purple-500 hover:text-purple-700 cursor-pointer"
+            >
+              {(notif)?.context ?? 'no context'}
+            </A>
+
+            
+
+          </div>
+        
+        </div>
+
+        
       </div>
     )
   }

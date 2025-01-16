@@ -35,6 +35,8 @@ const PingPplPage = () => {
 
   const { handleParticleAndWhyspiaLogin } = useAuth()
 
+  const [expandedOption, setExpandedOption] = useState<'planned' | 'unplanned' | null>(null)
+
   // const isValid = selectedSymbol?.length > 0
 
   const fetchDefinedEvents = async ({ pageParam = 0 }) => {
@@ -209,8 +211,8 @@ const PingPplPage = () => {
     <div className="h-screen flex flex-col items-center mt-4 px-4">
       
       <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
-        <h1 className="text-lg md:text-3xl font-bold mb-8">
-          pingppl: plan and send events to people or subscribe to specific events from other people
+        <h1 className="text-lg md:text-2xl font-bold mb-8">
+          NOTIF: notify others with specific symbols. follow specific symbols of others
         </h1>
 
         <>
@@ -237,7 +239,7 @@ const PingPplPage = () => {
                       selectedTab === 'pingppl' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                     )}
                   >
-                    pingppl
+                    notify
                   </button>
 
                   <button
@@ -247,7 +249,7 @@ const PingPplPage = () => {
                       selectedTab === 'plan-ping' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                     )}
                   >
-                    plan ping
+                    plan notif
                   </button>
 
                   <button
@@ -257,7 +259,7 @@ const PingPplPage = () => {
                       selectedTab === 'planned-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                     )}
                   >
-                    ur planned pings
+                    your planned notifs
                   </button>
 
                   <button
@@ -267,7 +269,7 @@ const PingPplPage = () => {
                       selectedTab === 'sent-pings' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                     )}
                   >
-                    ur sent pings
+                    your sent notifs
                   </button>
 
                   <button
@@ -277,58 +279,109 @@ const PingPplPage = () => {
                       selectedTab === 'ping-notifications' ? 'bg-[#1d8f89] selected-tab-triangle' : '',
                     )}
                   >
-                    ping notifications
+                    received notifs
                   </button>
                 </div>
 
                 {selectedTab === 'pingppl' && (
                   <div className="mt-4">
-                    {/* <h2 className="text-xl font-semibold mb-4">send created event</h2> */}
+                    <div className="flex flex-col gap-4">
+                      {/* Option 1: Send Planned Notif */}
+                      <div className="border border-[#1d8f89] rounded-lg">
+                        <button 
+                          onClick={() => setExpandedOption(expandedOption === 'planned' ? null : 'planned')}
+                          className="w-full p-4 text-left text-white font-semibold hover:bg-[#1d8f89] transition-colors flex justify-between items-center"
+                        >
+                          <span>send a planned notif</span>
+                          <span className="text-xl">{expandedOption === 'planned' ? '−' : '+'}</span>
+                        </button>
+                        
+                        {expandedOption === 'planned' && (
+                          <div className="p-4 border-t border-[#1d8f89]">
+                            <select
+                              value={JSON.stringify(selectedEvent)}
+                              onChange={(e) => {
+                                if (!e.target.value) {
+                                  setSelectedEvent('')
+                                } else {
+                                  const event = JSON.parse(e.target.value)
+                                  setSelectedEvent(event)
+                                }
+                              }}
+                              className="w-full px-3 py-2 border rounded-md mb-4 bg-dark3 text-white"
+                            >
+                              <option value="">select planned notif</option>
+                              {definedEventsData.map((event) => (
+                                <option key={event.id} value={JSON.stringify(event)}>
+                                  {event.eventName}
+                                </option>
+                              ))}
+                            </select>
 
-                    <select
-                      value={JSON.stringify(selectedEvent)}
-                      onChange={(e) => {
-                        if (!e.target.value) {
-                          setSelectedEvent('')
-                        } else {
-                          const event = JSON.parse(e.target.value)
-                          setSelectedEvent(event)
-                        }
-                      }}
-                      className="w-full px-3 py-2 border rounded-md mb-4 bg-dark3 text-white"
-                    >
-                      <option value="">select planned ping</option>
+                            <button
+                              onClick={pingpplClicked}
+                              disabled={!selectedEvent}
+                              className="w-full px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white text-white rounded-md flex items-center justify-center disabled:opacity-50"
+                            >
+                              notify
+                            </button>
+                          </div>
+                        )}
+                      </div>
 
-                      {definedEventsData.map((event) => (
-                        <option key={event.id} value={JSON.stringify(event)}>
-                          {event.eventName}
-                        </option>
-                      ))}
+                      {/* Option 2: Send Unplanned Notif */}
+                      <div className="border border-[#1d8f89] rounded-lg opacity-50">
+                        <button 
+                          onClick={() => setExpandedOption(expandedOption === 'unplanned' ? null : 'unplanned')}
+                          className="w-full p-4 text-left text-white font-semibold hover:bg-[#1d8f89] transition-colors flex justify-between items-center"
+                        >
+                          <span>send an unplanned notif</span>
+                          <span className="text-xl">{expandedOption === 'unplanned' ? '−' : '+'}</span>
+                        </button>
+                        
+                        {expandedOption === 'unplanned' && (
+                          <div className="p-4 border-t border-[#1d8f89]">
+                            <div className="text-white text-sm mb-4 italic">
+                              COMING SOON: this will allow people to type out what they want to be notified of from you (instead of them following specific notifs) and then AI will be used to figure out when to notify or not. BUT, for now, you only notify others if they follow specific planned notifs you saved
+                            </div>
 
-                      {hasDENextPage && <button onClick={() => fetchDENextPage()} disabled={!hasDENextPage || isFetchingDENextPage}>
-                        {isFetchingDENextPage ? 'Loading...' : 'Load More'}
-                      </button>}
+                            <input
+                              type="text"
+                              placeholder="notif name..."
+                              value={eventName}
+                              onChange={(e) => setEventName(e.target.value)}
+                              className="w-full px-3 py-2 border rounded-md mb-4 bg-dark3 text-white cursor-not-allowed"
+                              disabled
+                            />
 
-                    </select>
+                            <textarea
+                              placeholder="notif description (optional)..."
+                              value={eventDescription}
+                              onChange={(e) => setEventDescription(e.target.value)}
+                              rows={3}
+                              className="w-full px-3 py-2 border rounded-md mb-4 bg-dark3 text-white cursor-not-allowed"
+                              disabled
+                            />
 
-                    <button
-                      onClick={pingpplClicked}
-                      disabled={!selectedEvent}
-                      className="w-full px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white text-white rounded-md flex items-center justify-center disabled:opacity-50"
-                    >
-                      {/* <Send className="w-4 h-4 mr-2" /> */}
-                      pingppl
-                    </button>
-
+                            <button
+                              disabled
+                              className="w-full px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] text-white rounded-md flex items-center justify-center cursor-not-allowed"
+                            >
+                              notify
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {selectedTab === 'plan-ping' && (
                   <form onSubmit={planpingOrBothClicked} className="space-y-4">
-                    <div className="text-xs text-white">NOTE: planning a ping simply shares it to your profile, but does not ping anyone (unless you choose ping immediately)</div>
+                    <div className="text-xs text-white">NOTE: planning a notif simply saves it and shares it to your profile, but does not notify anyone</div>
                     <input
                       type="text"
-                      placeholder="ping name..."
+                      placeholder="notif name..."
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
                       required
@@ -342,13 +395,13 @@ const PingPplPage = () => {
                       className="w-full px-3 py-2 border rounded-md"
                     /> */}
                     <textarea
-                      placeholder="ping description (optional)..."
+                      placeholder="notif description (optional)..."
                       value={eventDescription}
                       onChange={(e) => setEventDescription(e.target.value)}
                       rows={3}
                       className="w-full px-3 py-2 border rounded-md bg-dark3 text-white"
                     />
-                    <div className="flex items-center space-x-2">
+                    {/* <div className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         id="pingNow"
@@ -356,8 +409,8 @@ const PingPplPage = () => {
                         onChange={(e) => setPingNow(e.target.checked)}
                         className="rounded text-blue-500 "
                       />
-                      <label htmlFor="pingNow" className="text-white">pingppl immediately</label>
-                    </div>
+                      <label htmlFor="pingNow" className="text-white">notify immediately</label>
+                    </div> */}
 
                     <div className="flex space-x-2">
                       <button
@@ -370,12 +423,12 @@ const PingPplPage = () => {
                         {pingNow ? (
                           <>
                             {/* <PlusCircle className="w-4 h-4 mr-2" /> */}
-                            share plan & pingppl
+                            share plan & notify
                           </>
                         ) : (
                           <>
                             {/* <Calendar className="w-4 h-4 mr-2" /> */}
-                            share plan (no ping)
+                            share plan
                           </>
                         )}
                       </button>

@@ -36,6 +36,14 @@ export default function DoStuffUI({
 
           <A
             onClick={close ? () => close() : () => {}}
+            href={`/place/notif`}
+            className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
+          >
+            <span className="block w-[20rem]"><span className="font-bold">NOTIF</span>: notify others with specific symbols. follow specific symbols of others</span>
+          </A>
+
+          <A
+            onClick={close ? () => close() : () => {}}
             href="/place/thinking-about-u"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
@@ -47,15 +55,7 @@ export default function DoStuffUI({
             href="/place/nou"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
-            <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone</span>
-          </A>
-
-          <A
-            onClick={close ? () => close() : () => {}}
-            href={`/place/pingppl`}
-            className="w-full p-3 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
-          >
-            <span className="block w-[20rem]"><span className="font-bold">pingppl</span>: plan and send events to people or subscribe to specific events from other people</span>
+            <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone. keep streaks</span>
           </A>
 
         </div>
@@ -149,8 +149,8 @@ export default function DoStuffUI({
                   onClick: () => close ? close() : null,
                 },
                 {
-                  label: EMOTE_CONTEXTS.PINGPPL,
-                  href: getContextPagePath(EMOTE_CONTEXTS.PINGPPL),
+                  label: EMOTE_CONTEXTS.NOTIF,
+                  href: getContextPagePath(EMOTE_CONTEXTS.NOTIF),
                   onClick: () => close ? close() : null,
                 },
                 {

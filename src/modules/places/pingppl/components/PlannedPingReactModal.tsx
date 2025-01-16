@@ -30,22 +30,22 @@ export default function PlannedPingReactModal({
         <div className="flex flex-wrap justify-center mt-6">
           <A
             onClick={() => onOptionSelected('home')}
-            href={getContextPagePath(EMOTE_CONTEXTS.PINGPPL)}
+            href={getContextPagePath(EMOTE_CONTEXTS.NOTIF)}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            go to home page of {EMOTE_CONTEXTS.PINGPPL}
+            go to home page of {EMOTE_CONTEXTS.NOTIF}
           </A>
 
           <A
             onClick={() => onOptionSelected('about')}
-            href={getContextPagePath(EMOTE_CONTEXTS.PINGPPL) + '/about'}
+            href={getContextPagePath(EMOTE_CONTEXTS.NOTIF) + '/about'}
             className={classNames(
               'p-3 mb-4 mr-2 text-white rounded-lg hover:bg-[#1d8f89] border border-[#1d8f89] cursor-pointer'
             )}
           >
-            go to about page of {EMOTE_CONTEXTS.PINGPPL}
+            go to about page of {EMOTE_CONTEXTS.NOTIF}
           </A>
 
           <A

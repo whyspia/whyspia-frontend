@@ -15,17 +15,21 @@ import { apiCreateCurrently, createTagsUpdate } from 'actions/currently/apiCreat
 import { updateTagText, updateTagDuration, deleteTag, apiUpdateCurrently } from 'actions/currently/apiUpdateCurrently'
 import { CurrentlyTag } from '../types/apiCurrentlyTypes'
 
-export default function CurrentlyEditTagsModal({
-  close,
-  onConfirm,
-  currentTags,
-  jwt
-}: {
+interface CurrentlyEditTagsModalProps {
   close: () => void
   onConfirm: (tags: CurrentlyTag[]) => void
   currentTags: CurrentlyTag[]
   jwt: string
-}) {
+  isAnyFieldActive: boolean
+}
+
+export default function CurrentlyEditTagsModal({
+  close,
+  onConfirm,
+  currentTags,
+  jwt,
+  isAnyFieldActive
+}: CurrentlyEditTagsModalProps) {
   const [inputTag, setInputTag] = useState('')
   const [inputDuration, setInputDuration] = useState<DURATION_OPTIONS>(DURATION_OPTIONS.END_OF_DAY)
   const [tagsWithDurations, setTagsWithDurations] = useState<CurrentlyTag[]>(
@@ -37,6 +41,7 @@ export default function CurrentlyEditTagsModal({
         }))
       : []
   )
+  const [isAddingTag, setIsAddingTag] = useState(false)
 
   const handleAddTag = () => {
     if (inputTag.trim() && inputDuration) {
@@ -67,7 +72,7 @@ export default function CurrentlyEditTagsModal({
           updates
         })
         if (!result) {
-          toast.error('Failed to delete all tags')
+          toast.error('failed to remove all tags')
           return
         }
       }
@@ -76,49 +81,61 @@ export default function CurrentlyEditTagsModal({
       return
     }
 
-    if (!currentTags.length) {
-      // Creating new tags
+    if (isAnyFieldActive) {
+      if (currentTags.length > 0) {
+        // Updating existing tags
+        const updates = []
+        
+        // Handle deleted tags
+        const deletedTags = currentTags.filter(
+          oldTag => !tagsWithDurations.some(newTag => newTag.tag === oldTag.tag)
+        )
+        deletedTags.forEach(tag => {
+          updates.push(deleteTag(tag.tag))
+        })
+
+        // Handle new and updated tags
+        tagsWithDurations.forEach(tag => {
+          const existingTag = currentTags.find(t => t.tag === tag.tag)
+          if (!existingTag) {
+            // This is a new tag
+            updates.push(...createTagsUpdate([tag]))
+          } else if (existingTag.duration !== tag.duration) {
+            // Duration changed
+            updates.push(updateTagDuration(tag.tag, tag.duration))
+          }
+        })
+        
+        if (updates.length > 0) {
+          const result = await apiUpdateCurrently({
+            jwt,
+            updates
+          })
+          if (!result) {
+            toast.error('failed to update tags')
+            return
+          }
+        }
+      } else {
+        // Creating new tags while other fields exist
+        const result = await apiUpdateCurrently({
+          jwt,
+          updates: createTagsUpdate(tagsWithDurations)
+        })
+        if (!result) {
+          toast.error('failed to update tags')
+          return
+        }
+      }
+    } else {
+      // No active fields, create new record
       const result = await apiCreateCurrently({
         jwt,
         updates: createTagsUpdate(tagsWithDurations)
       })
       if (!result) {
-        toast.error('Failed to create tags')
+        toast.error('failed to add tags')
         return
-      }
-    } else {
-      // Updating existing tags
-      const updates = []
-      
-      // Handle deleted tags - now we handle all deletions at save time
-      const deletedTags = currentTags.filter(
-        oldTag => !tagsWithDurations.some(newTag => newTag.tag === oldTag.tag)
-      )
-      deletedTags.forEach(tag => {
-        updates.push(deleteTag(tag.tag))
-      })
-
-      // Handle new and updated tags
-      tagsWithDurations.forEach(tag => {
-        const existingTag = currentTags.find(t => t.tag === tag.tag)
-        if (!existingTag) {
-          // This is a new tag
-          updates.push(...createTagsUpdate([tag]))
-        } else if (existingTag.duration !== tag.duration) {
-          // Duration changed
-          updates.push(updateTagDuration(tag.tag, tag.duration))
-        }
-      })
-      
-      if (updates.length > 0) {
-        const result = await apiUpdateCurrently({
-          jwt,
-          updates
-        })
-        if (!result) {
-          toast.error('Failed to update tags')
-          return
-        }
       }
     }
 
@@ -142,35 +159,50 @@ export default function CurrentlyEditTagsModal({
       <div className="p-6 w-full md:w-[30rem] text-white">
         <div className="mb-4 font-bold">WANT_YOU_TO_KNOW_TAGS: share tags signalling what you want others to know</div>
         
-        <div className="space-y-4 mb-4">
-          <input
-            value={inputTag}
-            onChange={(event) => setInputTag(event.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && canAddTag && handleAddTag()}
-            placeholder="enter tag..."
-            className="w-full rounded-lg px-2 py-2"
-          />
-
-          <div>
-            <label className="block text-sm mb-2">HOW LONG WILL THIS TAG BE ACTIVE (timer starts on save)</label>
-            <DropdownSelectMenu 
-              options={ACTIVE_DURATION_OPTIONS} 
-              selectedOption={inputDuration} 
-              setSelectedOption={setInputDuration as any} 
-            />
-          </div>
-
+        <div className="mb-4">
           <button 
-            onClick={handleAddTag}
-            disabled={!canAddTag}
-            className={`w-full px-4 py-2 text-white rounded-md border ${
-              canAddTag 
-                ? 'bg-[#1d8f89] border-[#1d8f89] hover:border-white cursor-pointer' 
-                : 'bg-gray-500 border-gray-500 cursor-not-allowed opacity-50'
-            }`}
+            onClick={() => setIsAddingTag(!isAddingTag)}
+            className="w-full px-4 py-2 text-white rounded-md border bg-[#1d8f89] border-[#1d8f89] hover:border-white"
           >
-            add tag
+            {isAddingTag ? '- cancel adding tag' : '+ add new tag'}
           </button>
+
+          {isAddingTag && (
+            <div className="mt-4 space-y-4">
+              <input
+                value={inputTag}
+                onChange={(event) => setInputTag(event.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && canAddTag && handleAddTag()}
+                placeholder="enter tag..."
+                className="w-full rounded-lg px-2 py-2"
+                autoFocus
+              />
+
+              <div>
+                <label className="block text-sm mb-2">HOW LONG WILL THIS TAG BE ACTIVE (timer starts on share)</label>
+                <DropdownSelectMenu 
+                  options={ACTIVE_DURATION_OPTIONS} 
+                  selectedOption={inputDuration} 
+                  setSelectedOption={setInputDuration as any} 
+                />
+              </div>
+
+              <button 
+                onClick={() => {
+                  handleAddTag()
+                  setIsAddingTag(false)
+                }}
+                disabled={!canAddTag}
+                className={`w-full px-4 py-2 text-white rounded-md border ${
+                  canAddTag 
+                    ? 'bg-[#1d8f89] border-[#1d8f89] hover:border-white cursor-pointer' 
+                    : 'bg-gray-500 border-gray-500 cursor-not-allowed opacity-50'
+                }`}
+              >
+                add tag
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -199,7 +231,12 @@ export default function CurrentlyEditTagsModal({
                 : 'bg-gray-500 border-gray-500 cursor-not-allowed opacity-50'
             }`}
           >
-            save all tags
+            {currentTags?.length > 0 
+              ? tagsWithDurations.length === 0 
+                ? 'remove current tags'
+                : 'share tag changes'
+              : 'share all tags'
+            }
           </button>
 
           <button 
