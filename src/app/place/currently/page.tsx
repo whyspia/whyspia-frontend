@@ -35,6 +35,9 @@ const CurrentlyPage = () => {
   const [inputStatus, setInputStatus] = useState<CurrentlyStatus | null>(null)
   const [activeTab, setActiveTab] = useState<'you' | 'saved'>('you')
   const [searchQuery, setSearchQuery] = useState('')
+  const [showFollowModal, setShowFollowModal] = useState(false)
+  const [showPingModal, setShowPingModal] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
 
   // Fetch current data
   const { data: currentlyData } = useQuery<CurrentlyResponse>(
@@ -324,7 +327,7 @@ const CurrentlyPage = () => {
 
             {activeTab === 'you' ? (
               <>
-                <div className="w-full flex justify-between mb-8">
+                <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-2 mb-8">
                   <button
                     onClick={() => ModalService.open(CurrentlyEditPlaceModal, { 
                       onConfirm: setInputPlace, 
@@ -332,9 +335,7 @@ const CurrentlyPage = () => {
                       jwt: jwtToken,
                       isAnyFieldActive: isAnyFieldActive() 
                     })}
-                    className={classNames(
-                      "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
-                    )}
+                    className="px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
                   >
                     {inputPlace ? 'edit' : 'add'} PLACE
                   </button>
@@ -345,9 +346,7 @@ const CurrentlyPage = () => {
                       jwt: jwtToken,
                       isAnyFieldActive: isAnyFieldActive()
                     })}
-                    className={classNames(
-                      "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
-                    )}
+                    className="px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
                   >
                     {inputTags.length > 0 ? 'edit' : 'add'} WANT_YOU_TO_KNOW_TAGS
                   </button>
@@ -358,9 +357,7 @@ const CurrentlyPage = () => {
                       jwt: jwtToken,
                       isAnyFieldActive: isAnyFieldActive()
                     })}
-                    className={classNames(
-                      "px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
-                    )}
+                    className="px-4 py-2 bg-[#1d8f89] border border-[#1d8f89] hover:border-white disabled:opacity-50 text-white rounded-md"
                   >
                     {inputStatus ? 'edit' : 'add'} STATUS
                   </button>
