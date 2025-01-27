@@ -71,27 +71,15 @@ export default function AuthStatusWithConnectButton() {
               </div>
             )}
 
-            <A
-              href={
-                userV2 && userV2?.primaryWallet
-                  ? `/u/${
-                      userV2 && userV2?.primaryWallet
-                        ? userV2?.primaryWallet
-                        : ''
-                    }`
-                  : '#'
-              }
-            >
-              <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
-                <Image
-                  src={(userV2 as any)?.profilePhoto || '/default-profile-pic.png'}
-                  alt="Profile photo"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                />
-              </div>
-            </A>
+            <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
+              <Image
+                src={(userV2 as any)?.profilePhoto || '/default-profile-pic.png'}
+                alt="Profile photo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
+            </div>
           
           </div>
         </div>

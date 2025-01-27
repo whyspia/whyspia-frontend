@@ -40,7 +40,7 @@ const Notifications = () => {
         return allGroups.length * 10
       },
       refetchOnMount: true,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       enabled: Boolean(jwtToken),
       keepPreviousData: true,
     }

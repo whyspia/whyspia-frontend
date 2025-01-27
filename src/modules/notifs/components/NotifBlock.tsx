@@ -200,11 +200,11 @@ export const NotifBlock = ({
               <A
                 onClick={(event) => {
                   event.stopPropagation()
-                  ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.senderPrimaryWallet })
+                  ModalService.open(PersonClickModal, { userToken: (notif?.notifData as EmoteResponse)?.senderUser })
                 }}
                 className="text-blue-500 hover:text-blue-700 cursor-pointer"
               >
-                {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
+                {(notif?.notifData as EmoteResponse)?.senderUser?.calculatedDisplayName}
               </A> sent{' '}
   
               {isMultipleSentSymbols ? (
@@ -282,7 +282,7 @@ export const NotifBlock = ({
                 <A
                   onClick={(event) => {
                     event.stopPropagation()
-                    ModalService.open(SymbolSelectModal, { symbol: (notif?.notifData as EmoteResponse)?.receiverSymbols[0] })
+                    ModalService.open(PersonClickModal, { userToken: (notif?.notifData as EmoteResponse)?.receiverUsers[0] })
                   }}
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
@@ -366,7 +366,7 @@ export const NotifBlock = ({
                     }}
                     className="text-blue-500 hover:text-blue-700 cursor-pointer"
                   >
-                    {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
+                    {(notif?.notifData as EmoteResponse)?.senderUser?.calculatedDisplayName}
                   </A> sent{' '}
     
                   {isMultipleSentSymbols ? (
@@ -484,7 +484,7 @@ export const NotifBlock = ({
                 {isFromDropdownOpen && (
                   <ul className="ml-10 list-disc">
                     <li><A href={`/u/${(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                      {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
+                      {(notif?.notifData as EmoteResponse)?.senderUser?.calculatedDisplayName}
                     </A></li>
                   </ul>
                 )}
@@ -612,7 +612,7 @@ export const NotifBlock = ({
                   }}
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {(notif?.notifData as EmoteResponse)?.senderPrimaryWallet}
+                  {(notif?.notifData as EmoteResponse)?.senderUser?.calculatedDisplayName}
                 </A> sent{' '}
     
                 {isMultipleSentSymbols ? (

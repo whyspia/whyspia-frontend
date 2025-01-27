@@ -148,7 +148,7 @@ export const NouEmoteBlock = ({
                 <span
                   className="text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {emote?.senderPrimaryWallet}
+                  {emote?.senderUser?.calculatedDisplayName}
                 </span>
               )}
             </A> sent{' '}
@@ -275,7 +275,7 @@ export const NouEmoteBlock = ({
             {isFromDropdownOpen && (
               <ul className="ml-10 list-disc">
                 <li><A href={`/u/${emote?.senderPrimaryWallet}`} onClick={(event) => event.stopPropagation()} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-                  {emote?.senderPrimaryWallet}
+                  {emote?.senderUser?.calculatedDisplayName}
                 </A></li>
               </ul>
             )}
@@ -540,7 +540,7 @@ export const NouEmoteBlock = ({
           }}
           className="bg-[#1d8f89] rounded-lg text-md text-white ml-auto mr-10 px-2 py-1 font-bold border border-[#1d8f89] hover:border-white cursor-pointer"
         >
-          emote
+          reply
         </div>
       )}
 

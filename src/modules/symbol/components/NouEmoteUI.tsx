@@ -124,7 +124,7 @@ export default function NouEmoteUI({
         }}
         className="flex items-center py-2 w-full cursor-pointer"
       >
-        <div className="font-bold text-lg mb-1">preview emote:</div>
+        <div className="font-bold text-lg mb-1">preview:</div>
         {isPreviewDropdownOpen ? (
           <ChevronUpIcon className="w-5 h-5 ml-2" />
         ) : (
