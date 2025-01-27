@@ -5,14 +5,18 @@ import { useContext, useEffect, } from 'react'
 import { getCookie } from 'modules/no-category/services/CookieService'
 import useAuth from 'modules/users/hooks/useAuth'
 import { useAccount } from '@particle-network/connectkit'
+import { usePathname } from 'next/navigation'
 
 // maybe rename to UserDataInitializer or UserInitializer?
+// TODO: rn we are pinging getUser API every time window focuses AND when user changes page/url - this gets and notifies user if they have new notifications. in future, we should delete this and just use serverside websockets for notifications OR periodic polling
 export const ClientWrapper = ({ children }: any) => {
   const { setJwtToken, setIsJwtLoadingFinished, isWhyspiaLoginHappening } = useContext(GlobalContext)
 
   const { setUserFromJwt, handleParticleAndWhyspiaDisconnect } = useAuth()
 
   const { isConnected, } = useAccount()
+
+  const pathname = usePathname()
 
   useEffect(() => {
     const initUserData = async () => {
@@ -36,9 +40,23 @@ export const ClientWrapper = ({ children }: any) => {
     if (isConnected) {
       initUserData()
     }
+
+    // Add focus event listener
+    const handleFocus = () => {
+      if (isConnected) {
+        initUserData()
+      }
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+    }
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected])
+  }, [isConnected, pathname])
 
   return <>{children}</>
 }

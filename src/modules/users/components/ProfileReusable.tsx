@@ -105,8 +105,8 @@ const ProfileReusable = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
       enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
@@ -133,8 +133,8 @@ const ProfileReusable = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
       enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }
@@ -217,8 +217,8 @@ const ProfileReusable = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
       enabled: Boolean(userData?.primaryWallet),
       keepPreviousData: true,
     }

@@ -45,8 +45,8 @@ const NouPage = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
       enabled: Boolean(jwtToken),
       keepPreviousData: true,
     }
@@ -73,8 +73,8 @@ const NouPage = () => {
 
         return allGroups.length * 10
       },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
       enabled: Boolean(jwtToken),
       keepPreviousData: true,
     }
