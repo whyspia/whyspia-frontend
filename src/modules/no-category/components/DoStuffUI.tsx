@@ -21,6 +21,7 @@ export default function DoStuffUI({
   const { handleParticleAndWhyspiaLogin, handleParticleAndWhyspiaDisconnect } = useAuth()
 
   const doStuffItems = [
+    
     {
       label: 'simple options',
       content: (
@@ -55,7 +56,7 @@ export default function DoStuffUI({
             href="/place/nou"
             className="w-full p-3 mb-4 mr-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/50 cursor-pointer border border-white flex justify-center items-center"
           >
-            <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone. keep streaks</span>
+            <span className="block w-[20rem]"><span className="font-bold">NoU</span>: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone. grow streaks</span>
           </A>
 
         </div>
@@ -171,6 +172,11 @@ export default function DoStuffUI({
               onClick: () => close ? close() : null,
             },
             {
+              label: 'mission page',
+              href: '/mission',
+              onClick: () => close ? close() : null,
+            },
+            {
               label: 'about page',
               href: '/about',
               onClick: () => close ? close() : null,
@@ -208,6 +214,11 @@ export default function DoStuffUI({
           ]
         }
       ],
+    },
+    {
+      label: 'whyspia mission',
+      href: '/mission',
+      onClick: () => close ? close() : null
     },
     
   ]

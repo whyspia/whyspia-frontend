@@ -98,7 +98,7 @@ const NouPage = () => {
 
       <div className="md:w-[36rem] w-full flex flex-col justify-center items-center">
         <h1 className="text-lg md:text-3xl font-bold mb-8">
-          NoU: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone. keep streaks
+          NoU: send symbol (like &quot;hug&quot; or &quot;poke&quot;) back and forth with someone. grow streaks
         </h1>
 
         <>
