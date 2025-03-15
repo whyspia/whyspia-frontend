@@ -14,6 +14,9 @@ import { getAllUserTokens } from 'actions/users/apiUserActions'
 import { useInfiniteQuery } from 'react-query'
 import DoStuffModal from 'modules/no-category/components/DoStuffModal'
 import { GlobalContext } from 'lib/GlobalContext'
+import Image from 'next/image'
+import WhyspiaLogo from '../../public/whyspia-logo-transbg.svg'
+import RollingBanner from './RollingBanner'
 
 type MenuItemType = {
   name: string,
@@ -99,8 +102,14 @@ export default function Header() {
               className="z-[600] flex items-center flex-shrink-0 cursor-pointer"
               onClick={() => router.push('/')}
             >
-              {/* <img src="/ShmojiChibiTransparent.png" className="w-12" alt="shmoji-icon" /> */}
-              <span className="w-auto h-full ml-2 text-2xl leading-none text-white md:text-3xl">
+              <Image 
+                src={WhyspiaLogo} 
+                alt="whyspia-logo" 
+                width={32} 
+                height={32} 
+                className="w-10 h-10"
+              />
+              <span className="w-auto h-full ml-2 mb-1 text-xl leading-none text-white md:text-2xl hidden md:inline-block">
                 whyspia
               </span>
             </div>
@@ -227,6 +236,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      <RollingBanner text="data storage and privacy is stinky poo poo rn. help us fix pls...we are thinking of IPFS and Lit Protocol" speed={20} />
     </>
   )
 }
