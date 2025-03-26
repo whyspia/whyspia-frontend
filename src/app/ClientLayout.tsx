@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ParticleConnectkit } from "modules/particle-network/components/ParticleConnectkit"
 import { ThemeProvider } from 'modules/styles/components/ThemeProvider'
+import Footer from '../components/Footer'
 
 const queryClient = new QueryClient()
 
@@ -31,13 +32,13 @@ export default function ClientLayout({
     <html lang="en" suppressHydrationWarning> 
       {/* this adds React devtools for debugging - need browser extension too tho */}
       {/* <script src="http://localhost:8097"></script> */}
-      <body>
+      <body className="flex flex-col min-h-screen dark:bg-dark2">
         <QueryClientProvider client={queryClient}>
           <ParticleConnectkit>
             <GlobalContextComponent>
               <ClientWrapper>
                 <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-                  <div className="min-h-screen py-20 dark:text-white">
+                  <div className="flex flex-col min-h-screen pt-20 dark:text-white">
                     <Header />
 
                     {isDowntimeMode && (
@@ -47,9 +48,11 @@ export default function ClientLayout({
                       </div>
                     )}
 
-                    <div>
+                    <main className="flex-1">
                       {children}
-                    </div>
+                    </main>
+
+                    <Footer />
 
                     <ModalRoot />
 

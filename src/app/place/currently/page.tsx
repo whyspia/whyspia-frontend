@@ -328,7 +328,7 @@ const CurrentlyPage = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center mt-4 px-4">
+    <div className="flex flex-col items-center mt-4 px-4">
       <div className="md:w-[37rem] w-full flex flex-col justify-center items-center">
         <div className="text-lg md:text-3xl font-bold mb-8">
           CURRENTLY: share with others what is current for you

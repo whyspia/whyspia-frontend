@@ -16,7 +16,9 @@ import DoStuffModal from 'modules/no-category/components/DoStuffModal'
 import { GlobalContext } from 'lib/GlobalContext'
 import Image from 'next/image'
 import WhyspiaLogo from '../../public/whyspia-logo-transbg.svg'
+import DiscordLogo from '../../public/discord.svg'
 import RollingBanner from './RollingBanner'
+import { SOCIAL_LINKS } from 'lib/constants'
 
 type MenuItemType = {
   name: string,
@@ -109,7 +111,7 @@ export default function Header() {
                 height={32} 
                 className="w-10 h-10"
               />
-              <span className="w-auto h-full ml-2 mb-1 text-xl leading-none text-white md:text-2xl hidden md:inline-block">
+              <span className="w-auto h-full ml-2 mb-1 text-xl leading-none text-white md:text-2xl hidden lg:inline-block">
                 whyspia
               </span>
             </div>
@@ -142,6 +144,25 @@ export default function Header() {
               className="bg-[#1d8f89] rounded-lg text-white px-4 py-2 font-bold cursor-pointer"
             >
               do stuff
+            </div>
+
+            {/* Discord logo - desktop only */}
+            <div className="hidden sm:block relative">
+              <div 
+                onClick={() => window.open(SOCIAL_LINKS.DISCORD, '_blank')}
+                className="mx-4 cursor-pointer group"
+              >
+                <Image
+                  src={DiscordLogo}
+                  alt="Discord"
+                  width={32}
+                  height={32}
+                  className="transition-all duration-200 hover:opacity-80 hover:scale-110"
+                />
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-gray-800 text-white text-sm py-1 px-2 rounded whitespace-nowrap">
+                  join community
+                </div>
+              </div>
             </div>
 
             <div className="relative z-[600]" ref={desktopSearchBarRef}>
@@ -213,6 +234,22 @@ export default function Header() {
                 {menuItem.name}
               </A>
             ))} */}
+
+            {/* Add Discord for mobile */}
+            <div 
+              onClick={() => window.open(SOCIAL_LINKS.DISCORD, '_blank')}
+              className="flex items-center justify-center space-x-2 py-3 cursor-pointer 
+                hover:bg-gray-700 mx-4 my-2 rounded-lg border border-gray-600 
+                transition-all duration-200 active:bg-gray-600"
+            >
+              <Image
+                src={DiscordLogo}
+                alt="Discord"
+                width={24}
+                height={24}
+              />
+              <span className="text-white">join Discord Community</span>
+            </div>
 
             <div className="relative z-[600]" ref={mobileSearchBarRef}>
               
