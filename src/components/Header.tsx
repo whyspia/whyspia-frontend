@@ -273,7 +273,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
-      <RollingBanner text="data storage and privacy is stinky poo poo rn. help us fix pls...we are thinking of IPFS and Lit Protocol" speed={20} />
+      <RollingBanner text="welcome to whyspia ••• data storage and privacy is stinky poo poo rn. help us fix pls...we are thinking of IPFS and Lit Protocol ••• backend servers are down, so no functionality works right now sadly" speed={20} />
     </>
   )
 }
