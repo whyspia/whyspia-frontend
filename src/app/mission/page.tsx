@@ -11,20 +11,20 @@ interface MissionPoint {
 }
 
 const missionPoints: MissionPoint[] = [
-    {
-        title: "help people vibe with life",
-        description: "• Our core question is: \"*do you feel aligned and connected enough with the people, places, and rhythms of your life?*\" - a more specific way of asking how much you vibe with life.\n\n• We're here to help those who dont feel aligned or connected enough. We cannot guarentee we help, but we can try. Often, this takes the form of helping people unlock their own agency.\n\n• The end goal is to vibe with life, which is a state where you feel that no change is needed in life, even when everything around you is changing or you are pursuing change.",
-        icon: "🤝"
-    },
+  {
+    title: "create and nurture heart-aligning community spaces",
+    description: "• Spaces where anyone can slow down, reconnect with what is alive for them, and do literally whatever they want – all with the presence of other people closeby.\n\n• Requires no money spent for visitors.\n\n• Requires no traditional socializing.\n\n> do your own thing, with other people close...(or just chat, we are not your mom)\n\n• Similar to: coffeeshop, computer lab, Student Union, community center.\n\n• Both explicit quiet areas and nonquiet areas.\n\n• Both in the physical world and a version in cyberspace.",
+    icon: "🏯"
+  },
+  {
+      title: "help people vibe with life",
+      description: "• Our core question is: \"*do you feel aligned and connected enough with the people, places, and rhythms of your specific daily life?*\" - a more specific way of asking the abstract question of how much you vibe with life.\n\n• We're here to help those who dont feel aligned or connected enough. We cannot guarentee that we help or our spaces help, but we can try. Often, this takes the form of helping people unlock their own agency. This could be through casual conversations, silent relaxation, rigorous rational analysis, or exploring what feels alive for you.\n\n• The end goal is to vibe with life, which is a state where you feel that no change is needed in life, even when everything around you is changing or you are pursuing change. The process to vibe more with life is called heart alignment. To become more aligned or connected with the people, places, and rhythms of your specific daily life. Or if you already feel aligned and connected, then you're simply vibing.",
+      icon: "🤝"
+  },
     {
         title: "create self-sufficient home & community",
         description: "• Create and use our own tech stack: from hardware to software.\n\n• Our own Twitter, Instagram, AWS, phone hardware, network hardware, etc.\n\n• Same vibe as living off the land (we want to do that eventually too). We want to survive. We want to protect.\n\n• We want a home. We want a community. With roots in physical places, yet strong enough to transcend the physical.",
         icon: "🏡"
-    },
-    {
-      title: "build a low-effort hangout spot",
-      description: "• Build a low-effort hangout spot and community center.\n\n• Requires no money spent for visitors.\n\n• Requires no traditional socializing.\n\n> do your own thing, with other people close...(or just chat, we are not your mom)\n\n• Similar to: coffeeshop, computer lab, Student Union, community center.\n\n• Ideally, there is both explicit quiet areas and nonquiet areas.\n\n• Both in the physical world and a version in cyberspace.",
-      icon: "🏯"
     },
     {
         title: "learn, create, share, experiment, play",
