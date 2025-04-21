@@ -12,7 +12,7 @@ interface MissionPoint {
 
 const missionPoints: MissionPoint[] = [
   {
-    title: "create and nurture heart-aligning community spaces",
+    title: "nurture community spaces for reconnecting with life",
     description: "• Spaces where anyone can slow down, reconnect with what is alive for them, and do literally whatever they want – all with the presence of other people closeby.\n\n• Requires no money spent for visitors.\n\n• Requires no traditional socializing.\n\n> do your own thing, with other people close...(or just chat, we are not your mom)\n\n• Similar to: coffeeshop, computer lab, Student Union, community center.\n\n• Both explicit quiet areas and nonquiet areas.\n\n• Both in the physical world and a version in cyberspace.",
     icon: "🏯"
   },
