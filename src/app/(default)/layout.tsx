@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import ClientLayout from './ClientLayout'
+import ClientLayout from '../ClientLayout'
 
 export const metadata = {
   title: 'whyspia',

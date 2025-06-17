@@ -1,7 +1,7 @@
 "use client"
 
 import type { NextPage } from 'next'
-import A from '../../components/A'
+import A from '../../../components/A'
 
 const AboutHome: NextPage = () => {
 

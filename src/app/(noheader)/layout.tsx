@@ -1,9 +1,8 @@
 "use client"
 
 import React from 'react'
-import Header from '../components/Header'
 import 'tailwindcss/tailwind.css'
-import '../styles/globals.css'
+import '../../styles/globals.css'
 import { GlobalContextComponent } from 'lib/GlobalContext'
 export { GlobalContext } from 'lib/GlobalContext'
 import { ClientWrapper } from 'lib/ClientWrapper'
@@ -14,7 +13,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ParticleConnectkit } from "modules/particle-network/components/ParticleConnectkit"
 import { ThemeProvider } from 'modules/styles/components/ThemeProvider'
-import Footer from '../components/Footer'
+import Footer from 'components/Footer'
 
 const queryClient = new QueryClient()
 
@@ -38,8 +37,8 @@ export default function ClientLayout({
             <GlobalContextComponent>
               <ClientWrapper>
                 <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-                  <div className="flex flex-col min-h-screen pt-[65px] dark:text-white">
-                    <Header />
+                  <div className="flex flex-col min-h-screen dark:text-white">
+                    {/* <Header /> */}
 
                     {isDowntimeMode && (
                       <div className="pb-6 border-b border-red-500">

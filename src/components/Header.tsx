@@ -97,7 +97,7 @@ export default function Header() {
 
   return (
     <>
-      <nav className="fixed top-0 z-[600] w-full px-4 md:px-8 shadow dark:bg-dark3 border-b dark:border-dark1">
+      <nav className="fixed top-0 z-[600] w-full h-[65px] px-4 md:px-8 shadow dark:bg-dark3 border-b dark:border-dark1">
         <div className="px-2 mx-auto transform max-w-88 md:max-w-304">
           <div className="relative flex items-center justify-between h-16">
             <div
@@ -273,7 +273,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
-      <RollingBanner text="welcome to whyspia ••• data storage and privacy is stinky poo poo rn. help us fix pls...we are thinking of IPFS and Lit Protocol ••• backend servers are down, so no functionality works right now sadly" speed={20} />
+      {/* <RollingBanner text="welcome to whyspia ••• data storage and privacy is stinky poo poo rn. help us fix pls...we are thinking of IPFS and Lit Protocol ••• backend servers are down, so no functionality works right now sadly" speed={20} /> */}
     </>
   )
 }
