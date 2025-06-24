@@ -1,10 +1,9 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import ModalService from 'components/modals/ModalService'
 import Modal from 'components/modals/Modal'
-import { io, Socket } from 'socket.io-client'
 
 interface TopicCard {
   id: string
@@ -120,7 +119,6 @@ const ShareTopicModal = ({ close, onTopicCreated }: { close: () => void, onTopic
 export default function Vibecamp2025Page() {
   const [searchQuery, setSearchQuery] = useState('')
   const [topics, setTopics] = useState<TopicCard[]>([])
-  const [socket, setSocket] = useState<Socket | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
@@ -164,41 +162,6 @@ export default function Vibecamp2025Page() {
     setHasMore(true)
   }, [searchQuery])
 
-  useEffect(() => {
-    // Initialize socket connection
-    const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_HOST || 'http://localhost:3300', {
-      withCredentials: true
-    })
-
-    // Set up event listeners
-    newSocket.on('connect', () => {
-      console.log('Connected to WebSocket server')
-      setError(null)
-    })
-
-    newSocket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error)
-      setError('Failed to connect to server')
-    })
-
-    newSocket.on('error', (errorMessage) => {
-      console.error('Socket error:', errorMessage)
-      setError(errorMessage)
-    })
-
-    newSocket.on('topicCreated', (newTopic: TopicCard) => {
-      setTopics(prevTopics => [...prevTopics, newTopic])
-      setError(null)
-    })
-
-    setSocket(newSocket)
-
-    // Cleanup on unmount
-    return () => {
-      newSocket.close()
-    }
-  }, [])
-
   const filteredTopics = topics.filter(topic => 
     topic.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
     topic.contact.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -207,6 +170,12 @@ export default function Vibecamp2025Page() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 bg-dark1">
+      {/* Deprecation Banner */}
+      <div className="w-full max-w-2xl mb-6 p-4 bg-yellow-500/20 border border-yellow-500 rounded-lg text-yellow-500 text-center">
+        <div className="font-bold text-lg mb-1">DEPRECATED</div>
+        <div className="text-sm">This app is no longer active. You can view topics posted during VC2025 but cannot add new ones.</div>
+      </div>
+
       <h1 className="text-xl md:text-2xl font-bold text-white mb-6 text-center">
         share niche topics you want to talk about during Vibecamp 2025
       </h1>
@@ -222,13 +191,15 @@ export default function Vibecamp2025Page() {
           <button
             onClick={() => ModalService.open(ShareTopicModal, {
               onTopicCreated: (topic) => {
-                socket?.emit('newTopic', topic)
+                // No longer adding to socket - just close modal
+                console.log('Topic creation disabled - feature deprecated')
               }
             })}
-            className="w-full sm:w-auto px-4 py-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/80 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 bg-[#1d8f89] text-white rounded-lg hover:bg-[#1d8f89]/80 flex items-center justify-center gap-2 opacity-50 cursor-not-allowed"
+            disabled
           >
             <PlusCircleIcon className="w-5 h-5" />
-            share topic
+            share topic (disabled)
           </button>
           <input
             type="text"
