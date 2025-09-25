@@ -50,7 +50,7 @@ export default function ClientLayout({
                       {children}
                     </main>
 
-                    <Footer />
+                    {/* <Footer /> */}
 
                     <ModalRoot />
 
