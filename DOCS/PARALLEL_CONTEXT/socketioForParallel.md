@@ -1,1 +1,0 @@
-for the bigger picture non-code and (mix of logic and code stuff) - im documenting in the backend MD files
